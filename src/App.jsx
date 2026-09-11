@@ -1,5 +1,7 @@
+import Router from "./router/Router";
+
 function App() {
-  return <div>프로젝트 시작!</div>;
+    return <Router />;
 }
 
 export default App;
