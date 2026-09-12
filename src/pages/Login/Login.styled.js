@@ -128,30 +128,6 @@ export const PasswordButton = styled.button`
     cursor: pointer;
 `;
 
-export const LoginButton = styled.button`
-    width: 100%;
-    height: 48px;
-
-    margin-top: 35px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #41dc99;
-
-    color: #ffffff;
-
-    font-family: Pretendard;
-    font-size: 20px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.9;
-    }
-`;
-
 export const Divider = styled.div`
     width: 100%;
 
@@ -215,4 +191,9 @@ export const LinkButton = styled.button`
 
         background: #e3e3e3;
     }
+`;
+
+export const ButtonArea = styled.div`
+    width: 100%;
+    margin-top: 35px;
 `;

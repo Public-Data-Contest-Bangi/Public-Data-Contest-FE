@@ -1,5 +1,8 @@
 import { useState } from "react";
+
 import AuthLayout from "../../components/auth/AuthLayout";
+import Button from "../../components/common/Button";
+
 import * as S from "./FindPassword.styled";
 
 function FindPassword() {
@@ -109,9 +112,7 @@ function FindPassword() {
                             placeholder="e-mail@gmail.com"
                             value={email}
                             onChange={(e) => {
-                                setEmail(
-                                    e.target.value
-                                );
+                                setEmail(e.target.value);
                                 setEmailMessage("");
                             }}
                         />
@@ -145,20 +146,14 @@ function FindPassword() {
                                 setVerificationCode(
                                     e.target.value
                                 );
-
-                                setVerificationMessage(
-                                    ""
-                                );
-
+                                setVerificationMessage("");
                                 setIsVerified(false);
                             }}
                         />
 
                         <S.CheckButton
                             type="button"
-                            onClick={
-                                handleVerificationCheck
-                            }
+                            onClick={handleVerificationCheck}
                         >
                             확인
                         </S.CheckButton>
@@ -208,33 +203,32 @@ function FindPassword() {
                                     setConfirmPassword(
                                         e.target.value
                                     );
-
-                                    setPasswordMessage(
-                                        ""
-                                    );
+                                    setPasswordMessage("");
                                 }}
                             />
 
                             {passwordMessage && (
                                 <S.ErrorMessage>
-                                    {
-                                        passwordMessage
-                                    }
+                                    {passwordMessage}
                                 </S.ErrorMessage>
                             )}
                         </S.Field>
-
-                        <S.ResetButton
-                            type="button"
-                            onClick={
-                                handlePasswordChange
-                            }
-                        >
-                            비밀번호 재설정
-                        </S.ResetButton>
                     </>
                 )}
             </S.Form>
+
+            {isVerified && (
+                <S.ButtonArea>
+                    <Button
+                        onClick={handlePasswordChange}
+                        height="54px"
+                        radius="11px"
+                        fontSize="19px"
+                    >
+                        비밀번호 재설정
+                    </Button>
+                </S.ButtonArea>
+            )}
         </AuthLayout>
     );
 }

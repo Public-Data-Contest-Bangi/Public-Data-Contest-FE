@@ -100,22 +100,3 @@ export const SuccessMessage = styled.p`
 
     font-size: 12px;
 `;
-
-export const SignupButton = styled.button`
-    width: 100%;
-    height: 52px;
-
-    margin-top: 8px;
-
-    border: none;
-    border-radius: 9px;
-
-    background: #42dba0;
-
-    color: #ffffff;
-
-    font-size: 17px;
-    font-weight: 600;
-
-    cursor: pointer;
-`;

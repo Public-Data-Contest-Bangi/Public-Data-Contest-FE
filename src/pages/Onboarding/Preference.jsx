@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/common/Button";
 
 import * as S from "./Preference.styled";
 
@@ -237,13 +238,15 @@ function Preference() {
                         )}
                     </S.Section>
 
-                    <S.SubmitButton
-                        type="button"
+                    <Button
                         disabled={!isFormValid}
                         onClick={handleSubmit}
+                        height="46px"
+                        radius="8px"
+                        fontSize="16px"
                     >
                         완료하고 시작하기
-                    </S.SubmitButton>
+                    </Button>
 
                     <S.BottomText>
                         입력하신 정보는 마이페이지에서
