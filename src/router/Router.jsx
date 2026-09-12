@@ -1,3 +1,4 @@
+import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
     Routes,
@@ -30,6 +31,10 @@ function Router() {
                     path="/home"
                     element={<Home />}
                 />
+                <Route
+    path="/facility-search"
+    element={<FacilitySearch />}
+/>
             </Routes>
         </BrowserRouter>
     );

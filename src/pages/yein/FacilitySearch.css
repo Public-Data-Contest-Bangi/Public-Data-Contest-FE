@@ -1,0 +1,179 @@
+.facility-search {
+  position: relative;
+  width: 375px;
+  min-height: 816px;
+  margin: 0 auto;
+  background: #ffffff;
+  font-family: 'Pretendard', sans-serif;
+  padding: 0 20px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 헤더 ───────────────── */
+
+.facility-search__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  margin: 0 -20px 8px;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.facility-search__back {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.facility-search__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* ── 히어로(마스코트 + 안내문구) ───────────────── */
+
+.facility-search__hero {
+  padding: 12px 0 24px;
+}
+
+.facility-search__mascot {
+  width: 90px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+.facility-search__hero-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1.3;
+}
+
+.facility-search__hero-subtitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #8c8c8c;
+}
+
+/* ── 검색창 ───────────────── */
+
+.facility-search__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f3f3;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.facility-search__input-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.facility-search__input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: #000000;
+}
+
+.facility-search__input::placeholder {
+  color: #b3b3b3;
+}
+
+/* ── 지역 검색 섹션 ───────────────── */
+
+.facility-search__region {
+  flex-shrink: 0;
+}
+
+.facility-search__region-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.facility-search__current-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  background: #eafaf1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.facility-search__divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+
+.facility-search__divider::before,
+.facility-search__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e4e4e4;
+}
+
+.facility-search__selects {
+  display: flex;
+  gap: 10px;
+}
+
+.facility-search__select {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #000000;
+  background: #ffffff;
+}
+
+/* ── 검색결과 자리 (지금은 빈 공간) ───────────────── */
+
+.facility-search__results {
+  flex: 1;
+}
