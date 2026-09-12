@@ -8,13 +8,20 @@ import Login from "../pages/Login/Login";
 import FindId from "../pages/Login/FindId";
 import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
+import Home from "../pages/yein/Home";
 
 function Router() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route
-                    path="/" element={<Login />}
+                    path="/"
+                    element={<Home />}
+                />
+
+                <Route
+                    path="/home"
+                    element={<Home />}
                 />
 
                 <Route
