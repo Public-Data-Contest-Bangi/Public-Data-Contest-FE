@@ -11,6 +11,8 @@ import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
 import Home from "../pages/yein/Home";
 
+import Preference from "../pages/Onboarding/Preference";
+
 function Router() {
     return (
         <BrowserRouter>
@@ -44,10 +46,16 @@ function Router() {
                     path="/signup"
                     element={<Signup />}
                 />
+
                 <Route
-    path="/facility-search"
-    element={<FacilitySearch />}
-/>
+                    path="/facility-search"
+                    element={<FacilitySearch />}
+                />
+
+                <Route
+                    path="/preference"
+                    element={<Preference />}
+                />
             </Routes>
         </BrowserRouter>
     );
