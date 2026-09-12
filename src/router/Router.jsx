@@ -6,6 +6,8 @@ import {
 
 import Login from "../pages/Login/Login";
 import FindId from "../pages/Login/FindId";
+import FindPassword from "../pages/Login/FindPassword";
+import Signup from "../pages/Login/Signup";
 import Home from "../pages/yein/Home";
 
 function Router() {
@@ -13,7 +15,13 @@ function Router() {
         <BrowserRouter>
             <Routes>
                 <Route
-                    path="/" element={<Login />}
+                    path="/"
+                    element={<Home />}
+                />
+
+                <Route
+                    path="/home"
+                    element={<Home />}
                 />
 
                 <Route
@@ -27,8 +35,13 @@ function Router() {
                 />
 
                 <Route
-                    path="/home"
-                    element={<Home />}
+                    path="/find-password"
+                    element={<FindPassword />}
+                />
+
+                <Route
+                    path="/signup"
+                    element={<Signup />}
                 />
             </Routes>
         </BrowserRouter>
