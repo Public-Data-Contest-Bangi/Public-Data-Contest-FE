@@ -6,6 +6,7 @@ import {
 
 import Login from "../pages/Login/Login";
 import FindId from "../pages/Login/FindId";
+import Home from "../pages/yein/Home";
 
 function Router() {
     return (
@@ -14,7 +15,7 @@ function Router() {
                 <Route
                     path="/" element={<Login />}
                 />
-                
+
                 <Route
                     path="/login"
                     element={<Login />}
@@ -23,6 +24,11 @@ function Router() {
                 <Route
                     path="/find-id"
                     element={<FindId />}
+                />
+
+                <Route
+                    path="/home"
+                    element={<Home />}
                 />
             </Routes>
         </BrowserRouter>
