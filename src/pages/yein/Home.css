@@ -1,0 +1,230 @@
+.home {
+  position: relative;
+  width: 375px;
+  margin: 0 auto;
+  min-height: 816px;
+  background: #F9F9F9;
+  padding-bottom: 96px;
+  overflow: hidden;
+}
+/* ── 헤더 (Figma 정확 좌표) ───────────────── */
+
+.home__logo-mark {
+  position: absolute;
+  top: 20px; /* 캡처에서 상단 값이 잘려서 마스코트 top(23px) 기준 추정 */
+  left: 5px;
+  width: 59px;
+  height: 59px;
+  object-fit: contain;
+}
+
+.home__logo-text {
+  position: absolute;
+  top: 20px;
+  left: 55px;
+  width: 193px;
+  height: 59px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-primary);
+  font-family: 'Pretendard', sans-serif;
+}
+
+.home__mascot {
+  position: absolute;
+  top: 23px;
+  left: 128px;
+  width: 245px;
+  height: 228px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── 인사말 (Figma 정확 좌표/폰트) ───────────────── */
+
+.home__greeting {
+  position: absolute;
+  top: 214px;
+  left: 26px;
+  width: 287px;
+  margin: 0;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--color-text);
+}
+
+/* ── 인사말 아래 컨텐츠 (여백은 추정치) ───────────────── */
+
+.home__body {
+  padding-top: 330px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.home__liked {
+  margin-bottom: 20px;
+}
+
+.home__liked-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home__liked-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.liked-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.liked-card {
+  width: 84px;
+  height: 84px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.liked-card--active {
+  background: var(--color-primary);
+}
+
+.liked-card__heart {
+  width: 22px;
+  height: 22px;
+}
+
+.liked-card__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.liked-card--placeholder {
+  background: var(--color-gray-light);
+}
+
+.liked-card--peek {
+  width: 40px;
+  opacity: 0.6;
+}
+
+.liked-item__caption {
+  font-size: 12px;
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* ── 메뉴 카드 (박스는 추정치, 아이콘만 정확 좌표) ───────────────── */
+
+.home__menu {
+  display: flex;
+  gap: 12px;
+}
+
+.menu-card {
+  position: relative;
+  background: #f4f4f4;
+  border-radius: 18px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.menu-card--large {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 224px;
+}
+
+.home__menu-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menu-card--small {
+  position: relative;
+  flex: 1;
+  min-height: 106px;
+}
+
+.menu-card__title {
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.menu-card__illust-recommend {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+  margin: 12px auto 0;
+  align-self: center;
+}
+
+/* 아이콘 2개: Figma에서 준 정확 top/left/width/height 그대로 절대배치.
+   원본이 (집+돋보기 / 달력+시계) 결합 이미지 1장이라 CSS로 좌/우 반씩 잘라서 사용 */
+.menu-card__icon {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+}
+
+.menu-card__icon--search {
+  width: 94px;
+  height: 90px;
+  background-position: left center;
+}
+
+.menu-card__icon--program {
+  width: 87px;
+  height: 88px;
+  background-position: right center;
+}
+/* ── 하단 안내 문구 (Figma 정확 좌표/폰트/색상) ───────────────── */
+
+.home__banner {
+  position: absolute;
+  top: 704px;
+  left: 5px;
+  width: 366px;
+  height: 21px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--color-caption);
+}
