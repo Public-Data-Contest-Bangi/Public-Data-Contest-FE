@@ -1,3 +1,4 @@
+import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
     Routes,
@@ -44,6 +45,11 @@ function Router() {
                 <Route
                     path="/signup"
                     element={<Signup />}
+                />
+
+                <Route
+                    path="/facility-search"
+                    element={<FacilitySearch />}
                 />
 
                 <Route
