@@ -10,6 +10,8 @@ import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
 import Home from "../pages/yein/Home";
 
+import Preference from "../pages/Onboarding/Preference";
+
 function Router() {
     return (
         <BrowserRouter>
@@ -42,6 +44,11 @@ function Router() {
                 <Route
                     path="/signup"
                     element={<Signup />}
+                />
+
+                <Route
+                    path="/preference"
+                    element={<Preference />}
                 />
             </Routes>
         </BrowserRouter>
