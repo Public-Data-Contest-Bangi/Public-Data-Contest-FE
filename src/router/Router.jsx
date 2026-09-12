@@ -1,14 +1,38 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from '../pages/yein/Home';
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+} from "react-router-dom";
+
+import Login from "../pages/Login/Login";
+import FindId from "../pages/Login/FindId";
+import Home from "../pages/yein/Home";
 
 function Router() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/" element={<Login />}
+                />
+
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+
+                <Route
+                    path="/find-id"
+                    element={<FindId />}
+                />
+
+                <Route
+                    path="/home"
+                    element={<Home />}
+                />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default Router;
