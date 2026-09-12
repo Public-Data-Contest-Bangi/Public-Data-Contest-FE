@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AuthLayout from "../../components/auth/AuthLayout";
 import * as S from "./Signup.styled";
+import Button from "../../components/common/Button";
 
 function Signup() {
     const [userId, setUserId] = useState("");
@@ -221,12 +222,9 @@ function Signup() {
                     )}
                 </S.Field>
 
-                <S.SignupButton
-                    type="button"
-                    onClick={handleSignup}
-                >
+                <Button onClick={handleSignup}>
                     회원가입
-                </S.SignupButton>
+                </Button>
             </S.Form>
         </AuthLayout>
     );

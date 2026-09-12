@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/auth/AuthLayout";
 import findidcharacter from "../../assets/images/findidcharacter.png";
 import * as S from "./FindId.styled";
+import Button from "../../components/common/Button";
 
 function FindId() {
     const navigate = useNavigate();
@@ -82,12 +83,11 @@ function FindId() {
                     </S.Field>
                 </S.Form>
 
-                <S.SelectButton
-                    type="button"
-                    onClick={handleSelect}
-                >
-                    선택하기
-                </S.SelectButton>
+                <S.ButtonArea>
+                    <Button onClick={handleSelect}>
+                        선택하기
+                    </Button>
+                </S.ButtonArea>
             </AuthLayout>
 
             {showResult && (

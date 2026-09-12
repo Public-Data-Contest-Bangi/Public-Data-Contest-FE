@@ -108,21 +108,7 @@ export const HelpText = styled.p`
     font-size: 10px;
 `;
 
-export const ResetButton = styled.button`
+export const ButtonArea = styled.div`
     width: 100%;
-    height: 52px;
-
-    margin-top: 38px;
-
-    border: none;
-    border-radius: 9px;
-
-    background: #42dba0;
-
-    color: #ffffff;
-
-    font-size: 17px;
-    font-weight: 600;
-
-    cursor: pointer;
+    margin-top: auto;
 `;

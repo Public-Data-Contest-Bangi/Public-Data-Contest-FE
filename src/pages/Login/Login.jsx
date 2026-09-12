@@ -6,6 +6,7 @@ import logo from "../../assets/images/login.png";
 import profileIcon from "../../assets/icons/profile.png";
 import lockIcon from "../../assets/icons/lock.png";
 import eyeIcon from "../../assets/icons/eye.png";
+import Button from "../../components/common/Button";
 
 function Login() {
     const navigate = useNavigate();
@@ -20,7 +21,8 @@ function Login() {
             password,
         });
 
-        // 추후 로그인 API 연결
+        // 개발용 임시 로그인
+        navigate("/");
     };
 
     const handleTogglePassword = () => {
@@ -95,12 +97,16 @@ function Login() {
                     </S.InputWrapper>
                 </S.InputSection>
 
-                <S.LoginButton
-                    type="button"
-                    onClick={handleLogin}
-                >
-                    로그인
-                </S.LoginButton>
+                <S.ButtonArea>
+                    <Button
+                        onClick={handleLogin}
+                        height="48px"
+                        radius="10px"
+                        fontSize="20px"
+                    >
+                        로그인
+                    </Button>
+                </S.ButtonArea>
 
                 <S.Divider>
                     <span />
