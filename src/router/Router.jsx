@@ -15,6 +15,7 @@ import Signup from "../pages/Login/Signup";
 import Preference from "../pages/Onboarding/Preference";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
+import FirstExercise from "../pages/Exercise/FirstExercise";
 
 function Router() {
     return (
@@ -63,6 +64,11 @@ function Router() {
                 <Route
                     path="/exercise-recommend"
                     element={<ExerciseRecommend />}
+                />
+
+                <Route
+                    path="/first-exercise" 
+                    element={<FirstExercise />}
                 />
             </Routes>
         </BrowserRouter>
