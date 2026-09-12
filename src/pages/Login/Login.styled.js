@@ -34,13 +34,17 @@ export const Logo = styled.img`
 
 export const BrandName = styled.h1`
     margin: -20px 0 28px;
+
     font-size: 40px;
     font-weight: 900;
     line-height: 1;
 
     color: #111111;
 
-    font-family: "Arial Rounded MT Bold", "Pretendard", sans-serif;
+    font-family:
+        "Arial Rounded MT Bold",
+        "Pretendard",
+        sans-serif;
 
     letter-spacing: -1px;
 `;
@@ -103,6 +107,7 @@ export const Input = styled.input`
 
     font-size: 14px;
     font-weight: 400;
+
     background: transparent;
 
     &::placeholder {
@@ -132,7 +137,7 @@ export const LoginButton = styled.button`
     border: none;
     border-radius: 10px;
 
-    background: #41DC99;
+    background: #41dc99;
 
     color: #ffffff;
 

@@ -6,6 +6,8 @@ import {
 
 import Login from "../pages/Login/Login";
 import FindId from "../pages/Login/FindId";
+import FindPassword from "../pages/Login/FindPassword";
+import Signup from "../pages/Login/Signup";
 
 function Router() {
     return (
@@ -14,7 +16,7 @@ function Router() {
                 <Route
                     path="/" element={<Login />}
                 />
-                
+
                 <Route
                     path="/login"
                     element={<Login />}
@@ -23,6 +25,16 @@ function Router() {
                 <Route
                     path="/find-id"
                     element={<FindId />}
+                />
+
+                <Route
+                    path="/find-password"
+                    element={<FindPassword />}
+                />
+
+                <Route
+                    path="/signup"
+                    element={<Signup />}
                 />
             </Routes>
         </BrowserRouter>

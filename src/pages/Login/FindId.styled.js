@@ -1,65 +1,5 @@
 import styled from "styled-components";
 
-export const Page = styled.div`
-    width: 100%;
-    min-height: 100vh;
-
-    display: flex;
-    justify-content: center;
-
-    background: #ffffff;
-`;
-
-export const Container = styled.div`
-    width: 100%;
-    max-width: 390px;
-
-    min-height: 100vh;
-
-    padding: 0 20px 32px;
-
-    display: flex;
-    flex-direction: column;
-
-    box-sizing: border-box;
-`;
-
-export const Header = styled.header`
-    width: 100%;
-    height: 72px;
-
-    display: flex;
-    align-items: center;
-
-    position: relative;
-`;
-
-export const BackButton = styled.button`
-    position: absolute;
-    left: 0;
-
-    border: none;
-    background: none;
-
-    font-size: 38px;
-    font-weight: 300;
-
-    cursor: pointer;
-
-    line-height: 1;
-`;
-
-export const Title = styled.h1`
-    width: 100%;
-
-    margin: 0;
-
-    text-align: center;
-
-    font-size: 21px;
-    font-weight: 700;
-`;
-
 export const Form = styled.div`
     display: flex;
     flex-direction: column;
@@ -160,6 +100,105 @@ export const SelectButton = styled.button`
 
     font-size: 19px;
     font-weight: 700;
+
+    cursor: pointer;
+`;
+
+export const ModalOverlay = styled.div`
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.2);
+
+    z-index: 1000;
+`;
+
+export const Modal = styled.div`
+    position: relative;
+
+    width: 280px;
+
+    padding: 55px 20px 22px;
+
+    background: #effcf7;
+    border-radius: 8px;
+
+    text-align: center;
+`;
+
+export const ResultCharacter = styled.img`
+    position: absolute;
+
+    width: 250px;
+    height: auto;
+
+    left: 50%;
+    top: -220px;
+
+    transform: translateX(-50%);
+
+    object-fit: contain;
+`;
+
+export const ResultText = styled.p`
+    margin: 0;
+
+    font-size: 17px;
+    font-weight: 600;
+    color: #333333;
+
+    line-height: 1.6;
+`;
+
+export const UserId = styled.span`
+    margin: 0 4px;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    color: #42dba0;
+`;
+
+export const ModalButtonRow = styled.div`
+    margin-top: 24px;
+
+    display: flex;
+    justify-content: center;
+
+    gap: 8px;
+`;
+
+export const CancelButton = styled.button`
+    width: 92px;
+    height: 38px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    font-size: 14px;
+
+    cursor: pointer;
+`;
+
+export const ResetButton = styled.button`
+    width: 110px;
+    height: 38px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #42dba0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
 
     cursor: pointer;
 `;
