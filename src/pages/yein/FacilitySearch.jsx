@@ -213,6 +213,14 @@ function FacilitySearch() {
           </div>
         </div>
       </section>
+            
+
+        <button type="button" className="facility-search__submit">
+          시설 검색하기
+        </button>
+
+        {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
+        <div className="facility-search__results" />
 
       {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
       <div className="facility-search__results" />
