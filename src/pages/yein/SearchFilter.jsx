@@ -1,4 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
+import rampIcon from '../../assets/icons/ramp-icon.png';
+import elevatorIcon from '../../assets/icons/elevator-icon.png';
+import restroomIcon from '../../assets/icons/restroom-icon.png';
+import parkingIcon from '../../assets/icons/parking-icon.png';
+import sportIcon from '../../assets/icons/sport-icon.png';
 import {
   Container,
   Header,
@@ -46,73 +53,26 @@ const accessibilityItems = [
 ];
 
 function AccessibilityIcon({ type }) {
-  switch (type) {
-    case 'wheelchair':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="15" cy="5" r="1.6" fill="#1A1A1A" />
-          <path
-            d="M15 7.2v3.3h3.3M15 10.5l-2 7.5M13 10.5H9"
-            stroke="#1A1A1A"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="9" cy="16.5" r="4.2" stroke="#1A1A1A" strokeWidth="1.6" />
-          <circle cx="9" cy="16.5" r="0.8" fill="#1A1A1A" />
-          <path d="M9 12.3v4.2" stroke="#1A1A1A" strokeWidth="1.3" strokeLinecap="round" />
-        </svg>
-      );
-    case 'ramp':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 19h18" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" />
-          <path d="M3 19 14 7" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" />
-          <path
-            d="M11 7h3v3"
-            stroke="#1A1A1A"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    case 'elevator':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="3" width="14" height="18" rx="2" stroke="#1A1A1A" strokeWidth="1.6" />
-          <path d="M12 7l-3 4h6l-3-4Z" fill="#1A1A1A" />
-          <path d="M12 17l3-4H9l3 4Z" fill="#1A1A1A" />
-        </svg>
-      );
-    case 'restroom':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8" cy="5" r="1.8" fill="#1A1A1A" />
-          <path d="M8 8v6M5.5 11h5M6 20l2-6 2 6" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="16.5" cy="5" r="1.8" fill="#1A1A1A" />
-          <path d="M14 10h5v4h-1.5v6h-2v-6H15v6h-2v-6H14v-4Z" fill="#1A1A1A" />
-        </svg>
-      );
-    case 'parking':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3" y="3" width="18" height="18" rx="3" stroke="#1A1A1A" strokeWidth="1.6" />
-          <path
-            d="M9 17V7h3.2a2.7 2.7 0 0 1 0 5.4H9"
-            stroke="#1A1A1A"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      );
-    default:
-      return null;
-  }
+  const iconMap = {
+    wheelchair: wheelchairIcon,
+    ramp: rampIcon,
+    elevator: elevatorIcon,
+    restroom: restroomIcon,
+    parking: parkingIcon,
+  };
+  const src = iconMap[type];
+  if (!src) return null;
+
+  let size = 27;
+  if (type === 'ramp') size = 40;
+  if (type === 'elevator') size = 34;
+  if (type === 'restroom') size = 30;
+
+  return <img src={src} alt="" style={{ width: size, height: size, objectFit: 'contain' }} />;
 }
 
 function SearchFilter() {
+  const navigate = useNavigate();
   const [checked, setChecked] = useState({
     wheelchair: true,
     ramp: false,
@@ -177,7 +137,7 @@ function SearchFilter() {
                 />
                 <CheckboxBox>
                   {checked[item.id] && (
-                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="14" height="12" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M1 5l3.5 3.5L11 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   )}
@@ -194,18 +154,14 @@ function SearchFilter() {
         <Section>
           <SectionTitle>운동 종목</SectionTitle>
           <SelectWrap ref={sportRef}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="6" cy="12" r="2.5" stroke="#1A1A1A" strokeWidth="1.6" />
-              <circle cx="18" cy="12" r="2.5" stroke="#1A1A1A" strokeWidth="1.6" />
-              <path d="M8.5 12h7" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
+            <img src={sportIcon} alt="" style={{ width: 24, height: 24, objectFit: 'contain' }} />
             <SelectTrigger type="button" onClick={() => setSportMenuOpen((prev) => !prev)}>
               {sport}
             </SelectTrigger>
             <SelectChevron
               $open={sportMenuOpen}
-              width="12"
-              height="12"
+              width="14"
+              height="14"
               viewBox="0 0 12 12"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -252,7 +208,9 @@ function SearchFilter() {
       </Body>
 
       <Footer>
-        <CancelButton type="button">취소</CancelButton>
+        <CancelButton type="button" onClick={() => navigate('/search-result')}>
+          취소
+        </CancelButton>
         <ApplyButton type="button">적용하기</ApplyButton>
       </Footer>
     </Container>

@@ -46,7 +46,7 @@ export const CloseButton = styled.button`
 
 export const Title = styled.h1`
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #000000;
 `;
@@ -58,7 +58,7 @@ export const ResetButton = styled.button`
   transform: translateY(-50%);
   border: none;
   background: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: #8c8c8c;
   cursor: pointer;
@@ -77,8 +77,8 @@ export const Section = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-  margin: 0 0 16px;
-  font-size: 18px;
+  margin: 0 0 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #000000;
 `;
@@ -86,13 +86,13 @@ export const SectionTitle = styled.h2`
 export const CheckList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
 `;
 
 export const CheckRow = styled.label`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
 `;
 
@@ -105,11 +105,11 @@ export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 `;
 
 export const CheckboxBox = styled.span`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
   border: 1.5px solid #d9d9d9;
-  border-radius: 5px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,13 +125,13 @@ export const CheckIconWrap = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
+  width: 26px;
   flex-shrink: 0;
 `;
 
 export const CheckLabel = styled.span`
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   color: #1a1a1a;
 `;
 
@@ -140,10 +140,10 @@ export const SelectWrap = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   border: 1px solid #e4e4e4;
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: #ffffff;
   box-sizing: border-box;
 `;
@@ -155,7 +155,8 @@ export const SelectTrigger = styled.button`
   outline: none;
   background: none;
   padding: 0;
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: 600;
   font-family: inherit;
   color: #000000;
   text-align: left;
@@ -196,11 +197,11 @@ export const SelectMenu = styled.ul`
     display: block;
     width: 100%;
     box-sizing: border-box;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: none;
     background: none;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 16px;
     font-family: inherit;
     text-align: left;
     color: #000000;
@@ -218,13 +219,13 @@ export const SelectMenu = styled.ul`
 export const RadioList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 `;
 
 export const RadioRow = styled.label`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
 `;
 
@@ -237,8 +238,8 @@ export const HiddenRadio = styled.input.attrs({ type: 'radio' })`
 `;
 
 export const RadioCircle = styled.span`
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
   border: 1.5px solid #d9d9d9;
   border-radius: 50%;
@@ -254,8 +255,8 @@ export const RadioCircle = styled.span`
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: var(--color-primary);
     transform: translate(-50%, -50%);
@@ -263,8 +264,8 @@ export const RadioCircle = styled.span`
 `;
 
 export const RadioLabel = styled.span`
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   color: #1a1a1a;
 `;
 
@@ -277,12 +278,12 @@ export const Footer = styled.div`
 
 export const CancelButton = styled.button`
   flex: 1;
-  padding: 16px;
+  padding: 17px;
   border: 1px solid #e4e4e4;
   border-radius: 16px;
   background: #ffffff;
   color: #1a1a1a;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
@@ -290,12 +291,12 @@ export const CancelButton = styled.button`
 
 export const ApplyButton = styled.button`
   flex: 1.6;
-  padding: 16px;
+  padding: 17px;
   border: none;
   border-radius: 16px;
   background: var(--color-primary);
   color: #ffffff;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
