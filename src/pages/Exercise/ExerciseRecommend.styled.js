@@ -54,7 +54,7 @@ export const BackButton = styled.button`
 export const Title = styled.h1`
     margin: 0;
 
-    font-size: 27px;
+    font-size: 19px;
     font-family: Pretendard;
     font-style: normal;
     font-weight: 700;

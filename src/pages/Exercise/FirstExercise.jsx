@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FirstExerciseCharacter from "../../assets/images/firstexercise-character.png";
+import Button from "../../components/common/Button";
 
 import * as S from "./FirstExercise.styled";
 
@@ -249,9 +250,12 @@ function FirstExercise() {
                     </S.CheckGrid>
                 </S.QuestionSection>
 
-                <S.FindButton onClick={handleSubmit}>
+                <Button
+                    variant="primary"
+                    onClick={handleSubmit}
+                >
                     첫 운동 찾기
-                </S.FindButton>
+                </Button>
             </S.Container>
         </S.Page>
     );
