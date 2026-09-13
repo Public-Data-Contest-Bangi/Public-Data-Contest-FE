@@ -50,7 +50,7 @@ export const BackButton = styled.button`
 export const Title = styled.h1`
     margin: 0;
 
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 700;
     color: #111111;
 `;
@@ -59,17 +59,17 @@ export const Title = styled.h1`
 
 export const Banner = styled.div`
     width: 100%;
-    height: 134px;
+    height: 195px;
 
     position: relative;
     overflow: hidden;
 
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     padding: 20px 18px;
 
     box-sizing: border-box;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
     background: linear-gradient(
         135deg,
@@ -84,19 +84,20 @@ export const BannerText = styled.div`
 `;
 
 export const BannerTitle = styled.div`
-    font-size: 17px;
-    line-height: 1.35;
+    font-size: 22px;
+    line-height: normal;
     font-weight: 700;
-
+    font-family: Pretendard;
     color: #ffffff;
+    margin-top: 10px;
 `;
 
 export const BannerDescription = styled.div`
-    margin-top: 13px;
+    margin-top: 60px;
 
-    font-size: 10px;
-    line-height: 1.5;
-    font-weight: 400;
+    font-size: 14px;
+    line-height: normal;
+    font-weight: 500;
 
     color: rgba(255, 255, 255, 0.9);
 `;
@@ -104,11 +105,11 @@ export const BannerDescription = styled.div`
 export const BannerImage = styled.img`
     position: absolute;
 
-    right: 2px;
-    bottom: -5px;
+    right: -25px;
+    bottom: 5px;
 
-    width: 125px;
-    height: 125px;
+    width: 213px;
+    height: 178px;
 
     object-fit: contain;
 
@@ -120,7 +121,7 @@ export const BannerImage = styled.img`
 export const QuestionSection = styled.section`
     width: 100%;
 
-    margin-bottom: 27px;
+    margin-bottom: 36px;
 `;
 
 export const QuestionHeader = styled.div`
@@ -129,12 +130,12 @@ export const QuestionHeader = styled.div`
 
     gap: 10px;
 
-    margin-bottom: 12px;
+    margin-bottom: 18px;
 `;
 
 export const Number = styled.div`
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
 
     flex-shrink: 0;
 
@@ -153,10 +154,10 @@ export const Number = styled.div`
 `;
 
 export const Question = styled.div`
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 
-    color: #222222;
+    color: #000;
 `;
 
 /* 드롭다운 */
@@ -166,7 +167,8 @@ export const Select = styled.select`
     height: 42px;
 
     margin-left: 34px;
-    padding: 0 14px;
+
+    padding: 0 42px 0 14px;
 
     box-sizing: border-box;
 
@@ -174,7 +176,23 @@ export const Select = styled.select`
     border-radius: 6px;
 
     outline: none;
-    background: #ffffff;
+
+    background-color: #ffffff;
+
+    /* 기본 화살표 제거 */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    /* 커스텀 화살표 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%23444444' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+
+    /* 여기 숫자가 화살표 위치 */
+    background-position: right 14px center;
+
+    background-size: 12px 8px;
 
     font-size: 12px;
     color: #444444;
@@ -196,7 +214,7 @@ export const CheckGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 
-    gap: 7px 8px;
+    gap: 8px 10px;
 `;
 
 export const CheckItem = styled.button`
@@ -220,7 +238,7 @@ export const CheckItem = styled.button`
     background: ${({ $selected }) =>
         $selected ? "#f1fff8" : "#ffffff"};
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
 
     color: #333333;
@@ -298,36 +316,11 @@ export const Chip = styled.button`
     background: ${({ $selected }) =>
         $selected ? "#eafff5" : "#ffffff"};
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
 
     color: ${({ $selected }) =>
         $selected ? "#16b978" : "#333333"};
 
     cursor: pointer;
-`;
-
-/* 하단 버튼 */
-
-export const FindButton = styled.button`
-    width: 100%;
-    height: 48px;
-
-    margin-top: 5px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #20cf8b;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    color: #ffffff;
-
-    cursor: pointer;
-
-    &:active {
-        opacity: 0.9;
-    }
 `;
