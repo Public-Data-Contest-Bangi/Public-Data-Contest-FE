@@ -1,3 +1,4 @@
+import SearchFilter from "../pages/yein/SearchFilter";
 import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
@@ -70,6 +71,10 @@ function Router() {
                     path="/first-exercise" 
                     element={<FirstExercise />}
                 />
+                <Route
+    path="/search-filter"
+    element={<SearchFilter />}
+/>
             </Routes>
         </BrowserRouter>
     );
