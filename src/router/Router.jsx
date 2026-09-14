@@ -19,9 +19,11 @@ import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
 
 import Preference from "../pages/Onboarding/Preference";
+import MyPage from "../pages/MyPage/MyPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
+import ExerciseResult from "../pages/Exercise/ExerciseResult";
 
 function Router() {
     return (
@@ -78,6 +80,11 @@ function Router() {
                 />
 
                 <Route
+                    path="/exercise-result"
+                    element={<ExerciseResult />}
+                />
+
+                <Route
                     path="/search-filter"
                     element={<SearchFilter />}
                 />
@@ -93,6 +100,11 @@ function Router() {
                 />
 
                 <Route
+                    path="/mypage"
+                    element={<MyPage />}
+                />
+
+                <Route 
                     path="/search-empty"
                     element={<SearchEmpty />}
                 />
