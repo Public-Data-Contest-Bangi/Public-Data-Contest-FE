@@ -46,6 +46,8 @@ const facilities = [
   },
 ];
 
+const ACCESS_ICON_SIZE = 45;
+
 function AccessIcon({ type }) {
   const iconMap = {
     wheelchair: wheelchairIcon,
@@ -56,13 +58,13 @@ function AccessIcon({ type }) {
   };
   const src = iconMap[type];
   if (!src) return null;
-
-  let size = 25;
-  if (type === 'ramp') size = 35;
-  if (type === 'restroom') size = 28;
-  if (type === 'parking') size = 23;
-
-  return <img src={src} alt="" style={{ width: size, height: size, objectFit: 'contain' }} />;
+  return (
+    <img
+      src={src}s
+      alt=""
+      style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
+    />
+  );
 }
 
 function SearchResult() {
