@@ -120,7 +120,7 @@ export default function MyPage() {
                             <S.EditButton
                                 type="button"
                                 onClick={() =>
-                                    navigate("/profile/edit")
+                                    navigate("/profile-edit")
                                 }
                             >
                                 정보수정
