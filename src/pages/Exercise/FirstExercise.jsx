@@ -37,8 +37,9 @@ function FirstExercise() {
 
         console.log("첫 운동 찾기 입력값:", data);
 
-        // TODO: 이후 추천 결과 페이지 연결
-        // navigate("/exercise/result", { state: data });
+        navigate("/exercise-result", {
+            state: data,
+        });
     };
 
     return (
