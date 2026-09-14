@@ -1,5 +1,6 @@
 import SearchFilter from "../pages/yein/SearchFilter";
 import SearchResult from "../pages/yein/SearchResult";
+import FacilityDetail from "../pages/yein/FacilityDetail";
 import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
@@ -81,6 +82,11 @@ function Router() {
                 <Route
                     path="/search-result"
                     element={<SearchResult />}
+                />
+
+                <Route
+                    path="/facility-detail/:id"
+                    element={<FacilityDetail />}
                 />
             </Routes>
         </BrowserRouter>

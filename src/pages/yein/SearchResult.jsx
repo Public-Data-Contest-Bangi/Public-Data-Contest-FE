@@ -57,10 +57,10 @@ function AccessIcon({ type }) {
   const src = iconMap[type];
   if (!src) return null;
 
-  let size = 25; // 기본 크기 (휠체어)
-  if (type === 'ramp') size = 35;       // 경사로, 원하는 숫자로 바꾸면 됨
-  if (type === 'restroom') size = 28;   // 화장실, 원하는 숫자로 바꾸면 됨
-  if (type === 'parking') size = 23;    // 주차장, 원하는 숫자로 바꾸면 됨
+  let size = 25;
+  if (type === 'ramp') size = 35;
+  if (type === 'restroom') size = 28;
+  if (type === 'parking') size = 23;
 
   return <img src={src} alt="" style={{ width: size, height: size, objectFit: 'contain' }} />;
 }
@@ -81,7 +81,7 @@ function SearchResult() {
         </BackButton>
         <Title>검색 결과</Title>
         <FilterButton type="button" aria-label="필터" onClick={() => navigate('/search-filter')}>
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M4 6h16M4 12h16M4 18h16" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" />
             <circle cx="9" cy="6" r="2" fill="#ffffff" stroke="#1A1A1A" strokeWidth="1.6" />
             <circle cx="16" cy="12" r="2" fill="#ffffff" stroke="#1A1A1A" strokeWidth="1.6" />
@@ -100,7 +100,7 @@ function SearchResult() {
 
       <List>
         {facilities.map((facility) => (
-          <Card key={facility.id}>
+          <Card key={facility.id} onClick={() => navigate(`/facility-detail/${facility.id}`)}>
             <CardImage />
             <CardBody>
               <CardTitleRow>
