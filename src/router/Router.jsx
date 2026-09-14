@@ -20,6 +20,7 @@ import Signup from "../pages/Login/Signup";
 
 import Preference from "../pages/Onboarding/Preference";
 import MyPage from "../pages/MyPage/MyPage";
+import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -102,6 +103,11 @@ function Router() {
                 <Route
                     path="/mypage"
                     element={<MyPage />}
+                />
+
+                <Route   
+                    path= "/profile-edit"
+                    element= {<ProfileEditPage />}
                 />
 
                 <Route 
