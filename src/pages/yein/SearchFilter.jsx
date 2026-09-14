@@ -52,6 +52,8 @@ const accessibilityItems = [
   { id: 'parking', label: '장애인 주차장' },
 ];
 
+const ACCESS_ICON_SIZE = 50;
+
 function AccessibilityIcon({ type }) {
   const iconMap = {
     wheelchair: wheelchairIcon,
@@ -62,13 +64,13 @@ function AccessibilityIcon({ type }) {
   };
   const src = iconMap[type];
   if (!src) return null;
-
-  let size = 27;
-  if (type === 'ramp') size = 40;
-  if (type === 'elevator') size = 34;
-  if (type === 'restroom') size = 30;
-
-  return <img src={src} alt="" style={{ width: size, height: size, objectFit: 'contain' }} />;
+  return (
+    <img
+      src={src}
+      alt=""
+      style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
+    />
+  );
 }
 
 function SearchFilter() {

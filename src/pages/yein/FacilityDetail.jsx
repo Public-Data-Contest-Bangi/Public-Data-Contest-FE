@@ -60,6 +60,8 @@ const facilitiesDetail = {
   },
 };
 
+const ACCESS_ICON_SIZE = 28;
+
 function ImagePlaceholderIcon() {
   return (
     <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,10 +170,10 @@ function FacilityDetail() {
         </CardTitleRow>
         <CardBody>
           <AccessRow>
-            <img src={wheelchairIcon} alt="" style={{ width: 25, height: 25, objectFit: 'contain' }} />
-            <img src={rampIcon} alt="" style={{ width: 35, height: 35, objectFit: 'contain' }} />
-            <img src={restroomIcon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
-            <img src={parkingIcon} alt="" style={{ width: 23, height: 23, objectFit: 'contain' }} />
+            <img src={wheelchairIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
+            <img src={rampIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
+            <img src={restroomIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
+            <img src={parkingIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
           </AccessRow>
         </CardBody>
       </Card>
@@ -223,7 +225,7 @@ function FacilityDetail() {
         <ProgramLink>자세히 보기 &gt;</ProgramLink>
       </ProgramCard>
 
-      <RouteButton type="button">
+      <RouteButton type="button" onClick={() => navigate('/accessible-route')}>
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
         </svg>

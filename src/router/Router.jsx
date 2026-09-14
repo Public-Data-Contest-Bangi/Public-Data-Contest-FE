@@ -1,6 +1,9 @@
 import SearchFilter from "../pages/yein/SearchFilter";
 import SearchResult from "../pages/yein/SearchResult";
+import SearchEmpty from "../pages/yein/SearchEmpty";
 import FacilityDetail from "../pages/yein/FacilityDetail";
+import AccessibleRoute from "../pages/yein/AccessibleRoute";
+import DepartureSearch from "../pages/yein/DepartureSearch";
 import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
@@ -99,6 +102,21 @@ function Router() {
                 <Route
                     path="/mypage"
                     element={<MyPage />}
+                />
+
+                <Route 
+                    path="/search-empty"
+                    element={<SearchEmpty />}
+                />
+
+                <Route
+                    path="/accessible-route"
+                    element={<AccessibleRoute />}
+                />
+
+                <Route
+                    path="/departure-search"
+                    element={<DepartureSearch />}
                 />
             </Routes>
         </BrowserRouter>
