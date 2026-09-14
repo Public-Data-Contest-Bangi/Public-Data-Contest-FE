@@ -1,3 +1,6 @@
+import SearchFilter from "../pages/yein/SearchFilter";
+import SearchResult from "../pages/yein/SearchResult";
+import FacilityDetail from "../pages/yein/FacilityDetail";
 import FacilitySearch from "../pages/yein/FacilitySearch";
 import {
     BrowserRouter,
@@ -13,6 +16,7 @@ import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
 
 import Preference from "../pages/Onboarding/Preference";
+import MyPage from "../pages/MyPage/MyPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -75,6 +79,26 @@ function Router() {
                 <Route
                     path="/exercise-result"
                     element={<ExerciseResult />}
+                />
+
+                <Route
+                    path="/search-filter"
+                    element={<SearchFilter />}
+                />
+
+                <Route
+                    path="/search-result"
+                    element={<SearchResult />}
+                />
+
+                <Route
+                    path="/facility-detail/:id"
+                    element={<FacilityDetail />}
+                />
+
+                <Route
+                    path="/mypage"
+                    element={<MyPage />}
                 />
             </Routes>
         </BrowserRouter>

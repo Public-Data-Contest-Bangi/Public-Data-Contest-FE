@@ -66,6 +66,7 @@ function BottomNav() {
                 type="button"
                 className="bottom-nav__item"
                 aria-label="마이페이지"
+                onClick={() => navigate("/mypage")}
             >
                 <svg
                     className="bottom-nav__icon"
