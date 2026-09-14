@@ -46,7 +46,7 @@ export const BackButton = styled.button`
 
 export const Title = styled.h1`
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: #000000;
 `;
@@ -114,6 +114,7 @@ export const Card = styled.div`
   border-radius: 16px;
   overflow: hidden;
   background: #ffffff;
+  cursor: pointer;
 `;
 
 export const CardImage = styled.div`
