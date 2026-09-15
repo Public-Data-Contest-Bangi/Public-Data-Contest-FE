@@ -5,6 +5,7 @@ import FacilityDetail from "../pages/yein/FacilityDetail";
 import AccessibleRoute from "../pages/yein/AccessibleRoute";
 import DepartureSearch from "../pages/yein/DepartureSearch";
 import FacilitySearch from "../pages/yein/FacilitySearch";
+
 import {
     BrowserRouter,
     Routes,
@@ -19,6 +20,7 @@ import FindPassword from "../pages/Login/FindPassword";
 import Signup from "../pages/Login/Signup";
 
 import Preference from "../pages/Onboarding/Preference";
+
 import MyPage from "../pages/MyPage/MyPage";
 import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 
@@ -26,9 +28,13 @@ import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
 import ExerciseResult from "../pages/Exercise/ExerciseResult";
 
+import ScrollToTop from "../components/ScrollToTop";
+
 function Router() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
+
             <Routes>
                 <Route
                     path="/"
@@ -105,12 +111,12 @@ function Router() {
                     element={<MyPage />}
                 />
 
-                <Route   
-                    path= "/profile-edit"
-                    element= {<ProfileEditPage />}
+                <Route
+                    path="/profile-edit"
+                    element={<ProfileEditPage />}
                 />
 
-                <Route 
+                <Route
                     path="/search-empty"
                     element={<SearchEmpty />}
                 />

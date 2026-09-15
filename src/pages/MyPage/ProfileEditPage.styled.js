@@ -11,8 +11,10 @@ const BaseButton = styled.button`
 `;
 
 const MessageText = styled.p`
-    margin: -1px 0 0 8px;
+    margin: 0 0 3px 8px;
+
     font-size: 11px;
+    line-height: 13px;
 `;
 
 export const Page = styled.div`
@@ -131,7 +133,8 @@ export const FormSection = styled.section`
     display: flex;
     flex-direction: column;
 
-    gap: 18px;
+    /* 경고/안내 문구가 없을 때 필드 사이 간격 */
+    gap: 16px;
 `;
 
 export const FieldGroup = styled.div`
@@ -174,6 +177,7 @@ export const Input = styled.input`
     background: #ffffff;
 
     font-size: 13px;
+
     color: #222222;
 
     &::placeholder {
@@ -228,7 +232,8 @@ export const PasswordSection = styled.section`
     display: flex;
     flex-direction: column;
 
-    gap: 18px;
+    /* 비밀번호 영역도 동일하게 16px */
+    gap: 16px;
 `;
 
 export const PasswordTitle = styled.h2`

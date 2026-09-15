@@ -23,6 +23,8 @@ export default function ProfileEditPage() {
         newPassword,
         confirmPassword,
 
+        userIdStatus,
+        nicknameStatus,
         emailStatus,
         verificationStatus,
 
@@ -64,13 +66,31 @@ export default function ProfileEditPage() {
             placeholder: "아이디",
             buttonText: "중복확인",
             onButtonClick: handleIdCheck,
+
+            message:
+                userIdStatus === "available"
+                    ? "사용 가능한 아이디입니다."
+                    : userIdStatus === "duplicate"
+                        ? "이미 사용 중인 아이디입니다."
+                        : userIdStatus === "empty"
+                            ? "아이디를 입력해 주세요."
+                            : null,
+
+            messageType:
+                userIdStatus === "available"
+                    ? "success"
+                    : userIdStatus
+                        ? "error"
+                        : null,
         },
+
         {
             label: "이름 입력",
             value: name,
             onChange: handleNameChange,
             placeholder: "이름",
         },
+
         {
             label: "닉네임 입력",
             value: nickname,
@@ -78,7 +98,24 @@ export default function ProfileEditPage() {
             placeholder: "닉네임",
             buttonText: "중복확인",
             onButtonClick: handleNicknameCheck,
+
+            message:
+                nicknameStatus === "available"
+                    ? "사용 가능한 닉네임입니다."
+                    : nicknameStatus === "duplicate"
+                        ? "이미 사용 중인 닉네임입니다."
+                        : nicknameStatus === "empty"
+                            ? "닉네임을 입력해 주세요."
+                            : null,
+
+            messageType:
+                nicknameStatus === "available"
+                    ? "success"
+                    : nicknameStatus
+                        ? "error"
+                        : null,
         },
+
         {
             label: "이메일",
             value: email,
@@ -90,17 +127,18 @@ export default function ProfileEditPage() {
                 emailStatus === "duplicate"
                     ? "이미 가입된 이메일입니다."
                     : emailStatus === "sent"
-                      ? "인증번호를 전송했습니다."
-                      : emailStatus === "error"
-                        ? "이메일을 입력해 주세요."
-                        : null,
+                        ? "인증번호를 전송했습니다."
+                        : emailStatus === "error"
+                            ? "이메일을 입력해 주세요."
+                            : null,
             messageType:
                 emailStatus === "sent"
                     ? "success"
                     : emailStatus
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
+
         {
             label: "인증번호 입력",
             value: verificationCode,
@@ -112,14 +150,14 @@ export default function ProfileEditPage() {
                 verificationStatus === "success"
                     ? "인증되었습니다."
                     : verificationStatus === "error"
-                      ? "인증번호가 일치하지 않습니다."
-                      : null,
+                        ? "인증번호가 일치하지 않습니다."
+                        : null,
             messageType:
                 verificationStatus === "success"
                     ? "success"
                     : verificationStatus === "error"
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
     ];
 
@@ -136,14 +174,14 @@ export default function ProfileEditPage() {
                 currentPasswordStatus === "success"
                     ? "현재 비밀번호가 확인되었습니다."
                     : currentPasswordStatus === "error"
-                      ? "비밀번호가 일치하지 않습니다."
-                      : null,
+                        ? "비밀번호가 일치하지 않습니다."
+                        : null,
             messageType:
                 currentPasswordStatus === "success"
                     ? "success"
                     : currentPasswordStatus === "error"
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
         {
             label: "새 비밀번호",
@@ -159,8 +197,8 @@ export default function ProfileEditPage() {
                 newPasswordStatus === "success"
                     ? "success"
                     : newPasswordStatus === "error"
-                      ? "error"
-                      : "helper",
+                        ? "error"
+                        : "helper",
         },
         {
             label: "새 비밀번호 확인",
@@ -172,14 +210,14 @@ export default function ProfileEditPage() {
                 confirmPasswordStatus === "success"
                     ? "비밀번호가 일치합니다."
                     : confirmPasswordStatus === "error"
-                      ? "비밀번호가 일치하지 않습니다."
-                      : null,
+                        ? "비밀번호가 일치하지 않습니다."
+                        : null,
             messageType:
                 confirmPasswordStatus === "success"
                     ? "success"
                     : confirmPasswordStatus === "error"
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
     ];
 
