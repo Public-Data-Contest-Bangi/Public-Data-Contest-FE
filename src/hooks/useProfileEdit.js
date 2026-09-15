@@ -13,7 +13,12 @@ export default function useProfileEdit() {
     const [verificationCode, setVerificationCode] =
         useState("");
 
-    const [emailStatus, setEmailStatus] = useState(null);
+    const [userIdStatus, setUserIdStatus] =
+        useState(null);
+    const [nicknameStatus, setNicknameStatus] =
+        useState(null);
+    const [emailStatus, setEmailStatus] =
+        useState(null);
     const [verificationStatus, setVerificationStatus] =
         useState(null);
 
@@ -41,6 +46,7 @@ export default function useProfileEdit() {
 
     const handleUserIdChange = (e) => {
         setUserId(e.target.value);
+        setUserIdStatus(null);
     };
 
     const handleNameChange = (e) => {
@@ -49,6 +55,7 @@ export default function useProfileEdit() {
 
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
+        setNicknameStatus(null);
     };
 
     const handleEmailChange = (e) => {
@@ -113,13 +120,35 @@ export default function useProfileEdit() {
     };
 
     const handleIdCheck = () => {
+        if (!userId.trim()) {
+            setUserIdStatus("empty");
+            return;
+        }
+
         // TODO: 아이디 중복확인 API 연결
-        console.log("아이디 중복 확인:", userId);
+
+        // 임시 테스트
+        if (userId === "ham4246") {
+            setUserIdStatus("duplicate");
+        } else {
+            setUserIdStatus("available");
+        }
     };
 
     const handleNicknameCheck = () => {
+        if (!nickname.trim()) {
+            setNicknameStatus("empty");
+            return;
+        }
+
         // TODO: 닉네임 중복확인 API 연결
-        console.log("닉네임 중복 확인:", nickname);
+
+        // 임시 테스트
+        if (nickname === "햄지") {
+            setNicknameStatus("duplicate");
+        } else {
+            setNicknameStatus("available");
+        }
     };
 
     const handleEmailVerify = () => {
@@ -128,20 +157,14 @@ export default function useProfileEdit() {
             return;
         }
 
-        // TODO: 이메일 인증번호 전송 API 연결
-        console.log("이메일 인증 요청:", email);
-
-        /*
-        API 연결 후 예시
-
-        성공:
-        setEmailStatus("sent");
-
-        이미 가입된 이메일:
-        setEmailStatus("duplicate");
-        */
+        // TODO: 이메일 중복확인 + 인증번호 전송 API 연결
 
         // 임시 테스트
+        if (email === "hamham@gmail.com") {
+            setEmailStatus("duplicate");
+            return;
+        }
+
         setEmailStatus("sent");
         setVerificationStatus(null);
     };
@@ -238,6 +261,8 @@ export default function useProfileEdit() {
         newPassword,
         confirmPassword,
 
+        userIdStatus,
+        nicknameStatus,
         emailStatus,
         verificationStatus,
 
