@@ -27,6 +27,9 @@ import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
 import ExerciseResult from "../pages/Exercise/ExerciseResult";
+import FitnessResultIntro from "../pages/Exercise/FitnessResultIntro";
+import FitnessResultInput from "../pages/Exercise/FitnessResultInput";
+import FitnessResultRecommend from "../pages/Exercise/FitnessResultRecommend";
 
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -84,6 +87,21 @@ function Router() {
                 <Route
                     path="/first-exercise"
                     element={<FirstExercise />}
+                />
+
+                <Route
+                    path="/fitness-result"
+                    element={<FitnessResultIntro />}
+                />
+
+                <Route
+                    path="/fitness-result/input"
+                    element={<FitnessResultInput />}
+                />
+
+                <Route
+                    path="/fitness-result/recommend"
+                    element={<FitnessResultRecommend />}
                 />
 
                 <Route
