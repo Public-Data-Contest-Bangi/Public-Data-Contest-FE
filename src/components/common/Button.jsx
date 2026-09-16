@@ -8,7 +8,7 @@ const CommonButton = styled.button`
     border-radius: ${({ $radius }) => $radius || "10px"};
 
     background: ${({ disabled }) =>
-        disabled ? "#d9d9d9" : "#41dc99"};
+        disabled ? "#d9d9d9" : "#40D293"};
 
     color: #ffffff;
 

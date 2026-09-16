@@ -26,6 +26,7 @@ import MyPage from "../pages/MyPage/MyPage";
 import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 import ReportHistory from "../pages/MyPage/Report/ReportHistory";
 import ReportDetail from "../pages/MyPage/Report/ReportDetail";
+import ReportCreate from "../pages/MyPage/Report/ReportCreate";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -80,6 +81,11 @@ function Router() {
                 <Route
                     path="/report-history/:id"
                     element={<ReportDetail />}
+                />
+
+                <Route
+                    path="/report/new"
+                    element={<ReportCreate />}
                 />
 
                 <Route
