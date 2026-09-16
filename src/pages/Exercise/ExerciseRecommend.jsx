@@ -23,7 +23,7 @@ function ExerciseRecommend() {
         }
 
         if (selected === "fitness") {
-            navigate("/fitness-recommend");
+            navigate("/fitness-result");
         }
     };
 
