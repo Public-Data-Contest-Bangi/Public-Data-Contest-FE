@@ -19,7 +19,7 @@ const menuItems = [
         id: 1,
         label: "사용자 불편 신고",
         icon: reportIcon,
-        path: "/report",
+        path: "/report-history",
         hasArrow: true,
     },
     {

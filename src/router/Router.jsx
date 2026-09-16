@@ -6,6 +6,7 @@ import AccessibleRoute from "../pages/yein/AccessibleRoute";
 import DepartureSearch from "../pages/yein/DepartureSearch";
 import FacilitySearch from "../pages/yein/FacilitySearch";
 
+
 import {
     BrowserRouter,
     Routes,
@@ -23,6 +24,8 @@ import Preference from "../pages/Onboarding/Preference";
 
 import MyPage from "../pages/MyPage/MyPage";
 import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
+import ReportHistory from "../pages/MyPage/Report/ReportHistory";
+import ReportDetail from "../pages/MyPage/Report/ReportDetail";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -67,6 +70,16 @@ function Router() {
                 <Route
                     path="/signup"
                     element={<Signup />}
+                />
+
+                <Route
+                    path="/report-history"
+                    element={<ReportHistory />}
+                />
+
+                <Route
+                    path="/report-history/:id"
+                    element={<ReportDetail />}
                 />
 
                 <Route
