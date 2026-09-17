@@ -30,6 +30,8 @@ import ReportCreate from "../pages/MyPage/Report/ReportCreate";
 import MyConditionPage from "../pages/MyPage/MyConditionPage";
 import FavoritesPage from "../pages/MyPage/FavoritesPage";
 
+import ProgramBrowsePage from "../pages/Program/ProgramBrowsePage";
+
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
 import ExerciseResult from "../pages/Exercise/ExerciseResult";
@@ -161,9 +163,9 @@ function Router() {
                 />
 
                 <Route
-                    path ="/favorites"
+                    path="/favorites"
                     element={<FavoritesPage />}
-/>
+                />
 
                 <Route
                     path="/search-empty"
@@ -178,6 +180,11 @@ function Router() {
                 <Route
                     path="/departure-search"
                     element={<DepartureSearch />}
+                />
+
+                <Route
+                    path="/program-browse"
+                    element={<ProgramBrowsePage />}
                 />
             </Routes>
         </BrowserRouter>
