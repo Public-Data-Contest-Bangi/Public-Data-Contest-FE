@@ -122,7 +122,12 @@ function Home() {
               />
             </div>
 
-            <div className="menu-card menu-card--small">
+            <div
+              className="menu-card menu-card--small"
+              onClick={() => navigate("/program-browse")}
+              role="button"
+              tabIndex={0}
+            >
               <span className="menu-card__title">
                 프로그램
                 <br />
