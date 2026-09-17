@@ -60,7 +60,7 @@ function AccessIcon({ type }) {
   if (!src) return null;
   return (
     <img
-      src={src}s
+      src={src}
       alt=""
       style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
     />
