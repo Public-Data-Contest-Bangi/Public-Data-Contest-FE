@@ -1,19 +1,23 @@
-import { useNavigate } from "react-router-dom";
-import "./BottomNav.css";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import * as S from "./BottomNav.styled";
 
 function BottomNav() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     return (
-        <nav className="bottom-nav">
-            <button
+        <S.Nav>
+            <S.NavItem
                 type="button"
-                className="bottom-nav__item bottom-nav__item--active"
                 aria-label="홈"
+                $active={
+                    location.pathname === "/" ||
+                    location.pathname === "/home"
+                }
                 onClick={() => navigate("/")}
             >
-                <svg
-                    className="bottom-nav__icon"
+                <S.NavIcon
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -25,6 +29,7 @@ function BottomNav() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
+
                     <path
                         d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9"
                         stroke="#fff"
@@ -32,16 +37,21 @@ function BottomNav() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                     />
-                </svg>
-            </button>
+                </S.NavIcon>
+            </S.NavItem>
 
-            <button
+            <S.NavItem
                 type="button"
-                className="bottom-nav__item"
                 aria-label="지도"
+                $active={
+                    location.pathname.includes("facility") ||
+                    location.pathname.includes("accessible-route")
+                }
+                onClick={() =>
+                    navigate("/facility-search")
+                }
             >
-                <svg
-                    className="bottom-nav__icon"
+                <S.NavIcon
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -52,6 +62,7 @@ function BottomNav() {
                         strokeWidth="2"
                         strokeLinejoin="round"
                     />
+
                     <circle
                         cx="12"
                         cy="9.5"
@@ -59,17 +70,23 @@ function BottomNav() {
                         stroke="#fff"
                         strokeWidth="2"
                     />
-                </svg>
-            </button>
+                </S.NavIcon>
+            </S.NavItem>
 
-            <button
+            <S.NavItem
                 type="button"
-                className="bottom-nav__item"
                 aria-label="마이페이지"
-                onClick={() => navigate("/mypage")}
+                $active={
+                    location.pathname.includes("mypage") ||
+                    location.pathname.includes("profile") ||
+                    location.pathname.includes("my-condition") ||
+                    location.pathname.includes("report")
+                }
+                onClick={() =>
+                    navigate("/mypage")
+                }
             >
-                <svg
-                    className="bottom-nav__icon"
+                <S.NavIcon
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -81,15 +98,16 @@ function BottomNav() {
                         stroke="#fff"
                         strokeWidth="2"
                     />
+
                     <path
                         d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"
                         stroke="#fff"
                         strokeWidth="2"
                         strokeLinecap="round"
                     />
-                </svg>
-            </button>
-        </nav>
+                </S.NavIcon>
+            </S.NavItem>
+        </S.Nav>
     );
 }
 

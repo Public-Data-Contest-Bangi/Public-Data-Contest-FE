@@ -8,6 +8,7 @@ import BottomNav from "../../components/BottomNav";
 import profileCharacter from "../../assets/images/profile-character.png";
 
 import backIcon from "../../assets/icons/back.png";
+import Header from "../../components/common/Header";
 import reportIcon from "../../assets/icons/reportIcon.png";
 import challengeIcon from "../../assets/icons/challengeIcon.png";
 import heartIcon from "../../assets/icons/heartIcon.png";
@@ -86,21 +87,7 @@ export default function MyPage() {
         <S.Page>
             <S.Container>
                 <S.Content>
-                    <S.Header>
-                        <S.BackButton
-                            type="button"
-                            onClick={() => navigate(-1)}
-                        >
-                            <img
-                                src={backIcon}
-                                alt="뒤로가기"
-                            />
-                        </S.BackButton>
-
-                        <S.HeaderTitle>
-                            마이페이지
-                        </S.HeaderTitle>
-                    </S.Header>
+                    <Header title="마이페이지" />
 
                     <S.ProfileSection>
                         <S.ProfileImage
