@@ -28,6 +28,7 @@ import ReportHistory from "../pages/MyPage/Report/ReportHistory";
 import ReportDetail from "../pages/MyPage/Report/ReportDetail";
 import ReportCreate from "../pages/MyPage/Report/ReportCreate";
 import MyConditionPage from "../pages/MyPage/MyConditionPage";
+import FavoritesPage from "../pages/MyPage/FavoritesPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -158,6 +159,11 @@ function Router() {
                     path="/my-condition"
                     element={<MyConditionPage />}
                 />
+
+                <Route
+                    path ="/favorites"
+                    element={<FavoritesPage />}
+/>
 
                 <Route
                     path="/search-empty"
