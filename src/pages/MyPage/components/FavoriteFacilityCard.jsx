@@ -31,6 +31,7 @@ function AccessIcon({ type }) {
 export default function FavoriteFacilityCard({
     facility,
     onClick,
+    onFavoriteRemove,
 }) {
     const {
         name,
@@ -39,11 +40,13 @@ export default function FavoriteFacilityCard({
         accessibility,
     } = facility;
 
+    const handleHeartClick = (event) => {
+        event.stopPropagation();
+        onFavoriteRemove();
+    };
+
     return (
-        <S.Card
-            type="button"
-            onClick={onClick}
-        >
+        <S.Card onClick={onClick}>
             <S.CardImage />
 
             <S.CardBody>
@@ -52,9 +55,19 @@ export default function FavoriteFacilityCard({
                         {name}
                     </S.CardName>
 
-                    <S.CardDistance>
-                        {distance}
-                    </S.CardDistance>
+                    <S.CardRight>
+                        <S.CardDistance>
+                            {distance}
+                        </S.CardDistance>
+
+                        <S.HeartButton
+                            type="button"
+                            aria-label="즐겨찾기 취소"
+                            onClick={handleHeartClick}
+                        >
+                            ♥
+                        </S.HeartButton>
+                    </S.CardRight>
                 </S.CardTitleRow>
 
                 <S.CardSports>
