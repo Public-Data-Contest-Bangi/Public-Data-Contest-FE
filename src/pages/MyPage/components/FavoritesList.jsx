@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import FavoriteFacilityCard from "./FavoriteFacilityCard";
@@ -9,15 +10,27 @@ import * as S from "../FavoritesPage.styled";
 export default function FavoritesList() {
     const navigate = useNavigate();
 
+    const [favorites, setFavorites] =
+        useState(FAVORITE_FACILITIES);
+
     const handleFacilityClick = (id) => {
         navigate(`/facility-detail/${id}`);
+    };
+
+    const handleFavoriteRemove = (id) => {
+        setFavorites((prev) =>
+            prev.filter(
+                (facility) =>
+                    facility.id !== id
+            )
+        );
     };
 
     return (
         <>
             <S.InfoSection>
                 <S.Count>
-                    총 {FAVORITE_FACILITIES.length}개
+                    총 {favorites.length}개
                 </S.Count>
 
                 <S.Description>
@@ -25,17 +38,36 @@ export default function FavoritesList() {
                 </S.Description>
             </S.InfoSection>
 
-            <S.List>
-                {FAVORITE_FACILITIES.map((facility) => (
-                    <FavoriteFacilityCard
-                        key={facility.id}
-                        facility={facility}
-                        onClick={() =>
-                            handleFacilityClick(facility.id)
-                        }
-                    />
-                ))}
-            </S.List>
+            {favorites.length > 0 ? (
+                <S.List>
+                    {favorites.map(
+                        (facility) => (
+                            <FavoriteFacilityCard
+                                key={
+                                    facility.id
+                                }
+                                facility={
+                                    facility
+                                }
+                                onClick={() =>
+                                    handleFacilityClick(
+                                        facility.id
+                                    )
+                                }
+                                onFavoriteRemove={() =>
+                                    handleFavoriteRemove(
+                                        facility.id
+                                    )
+                                }
+                            />
+                        )
+                    )}
+                </S.List>
+            ) : (
+                <S.EmptyMessage>
+                    즐겨찾기한 시설이 없어요.
+                </S.EmptyMessage>
+            )}
         </>
     );
 }

@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
-export const Card = styled.button`
+export const Card = styled.div`
     width: 100%;
-
-    padding: 0;
 
     border: 1px solid #dedede;
     border-radius: 10px;
@@ -12,11 +10,9 @@ export const Card = styled.button`
 
     background: #ffffff;
 
-    text-align: left;
-
     cursor: pointer;
 
-    font-family: inherit;
+    box-sizing: border-box;
 `;
 
 export const CardImage = styled.div`
@@ -47,11 +43,32 @@ export const CardName = styled.h3`
     color: #1a1a1a;
 `;
 
+export const CardRight = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+`;
+
 export const CardDistance = styled.span`
     font-size: 12px;
     font-weight: 600;
 
     color: #3d3d3d;
+`;
+
+export const HeartButton = styled.button`
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 23px;
+    line-height: 1;
+
+    color: #41dc99;
+
+    cursor: pointer;
 `;
 
 export const CardSports = styled.div`
@@ -79,12 +96,12 @@ export const CardAccessRow = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 8px;
+    gap: 7px;
 `;
 
 export const AccessIcon = styled.img`
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
 
     object-fit: contain;
 `;
@@ -99,3 +116,4 @@ export const CardChevron = styled.span`
 
     color: #1a1a1a;
 `;
+

@@ -62,3 +62,14 @@ export const List = styled.div`
 
     box-sizing: border-box;
 `;
+
+export const EmptyMessage = styled.p`
+    margin: 80px 0 0;
+
+    text-align: center;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    color: #8c8c8c;
+`;
