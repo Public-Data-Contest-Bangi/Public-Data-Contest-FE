@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Page = styled.div`
     width: 100%;
-    min-height: 816px;
+    min-height: max(816px, 100dvh);
 
     display: flex;
     justify-content: center;
@@ -12,7 +12,7 @@ const Page = styled.div`
 
 const Container = styled.div`
     width: 375px;
-    height: 816px;
+    min-height: max(816px, 100dvh);
 
     display: flex;
     flex-direction: column;

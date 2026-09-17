@@ -27,6 +27,7 @@ import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 import ReportHistory from "../pages/MyPage/Report/ReportHistory";
 import ReportDetail from "../pages/MyPage/Report/ReportDetail";
 import ReportCreate from "../pages/MyPage/Report/ReportCreate";
+import MyConditionPage from "../pages/MyPage/MyConditionPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -151,6 +152,11 @@ function Router() {
                 <Route
                     path="/profile-edit"
                     element={<ProfileEditPage />}
+                />
+
+                <Route
+                    path="/my-condition"
+                    element={<MyConditionPage />}
                 />
 
                 <Route
