@@ -31,6 +31,9 @@ import MyConditionPage from "../pages/MyPage/MyConditionPage";
 import FavoritesPage from "../pages/MyPage/FavoritesPage";
 
 import ProgramBrowsePage from "../pages/Program/ProgramBrowsePage";
+import ProgramRegionPage from "../pages/Program/ProgramRegionPage";
+import ProgramResultPage from "../pages/Program/ProgramResultPage";
+import OperatingProgramPage from "../pages/Program/OperatingProgramPage";
 
 import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
 import FirstExercise from "../pages/Exercise/FirstExercise";
@@ -185,6 +188,21 @@ function Router() {
                 <Route
                     path="/program-browse"
                     element={<ProgramBrowsePage />}
+                />
+
+                <Route
+                    path="/program-browse/region"
+                    element={<ProgramRegionPage />}
+                />
+
+                <Route
+                    path="/program-browse/results"
+                    element={<ProgramResultPage />}
+                />
+
+                <Route
+                    path="/facility-detail/:id/programs"
+                    element={<OperatingProgramPage />}
                 />
             </Routes>
         </BrowserRouter>

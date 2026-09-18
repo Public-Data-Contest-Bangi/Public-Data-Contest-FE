@@ -1,14 +1,14 @@
 import MobileLayout from "../../components/layout/MobileLayout";
 import Header from "../../components/common/Header";
 
-import SportSelection from "./components/SportSelection";
+import RegionSelection from "./components/RegionSelection";
 
-export default function ProgramBrowsePage() {
+export default function ProgramRegionPage() {
     return (
         <MobileLayout>
             <Header title="프로그램 둘러보기" />
 
-            <SportSelection />
+            <RegionSelection />
         </MobileLayout>
     );
 }
