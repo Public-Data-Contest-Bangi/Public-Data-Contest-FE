@@ -1,0 +1,20 @@
+export const OPERATING_PROGRAMS = [
+    {
+        id: 1,
+        title: "재활 필라테스 프로그램",
+        className: "재활필라테스",
+        days: "월, 수, 금",
+        time: "10:00 ~ 11:00",
+        applicationPeriod: "상시모집",
+        price: "90,000원",
+    },
+    {
+        id: 2,
+        title: "재활 필라테스 프로그램",
+        className: "재활필라테스",
+        days: "월, 수, 금",
+        time: "10:00 ~ 11:00",
+        applicationPeriod: "상시모집",
+        price: "90,000원",
+    },
+];

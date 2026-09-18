@@ -110,6 +110,10 @@ function FacilityDetail() {
     setActiveSlide(index);
   };
 
+  const handleProgramClick = () => {
+    navigate(`/facility-detail/${id}/programs`);
+  };
+
   return (
     <Container>
       <Header>
@@ -214,15 +218,42 @@ function FacilityDetail() {
         </VoucherText>
       </VoucherCard>
 
-      <ProgramCard type="button">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="3" width="20" height="22" rx="2" fill="var(--color-primary)" />
-          <path d="M9 9h10M9 13h10M9 17h6" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
+      <ProgramCard
+        type="button"
+        onClick={handleProgramClick}
+      >
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="4"
+            y="3"
+            width="20"
+            height="22"
+            rx="2"
+            fill="var(--color-primary)"
+          />
+          <path
+            d="M9 9h10M9 13h10M9 17h6"
+            stroke="#ffffff"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
         </svg>
+
         <ProgramTextWrap>
-          <ProgramTitle>운영 프로그램</ProgramTitle>
+          <ProgramTitle>
+            운영 프로그램
+          </ProgramTitle>
         </ProgramTextWrap>
-        <ProgramLink>자세히 보기 &gt;</ProgramLink>
+
+        <ProgramLink>
+          자세히 보기 &gt;
+        </ProgramLink>
       </ProgramCard>
 
       <RouteButton type="button" onClick={() => navigate('/accessible-route')}>
