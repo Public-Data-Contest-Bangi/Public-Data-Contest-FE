@@ -38,7 +38,7 @@ export const ResultList = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 25px;
+    gap: 30px;
 `;
 
 export const ResultRow = styled.div`
@@ -99,24 +99,18 @@ export const BottomArea = styled.div`
     flex-shrink: 0;
 `;
 
-export const Notice = styled.div`
+export const Notice = styled.p`
     width: 100%;
-    height: 67px;
 
-    padding: 18px;
+    margin: 24px 0 16px;
 
-    margin-bottom: 25px;
+    color: #8a8a8a;
 
-    box-sizing: border-box;
-
-    border-radius: 6px;
-
-    background: #d9d9d9;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
 
     text-align: center;
 
-    font-size: 14px;
-    line-height: normal;
-
-    color: #000;
+    word-break: keep-all;
 `;

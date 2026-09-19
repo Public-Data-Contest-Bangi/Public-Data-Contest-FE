@@ -33,11 +33,11 @@ export const SPORTS_OPTIONS = [
 export const VOUCHER_OPTIONS = [
     "보유함",
     "보유 안 함",
-    "잘 모름",
 ];
 
 export const DEFAULT_CONDITION = {
-    disabilityType: "",
+    disabilityTypes: [],
+
     wheelchair: "사용함",
 
     transports: [
