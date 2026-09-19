@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Page = styled.div`
     width: 100%;
-    min-height: 100vh;
+    min-height: 100dvh;
 
     display: flex;
     justify-content: center;
@@ -12,8 +12,8 @@ export const Page = styled.div`
 `;
 
 export const Container = styled.div`
-    width: 375px;
-    height: 816px;
+    width: min(100%, 375px);
+    min-height: 100dvh;
 
     background: #ffffff;
 
@@ -22,9 +22,12 @@ export const Container = styled.div`
 
 export const Content = styled.main`
     width: 100%;
-    height: 100%;
+    min-height: 100dvh;
 
-    padding: 28px 24px;
+    padding: 28px 24px 24px;
+
+    display: flex;
+    flex-direction: column;
 
     box-sizing: border-box;
 `;
@@ -55,53 +58,42 @@ export const Section = styled.section`
 `;
 
 export const Label = styled.p`
-    margin: 0 0 7px;
+    margin: 0 0 9px;
 
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
 
     color: #333333;
 `;
 
-export const Select = styled.select`
-    width: 100%;
-    height: 38px;
+export const MultipleText = styled.span`
+    margin-left: 5px;
 
-    padding: 0 12px;
+    color: #888888;
 
-    border: 1px solid #d8d8d8;
-    border-radius: 7px;
-
-    background: #ffffff;
-
-    color: #6f6f6f;
-    font-size: 12px;
-
-    outline: none;
-    cursor: pointer;
-
-    &:focus {
-        border-color: #41dc99;
-    }
+    font-size: 11px;
+    font-weight: 400;
 `;
 
 export const RadioRow = styled.div`
     width: 100%;
 
     display: flex;
+
     gap: 10px;
 `;
 
 export const RadioButton = styled.button`
     flex: 1;
     height: 37px;
-    padding: 12px 20px;
+
+    padding: 0 20px;
 
     border: 1px solid
         ${({ $selected }) =>
-        $selected
-            ? "#41dc99"
-            : "#d8d8d8"};
+            $selected
+                ? "#41dc99"
+                : "#d8d8d8"};
 
     border-radius: 18px;
 
@@ -123,47 +115,49 @@ export const RadioButton = styled.button`
 export const HelpText = styled.p`
     margin: 9px 0 0;
 
-    font-size: 11px;
-    font-family: Pretendard;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-
     color: #747474;
+
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.4;
 `;
 
 export const ChipContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
 
-    gap: 9px 12px;
+    gap: 9px 8px;
 `;
 
 export const Chip = styled.button`
-    min-width: 65px;
+    min-width: 72px;
     height: 34px;
 
-    padding: 12px 14px;
+    padding: 0 14px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
     border: 1px solid
         ${({ $selected }) =>
+            $selected
+                ? "#41dc99"
+                : "#d8d8d8"};
+
+    border-radius: 17px;
+
+    background: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
-            : "#d8d8d8"};
-
-    border-radius: 16px;
-
-    background: #ffffff;
+            ? "#ecfff7"
+            : "#ffffff"};
 
     color: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
-            : "#000"};
+            ? "#24c989"
+            : "#333333"};
 
-    font-size: 14px;
+    font-size: 12px;
 
     font-weight: ${({ $selected }) =>
         $selected ? 600 : 400};
@@ -171,44 +165,23 @@ export const Chip = styled.button`
     cursor: pointer;
 `;
 
-export const SubmitButton = styled.button`
-    width: 331px;
-    height: 53px;
+export const ButtonArea = styled.div`
+    width: 100%;
 
-    margin-top: 26px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: ${({ disabled }) =>
-        disabled
-            ? "#d9d9d9"
-            : "#41dc99"};
-
-    color: #ffffff;
-
-    font-size: 18px;
-    font-weight: 600;
-    font-family: Pretendard;
-
-    cursor: ${({ disabled }) =>
-        disabled
-            ? "default"
-            : "pointer"};
+    margin-top: auto;
+    padding-top: 32px;
 `;
 
 export const BottomText = styled.p`
+    width: 100%;
+
     margin: 12px 0 0;
-    width: 327px;
-    height: 62px;
 
     text-align: center;
 
     color: #747474;
-    font-family: Pretendard;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
 
     font-size: 11px;
+    font-weight: 300;
+    line-height: 1.4;
 `;

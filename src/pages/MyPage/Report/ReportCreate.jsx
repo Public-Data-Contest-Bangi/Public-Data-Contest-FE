@@ -11,6 +11,7 @@ function ReportCreate() {
     const {
         form,
         images,
+        imageError,
         isValid,
         handleChange,
         handleImageChange,
@@ -27,6 +28,7 @@ function ReportCreate() {
                     <ReportForm
                         form={form}
                         images={images}
+                        imageError={imageError}
                         onChange={handleChange}
                         onImageChange={handleImageChange}
                         onRemoveImage={handleRemoveImage}

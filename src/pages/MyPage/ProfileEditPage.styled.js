@@ -91,11 +91,28 @@ export const ProfileSection = styled.section`
     padding: 16px 0 54px;
 `;
 
+export const ProfileImageCircle = styled.div`
+    width: 140px;
+    height: 140px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #e5f8ed;
+
+    overflow: hidden;
+`;
+
 export const ProfileImage = styled.img`
-    width: 130px;
-    height: 130px;
+    width: 160px;
+    height: 160px;
+    margin-top: 30px;
 
     object-fit: contain;
+    overflow: hidden;
 `;
 
 export const ProfileImageChangeButton = styled(BaseButton)`
@@ -223,7 +240,7 @@ export const Divider = styled.div`
     width: 100%;
     height: 1px;
 
-    margin: 44px 0 34px;
+    margin: 24px 0 14px;
 
     background: #e1e1e1;
 `;
@@ -262,5 +279,120 @@ export const SubmitButton = styled(BaseButton)`
 
     &:active {
         opacity: 0.85;
+    }
+`;
+
+export const AvatarOverlay = styled.div`
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.35);
+`;
+
+export const AvatarModal = styled.div`
+    width: 100%;
+    max-width: 335px;
+
+    padding: 24px 20px 20px;
+
+    box-sizing: border-box;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+`;
+
+export const AvatarModalTitle = styled.h2`
+    margin: 0;
+
+    color: #111111;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    text-align: center;
+`;
+
+export const AvatarModalDescription = styled.p`
+    margin: 8px 0 24px;
+
+    color: #777777;
+
+    font-size: 12px;
+    font-weight: 400;
+
+    text-align: center;
+`;
+
+export const AvatarGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+`;
+
+export const AvatarOption = styled.button`
+    aspect-ratio: 1;
+
+    padding: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: ${({ $selected }) =>
+        $selected
+            ? `2px solid ${PRIMARY}`
+            : "1px solid #e2e2e2"};
+
+    border-radius: 14px;
+
+    background: ${({ $selected }) =>
+        $selected
+            ? "#ecfff7"
+            : "#ffffff"};
+
+    cursor: pointer;
+
+    img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: contain;
+    }
+`;
+
+export const AvatarCloseButton = styled.button`
+    width: 100%;
+    height: 44px;
+
+    margin-top: 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #f4f4f4;
+
+    color: #333333;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    &:active {
+        background: #eaeaea;
     }
 `;

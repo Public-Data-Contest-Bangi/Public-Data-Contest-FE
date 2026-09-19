@@ -7,6 +7,7 @@ import * as S from "./ReportForm.styled";
 function ReportForm({
     form,
     images,
+    imageError,
     onChange,
     onImageChange,
     onRemoveImage,
@@ -51,7 +52,9 @@ function ReportForm({
             </S.Field>
 
             <S.Field>
-                <S.Label>제목</S.Label>
+                <S.Label>
+                    제목
+                </S.Label>
 
                 <S.Input
                     type="text"
@@ -89,16 +92,23 @@ function ReportForm({
                 />
 
                 <S.Count>
-                    {form.content.length} /
-                    1,000
+                    {form.content.length} / 1,000
                 </S.Count>
             </S.Field>
 
-            <ReportImageUploader
-                images={images}
-                onChange={onImageChange}
-                onRemove={onRemoveImage}
-            />
+            <S.ImageUploadSection>
+                <ReportImageUploader
+                    images={images}
+                    onChange={onImageChange}
+                    onRemove={onRemoveImage}
+                />
+
+                {imageError && (
+                    <S.ImageError>
+                        {imageError}
+                    </S.ImageError>
+                )}
+            </S.ImageUploadSection>
 
             <S.Field>
                 <S.Label>

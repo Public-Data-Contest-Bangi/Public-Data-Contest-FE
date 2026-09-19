@@ -245,3 +245,13 @@ export const ButtonArea = styled.div`
 
     flex-shrink: 0;
 `;
+
+export const ImageError = styled.p`
+    margin: 7px 0 0;
+
+    color: #ff3838;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+`;

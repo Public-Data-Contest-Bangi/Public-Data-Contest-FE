@@ -207,3 +207,19 @@ export const Plus = styled.span`
 export const HiddenInput = styled.input`
     display: none;
 `;
+
+export const ImageUploadSection = styled.div`
+    width: 100%;
+
+    margin-bottom: 20px;
+`;
+
+export const ImageError = styled.p`
+    margin: 7px 0 0;
+
+    color: #ff3838;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+`;
