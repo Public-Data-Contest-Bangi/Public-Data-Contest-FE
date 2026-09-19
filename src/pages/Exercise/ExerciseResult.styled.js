@@ -51,16 +51,16 @@ export const ResultBanner = styled.div`
     overflow: hidden;
 
     width: 100%;
-    height: 132px;
+    height: 165px;
 
-    margin-bottom: 32px;
+    margin-bottom: 41px;
     padding: 25px 16px;
 
     box-sizing: border-box;
 
-    border-radius: 12px;
+    border-radius: 13px;
 
-    background: #3dd9a1;
+    background: #41DC99;
 `;
 
 export const BannerText = styled.div`
@@ -71,28 +71,28 @@ export const BannerText = styled.div`
 export const BannerTitle = styled.div`
     color: #ffffff;
 
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.4;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: normal;
 `;
 
 export const BannerDescription = styled.div`
-    margin-top: 23px;
+    margin-top: 55px;
 
-    color: rgba(255, 255, 255, 0.95);
+    color: #fff;
 
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
 `;
 
 export const BannerCharacter = styled.img`
     position: absolute;
 
-    right: -12px;
-    bottom: -18px;
+    right: 8px;
+    bottom: 10px;
 
-    width: 135px;
-    height: 135px;
+    width: 150px;
+    height: 150px;
 
     object-fit: contain;
 `;
@@ -103,12 +103,12 @@ export const ExerciseList = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 14px;
+    gap: 17px;
 `;
 
 export const ExerciseCard = styled.button`
     width: 100%;
-    height: 78px;
+    height: 94px;
 
     padding: 0 16px;
 
@@ -131,15 +131,13 @@ export const ExerciseCard = styled.button`
     }
 `;
 
-export const ExerciseIcon = styled.div`
-    width: 60px;
+export const ExerciseIcon = styled.img`
+    width: 73px;
+    height: 70px;
 
+    object-fit: contain;
     flex-shrink: 0;
-
-    font-size: 38px;
-    line-height: 1;
-
-    text-align: left;
+    margin-right: 15px;
 `;
 
 export const ExerciseInfo = styled.div`
@@ -149,20 +147,20 @@ export const ExerciseInfo = styled.div`
     flex-direction: column;
     align-items: flex-start;
 
-    gap: 6px;
+    gap: 8px;
 `;
 
 export const ExerciseName = styled.div`
-    color: #111111;
+    color: #000;
 
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
 `;
 
 export const ExerciseDescription = styled.div`
-    color: #555555;
+    color: #222;
 
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 400;
 `;
 
@@ -180,9 +178,9 @@ export const Arrow = styled.div`
 
 export const MessageBox = styled.div`
     width: 100%;
-    height: 58px;
+    height: 70px;
 
-    margin-top: 102px;
+    margin-top: 86px;
     padding: 0 16px;
 
     display: flex;
@@ -193,35 +191,38 @@ export const MessageBox = styled.div`
     border-radius: 10px;
 
     background: #dff9ef;
+
+    overflow: hidden;
 `;
 
 export const MessageCharacter = styled.img`
-    width: 65px;
-    height: 65px;
+    width: 113px;
+    height: 84px;
 
-    margin-top: -12px;
+    margin-top: 13px;
     margin-right: 5px;
 
     object-fit: contain;
+
 `;
 
 export const MessageText = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 3px;
+    gap: 7px;
 `;
 
 export const MessageTitle = styled.div`
-    color: #222222;
+    color: #222;
 
-    font-size: 11px;
+    font-size: 15px;
     font-weight: 700;
 `;
 
 export const MessageDescription = styled.div`
     color: #777777;
 
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 400;
 `;

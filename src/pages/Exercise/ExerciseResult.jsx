@@ -1,12 +1,18 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import RecommendResult from "../../assets/images/recommend-result.png";
+
+import BadmintonIcon from "../../assets/images/exercisename/badminton.png";
+import TableTennisIcon from "../../assets/images/exercisename/tabletennis.png";
+import BocciaIcon from "../../assets/images/exercisename/balling.png";
+
 import BottomNav from "../../components/BottomNav";
 
 import * as S from "./ExerciseResult.styled";
 
 function ExerciseResult() {
     const location = useLocation();
+    const navigate = useNavigate();
 
     // 앞 페이지에서 넘어온 선택 정보
     const formData = location.state;
@@ -15,24 +21,28 @@ function ExerciseResult() {
 
     const exercises = [
         {
-            id: 1,
-            icon: "🏋️",
+            id: "wheelchair-badminton",
+            icon: BadmintonIcon,
             name: "휠체어 배드민턴",
             description: "실내 상체활동",
         },
         {
-            id: 2,
-            icon: "🏓",
+            id: "table-tennis",
+            icon: TableTennisIcon,
             name: "탁구",
             description: "실내 상체활동 개인",
         },
         {
-            id: 3,
-            icon: "🔴",
+            id: "boccia",
+            icon: BocciaIcon,
             name: "보치아",
             description: "실내 비경쟁 단체",
         },
     ];
+
+    const handleExerciseClick = (exerciseId) => {
+        navigate(`/exercise/${exerciseId}`);
+    };
 
     return (
         <S.Page>
@@ -43,7 +53,7 @@ function ExerciseResult() {
                     <S.ResultBanner>
                         <S.BannerText>
                             <S.BannerTitle>
-                                @@_님에게 맞는
+                                혜원님에게 맞는
                                 <br />
                                 첫 운동을 골라봤어요
                             </S.BannerTitle>
@@ -61,10 +71,17 @@ function ExerciseResult() {
 
                     <S.ExerciseList>
                         {exercises.map((exercise) => (
-                            <S.ExerciseCard key={exercise.id}>
-                                <S.ExerciseIcon>
-                                    {exercise.icon}
-                                </S.ExerciseIcon>
+                            <S.ExerciseCard
+                                key={exercise.id}
+                                type="button"
+                                onClick={() =>
+                                    handleExerciseClick(exercise.id)
+                                }
+                            >
+                                <S.ExerciseIcon
+                                    src={exercise.icon}
+                                    alt={`${exercise.name} 아이콘`}
+                                />
 
                                 <S.ExerciseInfo>
                                     <S.ExerciseName>

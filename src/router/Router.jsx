@@ -41,6 +41,7 @@ import ExerciseResult from "../pages/Exercise/ExerciseResult";
 import FitnessResultIntro from "../pages/Exercise/FitnessResultIntro";
 import FitnessResultInput from "../pages/Exercise/FitnessResultInput";
 import FitnessResultRecommend from "../pages/Exercise/FitnessResultRecommend";
+import ExerciseDetailPage from "../pages/Exercise/ExerciseDetailPage";
 
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -133,6 +134,11 @@ function Router() {
                 <Route
                     path="/exercise-result"
                     element={<ExerciseResult />}
+                />
+
+                <Route
+                    path="/exercise/:exerciseId"
+                    element={<ExerciseDetailPage />}
                 />
 
                 <Route
