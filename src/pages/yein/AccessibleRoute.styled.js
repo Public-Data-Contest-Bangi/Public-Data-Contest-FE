@@ -174,6 +174,7 @@ export const MapPlaceholder = styled.div`
   align-items: center;
   justify-content: center;
   gap: 8px;
+  overflow: hidden;
 `;
 
 export const MapPlaceholderText = styled.span`
@@ -195,4 +196,129 @@ export const MapLocateButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+`;
+
+/* ── 시설 상세정보 시트 ───────────────── */
+
+export const FacilitySheet = styled.div`
+  position: fixed;
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 375px;
+  z-index: 999;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+  padding: 16px 20px;
+  box-sizing: border-box;
+`;
+
+export const SheetToggle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+`;
+
+export const Thumbnail = styled.div`
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: #eef2f2;
+`;
+
+export const SheetInfo = styled.div`
+  flex: 1;
+  min-width: 0;
+`;
+
+export const FacilityName = styled.p`
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+`;
+
+export const FacilityAddress = styled.p`
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #999999;
+`;
+
+export const ChevronButton = styled.span`
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(${(props) => (props.$expanded ? '180deg' : '0deg')});
+  transition: transform 0.2s ease;
+`;
+
+export const SheetExpanded = styled.div`
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eeeeee;
+`;
+
+export const AccessibilityLabelRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+`;
+
+export const AccessibilityDot = styled.span`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+`;
+
+export const AccessibilityLabelText = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+  color: #000000;
+`;
+
+export const AccessibilityGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+`;
+
+export const AccessibilityItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+`;
+
+export const AccessibilityIconWrap = styled.div`
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const AccessibilityItemLabel = styled.span`
+  font-size: 12px;
+  color: #666666;
+  text-align: center;
+  line-height: 1.3;
 `;

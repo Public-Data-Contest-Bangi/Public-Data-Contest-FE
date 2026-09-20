@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
 import swapIcon from '../../assets/icons/swap-icon.png';
 import locationIcon from '../../assets/icons/location-icon.png';
+import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
+import rampIcon from '../../assets/icons/ramp-icon.png';
+import restroomIcon from '../../assets/icons/restroom-icon.png';
+import parkingIcon from '../../assets/icons/parking-icon.png';
 import {
   Container,
   Header,
@@ -21,13 +25,41 @@ import {
   MapPlaceholder,
   MapPlaceholderText,
   MapLocateButton,
+  FacilitySheet,
+  SheetToggle,
+  Thumbnail,
+  SheetInfo,
+  FacilityName,
+  FacilityAddress,
+  ChevronButton,
+  SheetExpanded,
+  AccessibilityLabelRow,
+  AccessibilityDot,
+  AccessibilityLabelText,
+  AccessibilityGrid,
+  AccessibilityItem,
+  AccessibilityIconWrap,
+  AccessibilityItemLabel,
 } from './AccessibleRoute.styled';
+
+const ACCESSIBILITY_ITEMS = [
+  { icon: wheelchairIcon, label: '휠체어 접근' },
+  { icon: rampIcon, label: '경사로' },
+  { icon: restroomIcon, label: '장애인 화장실' },
+  { icon: parkingIcon, label: '장애인 주차장' },
+];
+
+const FACILITY = {
+  name: '중구 체육센터',
+  address: '서울특별시 중구 123 45',
+};
 
 function AccessibleRoute() {
   const navigate = useNavigate();
   const location = useLocation();
   const [departure, setDeparture] = useState(location.state?.departure || '현재 위치');
   const [arrival, setArrival] = useState('중구 체육센터');
+  const [sheetExpanded, setSheetExpanded] = useState(false);
 
   const handleSwap = () => {
     setDeparture(arrival);
@@ -109,6 +141,41 @@ function AccessibleRoute() {
           <img src={locationIcon} alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />
         </MapLocateButton>
       </MapPlaceholder>
+
+      <FacilitySheet>
+        <SheetToggle type="button" onClick={() => setSheetExpanded((prev) => !prev)}>
+          <Thumbnail />
+          <SheetInfo>
+            <FacilityName>{FACILITY.name}</FacilityName>
+            <FacilityAddress>{FACILITY.address}</FacilityAddress>
+          </SheetInfo>
+          <ChevronButton $expanded={sheetExpanded} aria-label="상세정보 펼치기/접기">
+            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 6.5L6 1.5L11 6.5" stroke="#1A1A1A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </ChevronButton>
+        </SheetToggle>
+
+        {sheetExpanded && (
+          <SheetExpanded>
+            <AccessibilityLabelRow>
+              <AccessibilityDot />
+              <AccessibilityLabelText>접근성 정보</AccessibilityLabelText>
+            </AccessibilityLabelRow>
+
+            <AccessibilityGrid>
+              {ACCESSIBILITY_ITEMS.map((item) => (
+                <AccessibilityItem key={item.label}>
+                  <AccessibilityIconWrap>
+                    <img src={item.icon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+                  </AccessibilityIconWrap>
+                  <AccessibilityItemLabel>{item.label}</AccessibilityItemLabel>
+                </AccessibilityItem>
+              ))}
+            </AccessibilityGrid>
+          </SheetExpanded>
+        )}
+      </FacilitySheet>
 
       <BottomNav />
     </Container>

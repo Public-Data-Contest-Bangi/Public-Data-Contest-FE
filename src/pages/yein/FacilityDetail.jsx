@@ -60,7 +60,7 @@ const facilitiesDetail = {
   },
 };
 
-const ACCESS_ICON_SIZE = 28;
+const ACCESS_ICON_SIZE = 50;
 
 function ImagePlaceholderIcon() {
   return (
@@ -260,7 +260,7 @@ function FacilityDetail() {
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
         </svg>
-        무장애 경로 보기
+        경로 보기
       </RouteButton>
 
       <BottomNav />
