@@ -7,19 +7,24 @@ import * as S from "./FitnessResultRecommend.styled";
 
 import bannerMascot from "../../assets/images/fitness-recommend.png";
 import InfoBanner from "../../components/common/InfoBanner";
-import tabletennis from "../../assets/images/exerciseName/tabletennis.png";
+import fitness from "../../assets/images/exercisename/fitness.png";
+import swim from "../../assets/images/exercisename/swim.png";
+import tabletennis from "../../assets/images/exercisename/table-tennis.png";
+import yoga from "../../assets/images/exercisename/yoga.png";
+import badminton from "../../assets/images/exercisename/badminton.png";
+import jumpRope from "../../assets/images/exercisename/jump-rope.png";
 
 
 const RECOMMEND_DATA = {
     근력: {
         exercise: "웨이트 트레이닝",
-        icon: "🏋️",
+        image: fitness,
         description: "실내 근력활동 개인",
     },
 
     근지구력: {
         exercise: "수영",
-        icon: "🏊",
+        image: swim,
         description: "실내 전신활동 개인",
     },
 
@@ -31,19 +36,19 @@ const RECOMMEND_DATA = {
 
     유연성: {
         exercise: "요가",
-        icon: "🧘",
+        image: yoga,
         description: "실내 유연성활동 개인",
     },
 
     민첩성: {
         exercise: "배드민턴",
-        icon: "🏸",
+        image: badminton,
         description: "실내 전신활동 개인",
     },
 
     순발력: {
         exercise: "줄넘기",
-        icon: "🤸",
+        image: jumpRope,
         description: "실내 전신활동 개인",
     },
 };

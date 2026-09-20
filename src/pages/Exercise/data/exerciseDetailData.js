@@ -1,12 +1,14 @@
+export const EXERCISE_DETAIL_COMMON = {
+    title: "처음이라면\n기초부터 시작해요",
+    description:
+        "가까운 체험 가능 시설을 알려드릴게요.",
+};
+
 export const EXERCISE_DETAIL_DATA = {
     "wheelchair-badminton": {
         name: "휠체어 배드민턴",
 
         tags: ["실내", "상체"],
-
-        title: "처음이라면\n기초부터 시작해요",
-
-        description: "가까운 체험 가능 시설을 알려드릴게요.",
 
         facilities: [
             {
@@ -33,10 +35,6 @@ export const EXERCISE_DETAIL_DATA = {
 
         tags: ["실내", "상체"],
 
-        title: "처음이라면\n가볍게 시작해요",
-
-        description: "탁구를 체험할 수 있는 가까운 시설이에요.",
-
         facilities: [
             {
                 id: 1,
@@ -53,10 +51,6 @@ export const EXERCISE_DETAIL_DATA = {
         name: "보치아",
 
         tags: ["실내", "단체"],
-
-        title: "부담 없이\n함께 시작해봐요",
-
-        description: "보치아 프로그램이 있는 시설을 알려드릴게요.",
 
         facilities: [
             {

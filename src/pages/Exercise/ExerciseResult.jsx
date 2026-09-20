@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import RecommendResult from "../../assets/images/recommend-result.png";
 
 import BadmintonIcon from "../../assets/images/exercisename/badminton.png";
-import TableTennisIcon from "../../assets/images/exercisename/tabletennis.png";
-import BocciaIcon from "../../assets/images/exercisename/balling.png";
+import TableTennisIcon from "../../assets/images/exercisename/table-tennis.png";
+import BocciaIcon from "../../assets/images/exercisename/boccia.png";
 
 import BottomNav from "../../components/BottomNav";
 

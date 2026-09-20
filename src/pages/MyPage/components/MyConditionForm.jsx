@@ -73,20 +73,6 @@ function MyConditionForm({
                 </S.HelpText>
             </S.Section>
 
-            <S.Section>
-                <S.Label>
-                    선호 이동수단
-                    <S.SubLabel>
-                        (중복 선택 가능)
-                    </S.SubLabel>
-                </S.Label>
-
-                <ConditionChoiceGroup
-                    options={TRANSPORT_OPTIONS}
-                    selected={transports}
-                    onToggle={handleTransportToggle}
-                />
-            </S.Section>
 
             <S.Section>
                 <S.Label>

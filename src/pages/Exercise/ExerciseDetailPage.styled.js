@@ -57,7 +57,7 @@ export const Tag = styled.div`
 /* 안내 문구 */
 
 export const Intro = styled.section`
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 `;
 
 export const IntroTitle = styled.h2`
@@ -175,7 +175,7 @@ export const FacilityName = styled.div`
 export const Distance = styled.span`
     flex-shrink: 0;
 
-    color: #000;
+    color: #40D293;
 
     font-size: 14px;
     font-weight: 600;

@@ -29,7 +29,7 @@ export const Banner = styled.div`
 
     border-radius: 12px;
 
-    background: #41dc99;
+    background: #40D293;
 
     box-sizing: border-box;
 `;

@@ -92,7 +92,7 @@ export const RadioButton = styled.button`
     border: 1px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "#d8d8d8"};
 
     border-radius: 18px;
@@ -101,7 +101,7 @@ export const RadioButton = styled.button`
 
     color: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
+            ? "#40D293"
             : "#777777"};
 
     font-size: 12px;
@@ -142,7 +142,7 @@ export const Chip = styled.button`
     border: 1px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "#d8d8d8"};
 
     border-radius: 17px;

@@ -60,7 +60,7 @@ export const ResultBanner = styled.div`
 
     border-radius: 13px;
 
-    background: #41DC99;
+    background: #40D293;
 `;
 
 export const BannerText = styled.div`
@@ -138,6 +138,8 @@ export const ExerciseIcon = styled.img`
     object-fit: contain;
     flex-shrink: 0;
     margin-right: 15px;
+    margin-left: -5px;
+    margin-top: -10px;
 `;
 
 export const ExerciseInfo = styled.div`

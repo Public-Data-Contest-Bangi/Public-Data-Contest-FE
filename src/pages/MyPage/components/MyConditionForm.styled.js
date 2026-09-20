@@ -78,7 +78,7 @@ export const Select = styled.select`
     outline: none;
 
     &:focus {
-        border-color: #41dc99;
+        border-color: #40D293;
     }
 `;
 
@@ -125,7 +125,7 @@ export const PillButton = styled.button`
     border: 2px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "#dedede"};
 
     border-radius: 20px;
@@ -134,7 +134,7 @@ export const PillButton = styled.button`
 
     color: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
+            ? "#40D293"
             : "#999999"};
 
     font-size: 14px;
@@ -166,7 +166,7 @@ export const Chip = styled.button`
     border: 2px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "#dedede"};
 
     border-radius: 20px;
@@ -175,7 +175,7 @@ export const Chip = styled.button`
 
     color: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
+            ? "#40D293"
             : "#555555"};
 
     font-size: 14px;

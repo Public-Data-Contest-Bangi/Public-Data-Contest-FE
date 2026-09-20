@@ -77,3 +77,29 @@ export const ButtonArea = styled.div`
 
     margin-top: 48px;
 `;
+
+export const TopArea = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+`;
+
+export const StatusBadge = styled.span`
+    padding: 4px 9px;
+
+    border: 1px solid
+        ${({ $isCompleted }) =>
+            $isCompleted ? "#40D293" : "#D9D9D9"};
+
+    border-radius: 20px;
+
+    color: ${({ $isCompleted }) =>
+        $isCompleted ? "#20C985" : "#777777"};
+
+    font-size: 11px;
+    font-weight: 500;
+
+    background: #ffffff;
+
+    white-space: nowrap;
+`;

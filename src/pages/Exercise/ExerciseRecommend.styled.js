@@ -84,14 +84,14 @@ export const OptionCard = styled.button`
     border: 1px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "rgba(0, 0, 0, 0.35)"};
 
     border-radius: 13px;
 
     background: ${({ $selected }) =>
         $selected
-            ? "#41dc99"
+            ? "#40D293"
             : "#ffffff"};
 
     text-align: left;
