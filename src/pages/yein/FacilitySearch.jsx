@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './FacilitySearch.css';
 import mascotSearchImg from './assets/facility-search/mascot-search.png';
 
@@ -25,6 +26,7 @@ const regionData = {
 const provinces = Object.keys(regionData);
 
 function FacilitySearch() {
+  const navigate = useNavigate();
   const [province, setProvince] = useState('서울특별시');
   const [district, setDistrict] = useState(regionData['서울특별시'][0]);
   const [openMenu, setOpenMenu] = useState(null); // 'province' | 'district' | null
@@ -58,7 +60,7 @@ function FacilitySearch() {
   return (
     <div className="facility-search">
       <header className="facility-search__header">
-        <button type="button" className="facility-search__back" aria-label="뒤로가기">
+        <button type="button" className="facility-search__back" aria-label="뒤로가기" onClick={() => navigate(-1)}>
           <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M11.8899 1.76664L10.1216 -2.67029e-05L0.489917 9.62831C0.33466 9.78259 0.211445 9.96605 0.127365 10.1681C0.0432855 10.3702 0 10.5869 0 10.8058C0 11.0247 0.0432855 11.2414 0.127365 11.4435C0.211445 11.6456 0.33466 11.829 0.489917 11.9833L10.1216 21.6166L11.8883 19.85L2.84825 10.8083L11.8899 1.76664Z"
@@ -120,7 +122,11 @@ function FacilitySearch() {
         </div>
 
         <div className="facility-search__selects">
-          <div className="facility-search__select-wrap" ref={provinceRef}>
+          <div
+            className="facility-search__select-wrap"
+            ref={provinceRef}
+            onClick={() => setOpenMenu(openMenu === 'province' ? null : 'province')}
+          >
             <svg
               className="facility-search__select-icon"
               width="16"
@@ -136,13 +142,7 @@ function FacilitySearch() {
               <rect x="8.5" y="7.5" width="2" height="2" fill="var(--color-primary)" />
               <rect x="6.5" y="11" width="3" height="3" fill="var(--color-primary)" />
             </svg>
-            <button
-              type="button"
-              className="facility-search__select-trigger"
-              onClick={() => setOpenMenu(openMenu === 'province' ? null : 'province')}
-            >
-              {province}
-            </button>
+            <span className="facility-search__select-trigger">{province}</span>
             <svg
               className={`facility-search__select-chevron${openMenu === 'province' ? ' facility-search__select-chevron--open' : ''}`}
               width="12"
@@ -158,7 +158,13 @@ function FacilitySearch() {
               <ul className="facility-search__select-menu">
                 {provinces.map((p) => (
                   <li key={p}>
-                    <button type="button" onClick={() => handleSelectProvince(p)}>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectProvince(p);
+                      }}
+                    >
                       {p}
                     </button>
                   </li>
@@ -167,7 +173,11 @@ function FacilitySearch() {
             )}
           </div>
 
-          <div className="facility-search__select-wrap" ref={districtRef}>
+          <div
+            className="facility-search__select-wrap"
+            ref={districtRef}
+            onClick={() => setOpenMenu(openMenu === 'district' ? null : 'district')}
+          >
             <svg
               className="facility-search__select-icon"
               width="16"
@@ -181,13 +191,7 @@ function FacilitySearch() {
                 fill="var(--color-primary)"
               />
             </svg>
-            <button
-              type="button"
-              className="facility-search__select-trigger"
-              onClick={() => setOpenMenu(openMenu === 'district' ? null : 'district')}
-            >
-              {district}
-            </button>
+            <span className="facility-search__select-trigger">{district}</span>
             <svg
               className={`facility-search__select-chevron${openMenu === 'district' ? ' facility-search__select-chevron--open' : ''}`}
               width="12"
@@ -203,7 +207,13 @@ function FacilitySearch() {
               <ul className="facility-search__select-menu">
                 {regionData[province].map((d) => (
                   <li key={d}>
-                    <button type="button" onClick={() => handleSelectDistrict(d)}>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectDistrict(d);
+                      }}
+                    >
                       {d}
                     </button>
                   </li>
@@ -213,14 +223,10 @@ function FacilitySearch() {
           </div>
         </div>
       </section>
-            
 
-        <button type="button" className="facility-search__submit">
-          시설 검색하기
-        </button>
-
-        {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
-        <div className="facility-search__results" />
+      <button type="button" className="facility-search__submit" onClick={() => navigate('/search-result')}>
+        시설 검색하기
+      </button>
 
       {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
       <div className="facility-search__results" />

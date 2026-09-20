@@ -109,7 +109,12 @@ function Home() {
           </div>
 
           <div className="home__menu-side">
-            <div className="menu-card menu-card--small">
+            <div
+              className="menu-card menu-card--small"
+              onClick={() => navigate("/facility-search")}
+              role="button"
+              tabIndex={0}
+            >
               <span className="menu-card__title">
                 시설 검색
               </span>
