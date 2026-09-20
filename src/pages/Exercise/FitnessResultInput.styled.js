@@ -73,7 +73,7 @@ export const GradeButton = styled.button`
     border: 1px solid
         ${({ $selected }) =>
             $selected
-                ? "#41dc99"
+                ? "#40D293"
                 : "#aaaaaa"};
 
     border-radius: 21px;

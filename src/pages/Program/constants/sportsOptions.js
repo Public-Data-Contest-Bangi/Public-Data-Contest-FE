@@ -32,3 +32,48 @@ export const SPORTS_OPTIONS = [
     "당구",
     "종합체육시설",
 ];
+
+const iconFiles = import.meta.glob("../../../assets/images/exercisename/*.png", {
+    eager: true,
+    query: "?url",
+    import: "default",
+});
+
+const iconNameBySport = {
+    검도: "kendo",
+    골프: "golf",
+    농구: "basketball",
+    댄스: "dance",
+    배구: "volleyball",
+    배드민턴: "badminton",
+    복싱: "boxing",
+    볼링: "bowling",
+    스케이트: "skating",
+    수영: "swim",
+    스쿼시: "squash",
+    승마: "horse-riding",
+    야구: "baseball",
+    에어로빅: "aerobic",
+    요가: "yoga",
+    유도: "judo",
+    줄넘기: "jump-rope",
+    축구: "soccer",
+    탁구: "table-tennis",
+    태권도: "taekwondo",
+    테니스: "tennis",
+    펜싱: "fencing",
+    필라테스: "pilates",
+    헬스: "fitness",
+    크로스핏: "crossfit",
+    주짓수: "jiu-jitsu",
+    클라이밍: "climbing",
+    당구: "billiards",
+    종합체육시설: "sport-complex",
+};
+
+export const SPORT_ICONS = Object.fromEntries(
+    Object.entries(iconNameBySport).map(([sport, fileName]) => [
+        sport,
+        iconFiles[`../../../assets/images/exercisename/${fileName}.png`],
+    ])
+);

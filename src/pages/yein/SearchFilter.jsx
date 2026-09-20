@@ -194,7 +194,7 @@ function SearchFilter() {
         <Section>
           <SectionTitle>스포츠 바우처 이용 가능</SectionTitle>
           <RadioList>
-            {['전체', '이용 가능', '이용 불가'].map((option) => (
+            {['전체', '이용 가능'].map((option) => (
               <RadioRow key={option}>
                 <HiddenRadio
                   name="voucher"

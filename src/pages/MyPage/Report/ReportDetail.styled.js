@@ -182,3 +182,47 @@ export const ButtonArea = styled.div`
 
     flex-shrink: 0;
 `;
+
+export const EditButtonArea = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    margin-top: 16px;
+`;
+
+export const EditButton = styled.button`
+    padding: 8px 18px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #555555;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+`;
+
+export const DeleteButton = styled.button`
+    padding: 8px 18px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #ff5c5c;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+`;
+
+export const AnswerArea = styled.div`
+    margin-top: 28px;
+`;

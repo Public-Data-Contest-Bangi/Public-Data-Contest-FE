@@ -66,7 +66,7 @@ export const HeartButton = styled.button`
     font-size: 23px;
     line-height: 1;
 
-    color: #41dc99;
+    color: #40D293;
 
     cursor: pointer;
 `;

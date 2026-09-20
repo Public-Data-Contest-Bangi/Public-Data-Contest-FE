@@ -55,7 +55,7 @@ export const Select = styled.select`
     -moz-appearance: none;
 
     &:focus {
-        border-color: #41dc99;
+        border-color: #40D293;
     }
 `;
 
@@ -96,7 +96,7 @@ export const Input = styled.input`
     }
 
     &:focus {
-        border-color: #41dc99;
+        border-color: #40D293;
     }
 `;
 
@@ -124,7 +124,7 @@ export const Textarea = styled.textarea`
     }
 
     &:focus {
-        border-color: #41dc99;
+        border-color: #40D293;
     }
 `;
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../../components/common/Button";
-import { SPORTS_OPTIONS } from "../constants/sportsOptions";
+import { SPORTS_OPTIONS, SPORT_ICONS } from "../constants/sportsOptions";
 
 import * as S from "./SportSelection.styled";
 
@@ -56,6 +56,9 @@ export default function SportSelection() {
                                     handleSportToggle(sport)
                                 }
                             >
+                                {SPORT_ICONS[sport] && (
+                                    <S.SportIcon src={SPORT_ICONS[sport]} alt="" />
+                                )}
                                 {sport}
                             </S.SportButton>
                         );

@@ -4,7 +4,10 @@ import MobileLayout from "../../components/layout/MobileLayout";
 import Header from "../../components/common/Header";
 
 import NearbyFacilityCard from "./components/NearbyFacilityCard";
-import { EXERCISE_DETAIL_DATA } from "./data/exerciseDetailData";
+import {
+    EXERCISE_DETAIL_COMMON,
+    EXERCISE_DETAIL_DATA,
+} from "./data/exerciseDetailData";
 
 import * as S from "./ExerciseDetailPage.styled";
 
@@ -36,22 +39,26 @@ function ExerciseDetailPage() {
 
                     <S.Intro>
                         <S.IntroTitle>
-                            {exercise.title}
+                            {EXERCISE_DETAIL_COMMON.title}
                         </S.IntroTitle>
 
                         <S.IntroDescription>
-                            {exercise.description}
+                            {EXERCISE_DETAIL_COMMON.description}
                         </S.IntroDescription>
                     </S.Intro>
 
                     <S.FacilityList>
-                        {exercise.facilities.map((facility) => (
-                            <NearbyFacilityCard
-                                key={facility.id}
-                                facility={facility}
-                                onClick={handleFacilityClick}
-                            />
-                        ))}
+                        {exercise.facilities.map(
+                            (facility) => (
+                                <NearbyFacilityCard
+                                    key={facility.id}
+                                    facility={facility}
+                                    onClick={
+                                        handleFacilityClick
+                                    }
+                                />
+                            )
+                        )}
                     </S.FacilityList>
                 </S.Content>
             </S.Container>

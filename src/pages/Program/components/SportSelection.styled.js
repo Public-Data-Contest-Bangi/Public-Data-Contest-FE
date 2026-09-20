@@ -55,22 +55,23 @@ export const SportGrid = styled.div`
 
 export const SportButton = styled.button`
     width: 100%;
-    height: 36px;
+    min-height: 36px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
 
-    padding: 0 4px;
+    padding: 4px;
 
     border: 1px solid
         ${({ $selected }) =>
-            $selected ? "#41dc99" : "#cfcfcf"};
+            $selected ? "#40D293" : "#cfcfcf"};
 
     border-radius: 18px;
 
     background: ${({ $selected }) =>
-        $selected ? "#41dc99" : "#ffffff"};
+        $selected ? "#40D293" : "#ffffff"};
 
     color: ${({ $selected }) =>
         $selected ? "#ffffff" : "#222222"};
@@ -81,10 +82,17 @@ export const SportButton = styled.button`
     line-height: 1;
     letter-spacing: -0.2px;
 
-    white-space: nowrap;
+    text-align: center;
 
     cursor: pointer;
     box-sizing: border-box;
+`;
+
+export const SportIcon = styled.img`
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    object-fit: contain;
 `;
 
 export const BottomArea = styled.div`
