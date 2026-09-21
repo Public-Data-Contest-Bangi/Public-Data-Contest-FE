@@ -1,11 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/BottomNav';
-import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
-import rampIcon from '../../assets/icons/ramp-icon.png';
-import elevatorIcon from '../../assets/icons/elevator-icon.png';
-import restroomIcon from '../../assets/icons/restroom-icon.png';
-import parkingIcon from '../../assets/icons/parking-icon.png';
 import sportTagIcon from '../../assets/icons/sport-tag-icon.png';
+import { FILTER_CHIPS, FACILITIES } from './utils/searchResultData';
+import AccessIcon from './components/AccessIcon';
 import {
   Container,
   Header,
@@ -26,46 +23,6 @@ import {
   CardAccessRow,
   CardChevron,
 } from './SearchResult.styled';
-
-const filterChips = ['계단 없는 출입', '장애인 화장실'];
-
-const facilities = [
-  {
-    id: 1,
-    name: '장충체육센터',
-    distance: '850m',
-    sports: '헬스 배드민턴 축구',
-    accessibility: ['wheelchair', 'ramp', 'restroom', 'parking'],
-  },
-  {
-    id: 2,
-    name: '중구 다목적체육관',
-    distance: '850m',
-    sports: '헬스 배드민턴 축구',
-    accessibility: ['wheelchair', 'ramp', 'restroom', 'parking'],
-  },
-];
-
-const ACCESS_ICON_SIZE = 50;
-
-function AccessIcon({ type }) {
-  const iconMap = {
-    wheelchair: wheelchairIcon,
-    ramp: rampIcon,
-    elevator: elevatorIcon,
-    restroom: restroomIcon,
-    parking: parkingIcon,
-  };
-  const src = iconMap[type];
-  if (!src) return null;
-  return (
-    <img
-      src={src}
-      alt=""
-      style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
-    />
-  );
-}
 
 function SearchResult() {
   const navigate = useNavigate();
@@ -95,13 +52,13 @@ function SearchResult() {
       <CountText>총 27개</CountText>
 
       <ChipRow>
-        {filterChips.map((chip) => (
+        {FILTER_CHIPS.map((chip) => (
           <Chip key={chip}>{chip}</Chip>
         ))}
       </ChipRow>
 
       <List>
-        {facilities.map((facility) => (
+        {FACILITIES.map((facility) => (
           <Card key={facility.id} onClick={() => navigate(`/facility-detail/${facility.id}`)}>
             <CardImage />
             <CardBody>

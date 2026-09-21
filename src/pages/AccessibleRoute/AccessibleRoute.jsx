@@ -1,17 +1,12 @@
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../../components/common/Header';
+import Button from '../../components/common/Button';
 import BottomNav from '../../components/BottomNav';
+import { useAccessibleRoute } from './hooks/useAccessibleRoute';
+import { ACCESSIBILITY_ITEMS, FACILITY } from './utils/accessibleRouteConstants';
 import swapIcon from '../../assets/icons/swap-icon.png';
 import locationIcon from '../../assets/icons/location-icon.png';
-import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
-import rampIcon from '../../assets/icons/ramp-icon.png';
-import restroomIcon from '../../assets/icons/restroom-icon.png';
-import parkingIcon from '../../assets/icons/parking-icon.png';
 import {
   Container,
-  Header,
-  BackButton,
-  Title,
   RouteCard,
   Row,
   Dot,
@@ -21,7 +16,7 @@ import {
   RowLabel,
   RowValue,
   GpsButton,
-  SearchButton,
+  SearchButtonWrap,
   MapPlaceholder,
   MapPlaceholderText,
   MapLocateButton,
@@ -42,43 +37,20 @@ import {
   AccessibilityItemLabel,
 } from './AccessibleRoute.styled';
 
-const ACCESSIBILITY_ITEMS = [
-  { icon: wheelchairIcon, label: '휠체어 접근' },
-  { icon: rampIcon, label: '경사로' },
-  { icon: restroomIcon, label: '장애인 화장실' },
-  { icon: parkingIcon, label: '장애인 주차장' },
-];
-
-const FACILITY = {
-  name: '중구 체육센터',
-  address: '서울특별시 중구 123 45',
-};
-
 function AccessibleRoute() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [departure, setDeparture] = useState(location.state?.departure || '현재 위치');
-  const [arrival, setArrival] = useState('중구 체육센터');
-  const [sheetExpanded, setSheetExpanded] = useState(false);
-
-  const handleSwap = () => {
-    setDeparture(arrival);
-    setArrival(departure);
-  };
+  const {
+    departure,
+    arrival,
+    sheetExpanded,
+    handleSwap,
+    handleSearchRoute,
+    toggleSheet,
+    goDepartureSearch,
+  } = useAccessibleRoute();
 
   return (
     <Container>
-      <Header>
-        <BackButton type="button" aria-label="뒤로가기" onClick={() => navigate(-1)}>
-          <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M11.8899 1.76664L10.1216 -2.67029e-05L0.489917 9.62831C0.33466 9.78259 0.211445 9.96605 0.127365 10.1681C0.0432855 10.3702 0 10.5869 0 10.8058C0 11.0247 0.0432855 11.2414 0.127365 11.4435C0.211445 11.6456 0.33466 11.829 0.489917 11.9833L10.1216 21.6166L11.8883 19.85L2.84825 10.8083L11.8899 1.76664Z"
-              fill="#1A1A1A"
-            />
-          </svg>
-        </BackButton>
-        <Title>무장애 경로 안내</Title>
-      </Header>
+      <Header title="무장애 경로 안내" />
 
       <RouteCard>
         <Row>
@@ -88,7 +60,7 @@ function AccessibleRoute() {
             as="button"
             type="button"
             style={{ textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-            onClick={() => navigate('/departure-search')}
+            onClick={goDepartureSearch}
           >
             {departure}
           </RowValue>
@@ -118,12 +90,16 @@ function AccessibleRoute() {
         </Row>
       </RouteCard>
 
-      <SearchButton type="button">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
-        </svg>
-        경로 검색
-      </SearchButton>
+      <SearchButtonWrap>
+        <Button type="button" radius="16px" onClick={handleSearchRoute}>
+          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
+            경로 검색
+          </span>
+        </Button>
+      </SearchButtonWrap>
 
       <MapPlaceholder>
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +119,7 @@ function AccessibleRoute() {
       </MapPlaceholder>
 
       <FacilitySheet>
-        <SheetToggle type="button" onClick={() => setSheetExpanded((prev) => !prev)}>
+        <SheetToggle type="button" onClick={toggleSheet}>
           <Thumbnail />
           <SheetInfo>
             <FacilityName>{FACILITY.name}</FacilityName>

@@ -1,10 +1,10 @@
-import SearchFilter from "../pages/yein/SearchFilter";
-import SearchResult from "../pages/yein/SearchResult";
-import SearchEmpty from "../pages/yein/SearchEmpty";
-import FacilityDetail from "../pages/yein/FacilityDetail";
-import AccessibleRoute from "../pages/yein/AccessibleRoute";
-import DepartureSearch from "../pages/yein/DepartureSearch";
-import FacilitySearch from "../pages/yein/FacilitySearch";
+import SearchFilter from "../pages/SearchFilter/SearchFilter";
+import SearchResult from "../pages/SearchResult/SearchResult";
+import SearchEmpty from "../pages/SearchEmpty/SearchEmpty";
+import FacilityDetail from "../pages/FacilityDetail/FacilityDetail";
+import AccessibleRoute from "../pages/AccessibleRoute/AccessibleRoute";
+import DepartureSearch from "../pages/DepartureSearch/DepartureSearch";
+import FacilitySearch from "../pages/FacilitySearch/FacilitySearch";
 
 
 import {
@@ -13,7 +13,7 @@ import {
     Route,
 } from "react-router-dom";
 
-import Home from "../pages/yein/Home";
+import Home from "../pages/Home/Home";
 
 import Login from "../pages/Login/Login";
 import FindId from "../pages/Login/FindId";
