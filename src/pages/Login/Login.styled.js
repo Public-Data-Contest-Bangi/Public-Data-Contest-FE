@@ -197,3 +197,12 @@ export const ButtonArea = styled.div`
     width: 100%;
     margin-top: 35px;
 `;
+
+export const ErrorMessage = styled.p`
+    margin: 4px 0 0;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #ff4d4f;
+`;

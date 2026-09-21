@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { createReport } from "../api/reports";
+
 function useReportCreate() {
     const navigate = useNavigate();
 
@@ -63,25 +65,54 @@ function useReportCreate() {
         form.title.trim() &&
         form.content.trim();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!isValid) {
             return;
         }
 
-        console.log({
-            ...form,
-            images,
-        });
+        try {
+            const response =
+                await createReport({
+                    type: form.type,
+                    title: form.title.trim(),
+                    content:
+                        form.content.trim(),
 
-        // 추후 API 연결
+                    // 여기 중요
+                    photos: images.map(
+                        (image) => image.file
+                    ),
+                });
 
-        navigate("/report-history");
+            console.log(
+                "불편신고 등록 성공:",
+                response
+            );
+
+            navigate("/report-history");
+        } catch (error) {
+            console.error(
+                "불편신고 등록 실패:",
+                error
+            );
+
+            console.error(
+                "서버 응답:",
+                error.response?.data
+            );
+
+            console.error(
+                "상태 코드:",
+                error.response?.status
+            );
+        }
     };
 
     return {
         form,
         images,
         isValid,
+
         handleChange,
         handleImageChange,
         handleRemoveImage,

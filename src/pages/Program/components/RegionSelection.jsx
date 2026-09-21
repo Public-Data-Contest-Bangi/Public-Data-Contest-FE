@@ -17,6 +17,7 @@ import {
 } from "../constants/regionData";
 
 import mascotSearchImg from "../../yein/assets/facility-search/mascot-search.png";
+import locationIcon from "../../../assets/icons/location-icon.png";
 
 import * as S from "./RegionSelection.styled";
 
@@ -158,22 +159,12 @@ export default function RegionSelection() {
 
                     <S.CurrentLocationButton
                         type="button"
-                        onClick={
-                            handleCurrentLocation
-                        }
+                        onClick={handleCurrentLocation}
                     >
                         <S.TargetIcon
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <circle
-                                cx="12"
-                                cy="12"
-                                r="5"
-                            />
-
-                            <path d="M12 2V5M12 19V22M2 12H5M19 12H22" />
-                        </S.TargetIcon>
+                            src={locationIcon}
+                            alt=""
+                        />
 
                         현재 위치로 찾기
                     </S.CurrentLocationButton>

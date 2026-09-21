@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./Login.styled";
 
@@ -6,28 +5,25 @@ import logo from "../../assets/images/login.png";
 import profileIcon from "../../assets/icons/profile.png";
 import lockIcon from "../../assets/icons/lock.png";
 import eyeIcon from "../../assets/icons/eye.png";
+
 import Button from "../../components/common/Button";
+import useLogin from "./hooks/useLogin";
 
 function Login() {
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState("");
-    const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const {
+        userId,
+        password,
+        showPassword,
+        loginMessage,
 
-    const handleLogin = () => {
-        console.log({
-            userId,
-            password,
-        });
+        setUserId,
+        setPassword,
 
-        // 개발용 임시 로그인
-        navigate("/");
-    };
-
-    const handleTogglePassword = () => {
-        setShowPassword((prev) => !prev);
-    };
+        handleTogglePassword,
+        handleLogin,
+    } = useLogin();
 
     return (
         <S.Page>
@@ -56,7 +52,9 @@ function Login() {
                             placeholder="아이디"
                             value={userId}
                             onChange={(e) =>
-                                setUserId(e.target.value)
+                                setUserId(
+                                    e.target.value
+                                )
                             }
                         />
                     </S.InputWrapper>
@@ -76,13 +74,17 @@ function Login() {
                             placeholder="비밀번호"
                             value={password}
                             onChange={(e) =>
-                                setPassword(e.target.value)
+                                setPassword(
+                                    e.target.value
+                                )
                             }
                         />
 
                         <S.PasswordButton
                             type="button"
-                            onClick={handleTogglePassword}
+                            onClick={
+                                handleTogglePassword
+                            }
                             aria-label={
                                 showPassword
                                     ? "비밀번호 숨기기"
@@ -95,6 +97,12 @@ function Login() {
                             />
                         </S.PasswordButton>
                     </S.InputWrapper>
+
+                    {loginMessage && (
+                        <S.ErrorMessage>
+                            {loginMessage}
+                        </S.ErrorMessage>
+                    )}
                 </S.InputSection>
 
                 <S.ButtonArea>
@@ -127,7 +135,9 @@ function Login() {
                     <S.LinkButton
                         type="button"
                         onClick={() =>
-                            navigate("/find-password")
+                            navigate(
+                                "/find-password"
+                            )
                         }
                     >
                         비밀번호 찾기

@@ -3,8 +3,6 @@ export const SPORTS_OPTIONS = [
     "골프",
     "농구",
     "댄스",
-    "롤러인라인",
-    "무용",
     "배구",
     "배드민턴",
     "복싱",
@@ -24,13 +22,11 @@ export const SPORTS_OPTIONS = [
     "테니스",
     "펜싱",
     "필라테스",
-    "합기도",
     "헬스",
     "크로스핏",
     "주짓수",
     "클라이밍",
     "당구",
-    "종합체육시설",
 ];
 
 const iconFiles = import.meta.glob("../../../assets/images/exercisename/*.png", {
@@ -68,7 +64,6 @@ const iconNameBySport = {
     주짓수: "jiu-jitsu",
     클라이밍: "climbing",
     당구: "billiards",
-    종합체육시설: "sport-complex",
 };
 
 export const SPORT_ICONS = Object.fromEntries(
