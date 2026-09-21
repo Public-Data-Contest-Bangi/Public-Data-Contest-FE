@@ -1,6 +1,5 @@
 import Button from "../../../components/common/Button";
 
-import ConditionSelect from "./ConditionSelect";
 import ConditionChoiceGroup from "./ConditionChoiceGroup";
 
 import {
@@ -14,20 +13,18 @@ import {
 import * as S from "./MyConditionForm.styled";
 
 function MyConditionForm({
-    disabilityType,
+    disabilityTypes,
     wheelchair,
-    transports,
     sports,
     voucher,
 
     saved,
     canSave,
 
-    setDisabilityType,
     setWheelchair,
     setVoucher,
 
-    handleTransportToggle,
+    handleDisabilityToggle,
     handleSportsToggle,
     handleSave,
 }) {
@@ -47,12 +44,15 @@ function MyConditionForm({
             <S.Section>
                 <S.Label>
                     장애 유형
+                    <S.SubLabel>
+                        (중복 선택 가능)
+                    </S.SubLabel>
                 </S.Label>
 
-                <ConditionSelect
-                    value={disabilityType}
+                <ConditionChoiceGroup
                     options={DISABILITY_OPTIONS}
-                    onChange={setDisabilityType}
+                    selected={disabilityTypes}
+                    onToggle={handleDisabilityToggle}
                 />
             </S.Section>
 
@@ -103,7 +103,7 @@ function MyConditionForm({
             </S.Section>
 
             <Button
-                disabled={!canSave && !saved}
+                disabled={!canSave}
                 height="52px"
                 radius="8px"
                 fontSize="17px"

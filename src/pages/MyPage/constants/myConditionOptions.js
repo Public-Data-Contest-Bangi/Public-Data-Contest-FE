@@ -1,11 +1,11 @@
 export const DISABILITY_OPTIONS = [
-    "지체장애",
-    "뇌병변장애",
-    "시각장애",
-    "청각장애",
     "지적장애",
-    "자폐성장애",
-    "기타",
+    "청각장애",
+    "지체장애",
+    "시각장애",
+    "척수장애",
+    "소아마비",
+    "뇌병변",
 ];
 
 export const WHEELCHAIR_OPTIONS = [

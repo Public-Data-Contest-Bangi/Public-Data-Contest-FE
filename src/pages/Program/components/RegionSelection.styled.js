@@ -51,8 +51,8 @@ export const Title = styled.h1`
 export const Mascot = styled.img`
     position: absolute;
 
-    width: 145px;
-    height: 145px;
+    width: 180px;
+    height: 180px;
 
     right: 2px;
     top: -4px;
@@ -114,16 +114,14 @@ export const CurrentLocationButton = styled.button`
     box-sizing: border-box;
 `;
 
-export const TargetIcon = styled.svg`
-    width: 22px;
-    height: 22px;
+export const TargetIcon = styled.img`
+    width: 20px;
+    height: 20px;
 
-    fill: none;
-
-    stroke: #151515;
-    stroke-width: 2;
+    object-fit: contain;
 
     flex-shrink: 0;
+    filter: brightness(0) saturate(80%);
 `;
 
 export const Divider = styled.div`

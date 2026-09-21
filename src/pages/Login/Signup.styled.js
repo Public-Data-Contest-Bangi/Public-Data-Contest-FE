@@ -85,18 +85,18 @@ export const HelpText = styled.p`
     font-size: 10px;
 `;
 
-export const ErrorMessage = styled.p`
-    margin: 0;
+export const SuccessMessage = styled.p`
+    margin: 6px 0 0;
 
-    color: #ff4141;
+    color: #41dc99;
 
-    font-size: 12px;
+    font-size: 13px;
 `;
 
-export const SuccessMessage = styled.p`
-    margin: 0;
+export const ErrorMessage = styled.p`
+    margin: 6px 0 0;
 
-    color: #42dba0;
+    color: #ff4d4f;
 
-    font-size: 12px;
+    font-size: 13px;
 `;

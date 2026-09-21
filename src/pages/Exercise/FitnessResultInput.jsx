@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Header from "../../components/common/Header";
 import Button from "../../components/common/Button";
 import MobileLayout from "../../components/layout/MobileLayout";
+
+import useFitnessResultInput from "./hooks/useFitnessResultInput";
 
 import * as S from "./FitnessResultInput.styled";
 
@@ -16,41 +15,13 @@ const FITNESS_ITEMS = [
     "순발력",
 ];
 
-const INITIAL_RESULT = {
-    근력: 2,
-    근지구력: 1,
-    심폐지구력: 3,
-    유연성: 2,
-    민첩성: 2,
-    순발력: 1,
-};
-
 function FitnessResultInput() {
-    const navigate = useNavigate();
-
-    const [results, setResults] =
-        useState(INITIAL_RESULT);
-
-    const handleSelect = (
-        category,
-        grade
-    ) => {
-        setResults((prev) => ({
-            ...prev,
-            [category]: grade,
-        }));
-    };
-
-    const handleSubmit = () => {
-        navigate(
-            "/fitness-result/recommend",
-            {
-                state: {
-                    results,
-                },
-            }
-        );
-    };
+    const {
+        results,
+        isSubmitting,
+        handleSelect,
+        handleSubmit,
+    } = useFitnessResultInput();
 
     return (
         <MobileLayout>
@@ -122,8 +93,11 @@ function FitnessResultInput() {
                         radius="6px"
                         fontSize="16px"
                         onClick={handleSubmit}
+                        disabled={isSubmitting}
                     >
-                        체력 결과로 추천받기
+                        {isSubmitting
+                            ? "저장 중..."
+                            : "체력 결과로 추천받기"}
                     </Button>
                 </S.BottomArea>
             </S.Inner>

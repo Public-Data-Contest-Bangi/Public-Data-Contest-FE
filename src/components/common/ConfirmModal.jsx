@@ -7,6 +7,7 @@ function ConfirmModal({
     confirmText = "확인",
     onCancel,
     onConfirm,
+    showCancel = true,
 }) {
     return (
         <Overlay onClick={onCancel}>
@@ -24,12 +25,14 @@ function ConfirmModal({
                 )}
 
                 <ButtonArea>
-                    <CancelButton
-                        type="button"
-                        onClick={onCancel}
-                    >
-                        {cancelText}
-                    </CancelButton>
+                    {showCancel && (
+                        <CancelButton
+                            type="button"
+                            onClick={onCancel}
+                        >
+                            {cancelText}
+                        </CancelButton>
+                    )}
 
                     <ConfirmButton
                         type="button"
@@ -47,8 +50,16 @@ export default ConfirmModal;
 
 const Overlay = styled.div`
     position: fixed;
-    inset: 0;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+
+    width: 100%;
+    max-width: 375px;
+
     z-index: 9999;
+
+    transform: translateX(-50%);
 
     display: flex;
     align-items: center;
@@ -131,7 +142,7 @@ const ConfirmButton = styled.button`
     border: none;
     border-radius: 8px;
 
-    background: #ff5c5c;
+    background: #41dc99;
 
     color: #ffffff;
 

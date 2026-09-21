@@ -66,14 +66,17 @@ export default function ProfileEditPage() {
             message:
                 userIdStatus === "available"
                     ? "사용 가능한 아이디입니다."
-                    : userIdStatus === "duplicate"
-                        ? "이미 사용 중인 아이디입니다."
-                        : userIdStatus === "empty"
-                            ? "아이디를 입력해 주세요."
-                            : null,
+                    : userIdStatus === "current"
+                        ? "현재 사용 중인 아이디입니다."
+                        : userIdStatus === "duplicate"
+                            ? "이미 사용 중인 아이디입니다."
+                            : userIdStatus === "empty"
+                                ? "아이디를 입력해 주세요."
+                                : null,
 
             messageType:
-                userIdStatus === "available"
+                userIdStatus === "available" ||
+                    userIdStatus === "current"
                     ? "success"
                     : userIdStatus
                         ? "error"
@@ -98,14 +101,17 @@ export default function ProfileEditPage() {
             message:
                 nicknameStatus === "available"
                     ? "사용 가능한 닉네임입니다."
-                    : nicknameStatus === "duplicate"
-                        ? "이미 사용 중인 닉네임입니다."
-                        : nicknameStatus === "empty"
-                            ? "닉네임을 입력해 주세요."
-                            : null,
+                    : nicknameStatus === "current"
+                        ? "현재 사용 중인 닉네임입니다."
+                        : nicknameStatus === "duplicate"
+                            ? "이미 사용 중인 닉네임입니다."
+                            : nicknameStatus === "empty"
+                                ? "닉네임을 입력해 주세요."
+                                : null,
 
             messageType:
-                nicknameStatus === "available"
+                nicknameStatus === "available" ||
+                    nicknameStatus === "current"
                     ? "success"
                     : nicknameStatus
                         ? "error"
@@ -134,14 +140,14 @@ export default function ProfileEditPage() {
             onButtonClick: handleCurrentPasswordCheck,
 
             message:
-                currentPasswordStatus === "success"
-                    ? "현재 비밀번호가 확인되었습니다."
+                currentPasswordStatus === "ready"
+                    ? "현재 비밀번호가 입력되었습니다."
                     : currentPasswordStatus === "error"
-                        ? "비밀번호가 일치하지 않습니다."
+                        ? "현재 비밀번호를 확인해 주세요."
                         : null,
 
             messageType:
-                currentPasswordStatus === "success"
+                currentPasswordStatus === "ready"
                     ? "success"
                     : currentPasswordStatus === "error"
                         ? "error"
