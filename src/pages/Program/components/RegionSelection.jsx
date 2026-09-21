@@ -16,7 +16,7 @@ import {
     REGION_DATA,
 } from "../constants/regionData";
 
-import mascotSearchImg from "../../yein/assets/facility-search/mascot-search.png";
+import mascotSearchImg from "../../../assets/images/mascot-search.png";
 
 import * as S from "./RegionSelection.styled";
 

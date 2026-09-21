@@ -1,10 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
-import rampIcon from '../../assets/icons/ramp-icon.png';
-import elevatorIcon from '../../assets/icons/elevator-icon.png';
-import restroomIcon from '../../assets/icons/restroom-icon.png';
-import parkingIcon from '../../assets/icons/parking-icon.png';
+import { useSearchFilter } from './hooks/useSearchFilter';
+import { SPORT_OPTIONS, ACCESSIBILITY_ITEMS } from './utils/searchFilterOptions';
+import AccessibilityIcon from './components/AccessibilityIcon';
 import sportIcon from '../../assets/icons/sport-icon.png';
 import {
   Container,
@@ -35,83 +31,20 @@ import {
   ApplyButton,
 } from './SearchFilter.styled';
 
-const sportOptions = [
-  '전체',
-  '검도', '골프', '농구', '댄스', '롤러인라인', '무용',
-  '배구', '배드민턴', '복싱', '볼링', '스케이트', '수영',
-  '스쿼시', '승마', '야구', '에어로빅', '요가', '유도',
-  '줄넘기', '축구', '탁구', '태권도', '펜싱', '필라테스',
-  '크로스핏', '주짓수', '클라이밍', '당구', '종합체육시설',
-];
-
-const accessibilityItems = [
-  { id: 'wheelchair', label: '휠체어 접근가능' },
-  { id: 'ramp', label: '경사로' },
-  { id: 'elevator', label: '엘리베이터' },
-  { id: 'restroom', label: '장애인 화장실' },
-  { id: 'parking', label: '장애인 주차장' },
-];
-
-const ACCESS_ICON_SIZE = 50;
-
-function AccessibilityIcon({ type }) {
-  const iconMap = {
-    wheelchair: wheelchairIcon,
-    ramp: rampIcon,
-    elevator: elevatorIcon,
-    restroom: restroomIcon,
-    parking: parkingIcon,
-  };
-  const src = iconMap[type];
-  if (!src) return null;
-  return (
-    <img
-      src={src}
-      alt=""
-      style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
-    />
-  );
-}
-
 function SearchFilter() {
-  const navigate = useNavigate();
-  const [checked, setChecked] = useState({
-    wheelchair: true,
-    ramp: false,
-    elevator: false,
-    restroom: false,
-    parking: false,
-  });
-  const [sport, setSport] = useState('전체');
-  const [voucher, setVoucher] = useState('전체');
-  const [sportMenuOpen, setSportMenuOpen] = useState(false);
-  const sportRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (sportRef.current && !sportRef.current.contains(e.target)) {
-        setSportMenuOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const toggleCheck = (id) => {
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const handleReset = () => {
-    setChecked({
-      wheelchair: false,
-      ramp: false,
-      elevator: false,
-      restroom: false,
-      parking: false,
-    });
-    setSport('전체');
-    setVoucher('전체');
-  };
+  const {
+    checked,
+    sport,
+    voucher,
+    sportMenuOpen,
+    sportRef,
+    toggleCheck,
+    handleReset,
+    toggleSportMenu,
+    selectSport,
+    setVoucher,
+    goSearchResult,
+  } = useSearchFilter();
 
   return (
     <Container>
@@ -131,7 +64,7 @@ function SearchFilter() {
         <Section>
           <SectionTitle>접근성 조건</SectionTitle>
           <CheckList>
-            {accessibilityItems.map((item) => (
+            {ACCESSIBILITY_ITEMS.map((item) => (
               <CheckRow key={item.id}>
                 <HiddenCheckbox
                   checked={checked[item.id]}
@@ -157,7 +90,7 @@ function SearchFilter() {
           <SectionTitle>운동 종목</SectionTitle>
           <SelectWrap ref={sportRef}>
             <img src={sportIcon} alt="" style={{ width: 24, height: 24, objectFit: 'contain' }} />
-            <SelectTrigger type="button" onClick={() => setSportMenuOpen((prev) => !prev)}>
+            <SelectTrigger type="button" onClick={toggleSportMenu}>
               {sport}
             </SelectTrigger>
             <SelectChevron
@@ -173,15 +106,9 @@ function SearchFilter() {
 
             {sportMenuOpen && (
               <SelectMenu>
-                {sportOptions.map((option) => (
+                {SPORT_OPTIONS.map((option) => (
                   <li key={option}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSport(option);
-                        setSportMenuOpen(false);
-                      }}
-                    >
+                    <button type="button" onClick={() => selectSport(option)}>
                       {option}
                     </button>
                   </li>
@@ -210,7 +137,7 @@ function SearchFilter() {
       </Body>
 
       <Footer>
-        <CancelButton type="button" onClick={() => navigate('/search-result')}>
+        <CancelButton type="button" onClick={goSearchResult}>
           취소
         </CancelButton>
         <ApplyButton type="button">적용하기</ApplyButton>
