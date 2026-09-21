@@ -17,6 +17,8 @@ const HeaderWrap = styled.header`
 const BackButton = styled.button`
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 
     width: 40px;
     height: 40px;

@@ -17,41 +17,6 @@ export const Container = styled.div`
   }
 `;
 
-/* ── 헤더 ───────────────── */
-
-export const Header = styled.header`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 56px;
-  padding: 0 20px;
-  flex-shrink: 0;
-`;
-
-export const BackButton = styled.button`
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
-export const Title = styled.h1`
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: #000000;
-`;
-
 /* ── 출발/도착 카드 ───────────────── */
 
 export const RouteCard = styled.div`
@@ -142,23 +107,10 @@ export const GpsButton = styled.button`
   cursor: pointer;
 `;
 
-/* ── 경로 검색 버튼 ───────────────── */
+/* ── 경로 검색 버튼 (공용 Button 감싸는 wrapper) ───────────────── */
 
-export const SearchButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: calc(100% - 40px);
+export const SearchButtonWrap = styled.div`
   margin: 0 20px 20px;
-  padding: 16px;
-  border: none;
-  border-radius: 16px;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
   flex-shrink: 0;
 `;
 

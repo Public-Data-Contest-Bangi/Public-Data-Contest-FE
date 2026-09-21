@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import mascotSurprisedImg from './assets/search-empty/mascot-surprised.png';
+import mascotSurprisedImg from '../../assets/images/mascot-surprised.png';
 import {
   Container,
   Header,
