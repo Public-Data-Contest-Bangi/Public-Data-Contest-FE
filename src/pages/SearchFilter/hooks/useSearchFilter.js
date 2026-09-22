@@ -10,7 +10,7 @@ export function useSearchFilter() {
     restroom: false,
     parking: false,
   });
-  const [sport, setSport] = useState('전체');
+  const [selectedSports, setSelectedSports] = useState([]);
   const [voucher, setVoucher] = useState('전체');
   const [sportMenuOpen, setSportMenuOpen] = useState(false);
   const sportRef = useRef(null);
@@ -37,7 +37,7 @@ export function useSearchFilter() {
       restroom: false,
       parking: false,
     });
-    setSport('전체');
+    setSelectedSports([]);
     setVoucher('전체');
   };
 
@@ -45,9 +45,10 @@ export function useSearchFilter() {
     setSportMenuOpen((prev) => !prev);
   };
 
-  const selectSport = (option) => {
-    setSport(option);
-    setSportMenuOpen(false);
+  const toggleSport = (option) => {
+    setSelectedSports((prev) =>
+      prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+    );
   };
 
   const goSearchResult = () => {
@@ -60,14 +61,14 @@ export function useSearchFilter() {
 
   return {
     checked,
-    sport,
+    selectedSports,
     voucher,
     sportMenuOpen,
     sportRef,
     toggleCheck,
     handleReset,
     toggleSportMenu,
-    selectSport,
+    toggleSport,
     setVoucher,
     goSearchResult,
     closeFilter,

@@ -184,7 +184,7 @@ export const SelectMenu = styled.ul`
   background: #ffffff;
   border: 1px solid #e4e4e4;
   border-radius: 10px;
-  max-height: 240px;
+  max-height: 280px;
   overflow-y: auto;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
@@ -193,27 +193,28 @@ export const SelectMenu = styled.ul`
   li {
     list-style: none;
   }
+`;
 
-  li button {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px 14px;
-    border: none;
-    background: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-family: inherit;
-    text-align: left;
-    color: #000000;
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+export const SelectMenuItem = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #000000;
+  cursor: pointer;
+
+  &:hover {
+    background: #f3f3f3;
   }
 
-  li button:hover {
-    background: #f3f3f3;
+  ${CheckboxBox} {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
   }
 `;
 
