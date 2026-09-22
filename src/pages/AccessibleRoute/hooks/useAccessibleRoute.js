@@ -14,10 +14,6 @@ export function useAccessibleRoute() {
     setArrival(departure);
   };
 
-  const handleSearchRoute = () => {
-    // TODO: 경로 검색 동작 연결
-  };
-
   const toggleSheet = () => {
     setSheetExpanded((prev) => !prev);
   };
@@ -31,7 +27,6 @@ export function useAccessibleRoute() {
     arrival,
     sheetExpanded,
     handleSwap,
-    handleSearchRoute,
     toggleSheet,
     goDepartureSearch,
   };

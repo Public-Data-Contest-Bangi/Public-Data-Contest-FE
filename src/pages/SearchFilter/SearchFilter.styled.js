@@ -146,6 +146,7 @@ export const SelectWrap = styled.div`
   padding: 16px 18px;
   background: #ffffff;
   box-sizing: border-box;
+  cursor: pointer;
 `;
 
 export const SelectTrigger = styled.button`

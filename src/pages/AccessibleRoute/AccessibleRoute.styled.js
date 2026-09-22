@@ -128,6 +128,10 @@ export const MapPlaceholder = styled.div`
   gap: 8px;
   overflow: hidden;
 `;
+export const MapContainer = styled.div`
+  position: absolute;
+  inset: 0;
+`;
 
 export const MapPlaceholderText = styled.span`
   font-size: 13px;
