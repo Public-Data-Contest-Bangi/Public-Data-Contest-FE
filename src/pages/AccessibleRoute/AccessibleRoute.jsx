@@ -2,6 +2,7 @@ import Header from '../../components/common/Header';
 import Button from '../../components/common/Button';
 import BottomNav from '../../components/BottomNav';
 import { useAccessibleRoute } from './hooks/useAccessibleRoute';
+import { useAccessibleRouteMap } from './hooks/useAccessibleRouteMap';
 import { ACCESSIBILITY_ITEMS, FACILITY } from './utils/accessibleRouteConstants';
 import swapIcon from '../../assets/icons/swap-icon.png';
 import locationIcon from '../../assets/icons/location-icon.png';
@@ -18,6 +19,7 @@ import {
   GpsButton,
   SearchButtonWrap,
   MapPlaceholder,
+  MapContainer,
   MapPlaceholderText,
   MapLocateButton,
   FacilitySheet,
@@ -43,10 +45,11 @@ function AccessibleRoute() {
     arrival,
     sheetExpanded,
     handleSwap,
-    handleSearchRoute,
     toggleSheet,
     goDepartureSearch,
   } = useAccessibleRoute();
+
+  const { mapContainerRef, mapLoaded, mapError, drawRoute, routeLoading } = useAccessibleRouteMap();
 
   return (
     <Container>
@@ -91,27 +94,35 @@ function AccessibleRoute() {
       </RouteCard>
 
       <SearchButtonWrap>
-        <Button type="button" radius="16px" onClick={handleSearchRoute}>
+        <Button type="button" radius="16px" onClick={drawRoute} disabled={routeLoading}>
           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
             </svg>
-            경로 검색
+            {routeLoading ? '경로 검색 중...' : '경로 검색'}
           </span>
         </Button>
       </SearchButtonWrap>
 
       <MapPlaceholder>
-        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M12 22s7-6.2 7-11.5A7 7 0 0 0 5 10.5C5 15.8 12 22 12 22Z"
-            stroke="#B3C2C2"
-            strokeWidth="1.8"
-            strokeLinejoin="round"
-          />
-          <circle cx="12" cy="10.5" r="2.3" stroke="#B3C2C2" strokeWidth="1.8" />
-        </svg>
-        <MapPlaceholderText>지도 영역 (준비 중)</MapPlaceholderText>
+        <MapContainer ref={mapContainerRef} />
+
+        {(!mapLoaded || mapError) && (
+          <>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 22s7-6.2 7-11.5A7 7 0 0 0 5 10.5C5 15.8 12 22 12 22Z"
+                stroke="#B3C2C2"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+              />
+              <circle cx="12" cy="10.5" r="2.3" stroke="#B3C2C2" strokeWidth="1.8" />
+            </svg>
+            <MapPlaceholderText>
+              {mapError ? '지도를 불러오지 못했어요' : '지도 불러오는 중...'}
+            </MapPlaceholderText>
+          </>
+        )}
 
         <MapLocateButton type="button" aria-label="현재 위치로 이동">
           <img src={locationIcon} alt="" style={{ width: 18, height: 18, objectFit: 'contain' }} />

@@ -44,12 +44,13 @@ function SearchFilter() {
     selectSport,
     setVoucher,
     goSearchResult,
+    closeFilter,
   } = useSearchFilter();
 
   return (
     <Container>
       <Header>
-        <CloseButton type="button" aria-label="닫기">
+        <CloseButton type="button" aria-label="닫기" onClick={closeFilter}>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1l16 16M17 1L1 17" stroke="#1A1A1A" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
@@ -88,9 +89,9 @@ function SearchFilter() {
 
         <Section>
           <SectionTitle>운동 종목</SectionTitle>
-          <SelectWrap ref={sportRef}>
+          <SelectWrap ref={sportRef} onClick={toggleSportMenu}>
             <img src={sportIcon} alt="" style={{ width: 24, height: 24, objectFit: 'contain' }} />
-            <SelectTrigger type="button" onClick={toggleSportMenu}>
+            <SelectTrigger type="button" tabIndex={-1}>
               {sport}
             </SelectTrigger>
             <SelectChevron
@@ -105,7 +106,7 @@ function SearchFilter() {
             </SelectChevron>
 
             {sportMenuOpen && (
-              <SelectMenu>
+              <SelectMenu onClick={(e) => e.stopPropagation()}>
                 {SPORT_OPTIONS.map((option) => (
                   <li key={option}>
                     <button type="button" onClick={() => selectSport(option)}>

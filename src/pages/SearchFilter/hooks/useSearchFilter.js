@@ -54,6 +54,10 @@ export function useSearchFilter() {
     navigate('/search-result');
   };
 
+  const closeFilter = () => {
+    navigate(-1);
+  };
+
   return {
     checked,
     sport,
@@ -66,5 +70,6 @@ export function useSearchFilter() {
     selectSport,
     setVoucher,
     goSearchResult,
+    closeFilter,
   };
 }
