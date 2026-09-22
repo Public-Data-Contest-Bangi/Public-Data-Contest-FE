@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./MyPage.styled";
 
 import BottomNav from "../../components/BottomNav";
+import Header from "../../components/common/Header";
+
+import useLogout from "./hooks/useLogout";
+import useWithdraw from "./hooks/useWithdraw";
+import useMyPageProfile from "./hooks/useMyPageProfile";
 
 import profileCharacter from "../../assets/images/profile-character.png";
 
 import backIcon from "../../assets/icons/back.png";
-import Header from "../../components/common/Header";
 import reportIcon from "../../assets/icons/reportIcon.png";
 import challengeIcon from "../../assets/icons/challengeIcon.png";
 import heartIcon from "../../assets/icons/heartIcon.png";
@@ -56,18 +60,33 @@ const menuItems = [
 export default function MyPage() {
     const navigate = useNavigate();
 
-    const [isWithdrawModalOpen, setIsWithdrawModalOpen] =
-        useState(false);
+    const {
+        handleLogout,
+    } = useLogout();
 
-    const handleMenuClick = (item) => {
+    const {
+        handleWithdraw: withdrawMember,
+    } = useWithdraw();
+
+    const {
+        nickname,
+        email,
+        isLoading,
+    } = useMyPageProfile();
+
+    const [
+        isWithdrawModalOpen,
+        setIsWithdrawModalOpen,
+    ] = useState(false);
+
+    const handleMenuClick = async (item) => {
         if (item.path) {
             navigate(item.path);
             return;
         }
 
         if (item.action === "logout") {
-            console.log("로그아웃");
-            navigate("/login");
+            await handleLogout();
             return;
         }
 
@@ -76,11 +95,15 @@ export default function MyPage() {
         }
     };
 
-    const handleWithdraw = () => {
-        console.log("회원 탈퇴");
+    const handleWithdrawConfirm = async () => {
+        const success =
+            await withdrawMember();
+
+        if (!success) {
+            return;
+        }
 
         setIsWithdrawModalOpen(false);
-        navigate("/login");
     };
 
     return (
@@ -97,17 +120,23 @@ export default function MyPage() {
 
                         <S.ProfileInfo>
                             <S.UserName>
-                                햄지
+                                {isLoading
+                                    ? "불러오는 중..."
+                                    : nickname}
                             </S.UserName>
 
                             <S.UserEmail>
-                                hamham@gmail.com
+                                {isLoading
+                                    ? ""
+                                    : email}
                             </S.UserEmail>
 
                             <S.EditButton
                                 type="button"
                                 onClick={() =>
-                                    navigate("/profile-edit")
+                                    navigate(
+                                        "/profile-edit"
+                                    )
                                 }
                             >
                                 정보수정
@@ -118,35 +147,49 @@ export default function MyPage() {
                     <S.Divider />
 
                     <S.MenuList>
-                        {menuItems.map((item) => (
-                            <S.MenuItem
-                                key={item.id}
-                                type="button"
-                                onClick={() =>
-                                    handleMenuClick(item)
-                                }
-                            >
-                                <S.MenuLeft>
-                                    <S.IconBox>
-                                        <img
-                                            src={item.icon}
-                                            alt={item.label}
+                        {menuItems.map(
+                            (item) => (
+                                <S.MenuItem
+                                    key={
+                                        item.id
+                                    }
+                                    type="button"
+                                    onClick={() =>
+                                        handleMenuClick(
+                                            item
+                                        )
+                                    }
+                                >
+                                    <S.MenuLeft>
+                                        <S.IconBox>
+                                            <img
+                                                src={
+                                                    item.icon
+                                                }
+                                                alt={
+                                                    item.label
+                                                }
+                                            />
+                                        </S.IconBox>
+
+                                        <S.MenuLabel>
+                                            {
+                                                item.label
+                                            }
+                                        </S.MenuLabel>
+                                    </S.MenuLeft>
+
+                                    {item.hasArrow && (
+                                        <S.Chevron
+                                            src={
+                                                backIcon
+                                            }
+                                            alt=""
                                         />
-                                    </S.IconBox>
-
-                                    <S.MenuLabel>
-                                        {item.label}
-                                    </S.MenuLabel>
-                                </S.MenuLeft>
-
-                                {item.hasArrow && (
-                                    <S.Chevron
-                                        src={backIcon}
-                                        alt=""
-                                    />
-                                )}
-                            </S.MenuItem>
-                        ))}
+                                    )}
+                                </S.MenuItem>
+                            )
+                        )}
                     </S.MenuList>
                 </S.Content>
 
@@ -161,15 +204,19 @@ export default function MyPage() {
                         </S.ModalTitle>
 
                         <S.ModalDescription>
-                            탈퇴 시 저장된 모든 데이터가 삭제되며
+                            탈퇴 시 저장된 모든
+                            데이터가 삭제되며
                             <br />
-                            삭제된 데이터는 복구가 불가능합니다.
+                            삭제된 데이터는 복구가
+                            불가능합니다.
                         </S.ModalDescription>
 
                         <S.ModalButtonGroup>
                             <S.WithdrawButton
                                 type="button"
-                                onClick={handleWithdraw}
+                                onClick={
+                                    handleWithdrawConfirm
+                                }
                             >
                                 탈퇴
                             </S.WithdrawButton>
@@ -177,7 +224,9 @@ export default function MyPage() {
                             <S.CancelButton
                                 type="button"
                                 onClick={() =>
-                                    setIsWithdrawModalOpen(false)
+                                    setIsWithdrawModalOpen(
+                                        false
+                                    )
                                 }
                             >
                                 취소
