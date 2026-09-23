@@ -29,9 +29,6 @@ import {
   CardTitle,
   CardBody,
   AccessRow,
-  HoursRow,
-  HoursLabel,
-  HoursValue,
   VoucherCard,
   VoucherText,
   VoucherTitle,
@@ -77,10 +74,10 @@ function FacilityDetail() {
           <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M11 19S1.5 13 1.5 6.8A5.3 5.3 0 0 1 11 3.4a5.3 5.3 0 0 1 9.5 3.4C20.5 13 11 19 11 19Z"
-              stroke="#e61010"
+              stroke="#1A1A1A"
               strokeWidth="1.8"
               strokeLinejoin="round"
-              fill={favorite ? '#e61010' : 'none'}
+              fill={favorite ? '#1A1A1A' : 'none'}
             />
           </svg>
         </FavoriteButton>
@@ -122,23 +119,6 @@ function FacilityDetail() {
             <img src={restroomIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
             <img src={parkingIcon} alt="" style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }} />
           </AccessRow>
-        </CardBody>
-      </Card>
-
-      <Card>
-        <CardTitleRow>
-          <CheckIcon />
-          <CardTitle>운영 정보</CardTitle>
-        </CardTitleRow>
-        <CardBody>
-          <HoursRow>
-            <HoursLabel>운영 시간</HoursLabel>
-            <HoursValue>{facility.hours}</HoursValue>
-          </HoursRow>
-          <HoursRow>
-            <HoursLabel>휴무일</HoursLabel>
-            <HoursValue>{facility.closedDay}</HoursValue>
-          </HoursRow>
         </CardBody>
       </Card>
 
