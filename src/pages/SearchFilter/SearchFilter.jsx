@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectChevron,
   SelectMenu,
+  SelectMenuItem,
   RadioList,
   RadioRow,
   HiddenRadio,
@@ -34,18 +35,20 @@ import {
 function SearchFilter() {
   const {
     checked,
-    sport,
+    selectedSports,
     voucher,
     sportMenuOpen,
     sportRef,
     toggleCheck,
     handleReset,
     toggleSportMenu,
-    selectSport,
+    toggleSport,
     setVoucher,
     goSearchResult,
     closeFilter,
   } = useSearchFilter();
+
+  const sportTriggerLabel = selectedSports.length === 0 ? '전체' : selectedSports.join(', ');
 
   return (
     <Container>
@@ -92,7 +95,7 @@ function SearchFilter() {
           <SelectWrap ref={sportRef} onClick={toggleSportMenu}>
             <img src={sportIcon} alt="" style={{ width: 24, height: 24, objectFit: 'contain' }} />
             <SelectTrigger type="button" tabIndex={-1}>
-              {sport}
+              {sportTriggerLabel}
             </SelectTrigger>
             <SelectChevron
               $open={sportMenuOpen}
@@ -109,9 +112,20 @@ function SearchFilter() {
               <SelectMenu onClick={(e) => e.stopPropagation()}>
                 {SPORT_OPTIONS.map((option) => (
                   <li key={option}>
-                    <button type="button" onClick={() => selectSport(option)}>
-                      {option}
-                    </button>
+                    <SelectMenuItem>
+                      <HiddenCheckbox
+                        checked={selectedSports.includes(option)}
+                        onChange={() => toggleSport(option)}
+                      />
+                      <CheckboxBox>
+                        {selectedSports.includes(option) && (
+                          <svg width="14" height="12" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 5l3.5 3.5L11 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </CheckboxBox>
+                      <span>{option}</span>
+                    </SelectMenuItem>
                   </li>
                 ))}
               </SelectMenu>

@@ -36,10 +36,11 @@ function Home() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M12 21s-6.7-4.35-9.3-8.1C1 10.2 1.6 6.7 4.6 5.2c2.2-1.1 4.6-.3 5.9 1.4a4 4 0 0 1 1.5-1.4c3-1.5 5.4.1 5.9 2.6.8 3.6-2.9 8.3-7.9 13.2Z"
-                    stroke="#fff"
-                    strokeWidth="1.8"
+                    d="M12 21s-7.2-4.35-9.6-8.55C0.6 9.15 1.65 5.4 5.1 4.35c2.55-0.75 5.1 0.3 6.9 2.55 1.8-2.25 4.35-3.3 6.9-2.55 3.45 1.05 4.5 4.8 2.7 8.1C19.2 16.65 12 21 12 21Z"
+                    stroke="#ffffff"
+                    strokeWidth="2"
                     strokeLinejoin="round"
+                    strokeLinecap="round"
                   />
                 </svg>
 

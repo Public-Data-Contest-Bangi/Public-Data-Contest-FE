@@ -53,7 +53,7 @@ function AccessibleRoute() {
 
   return (
     <Container>
-      <Header title="무장애 경로 안내" />
+      <Header title="경로 안내" />
 
       <RouteCard>
         <Row>
