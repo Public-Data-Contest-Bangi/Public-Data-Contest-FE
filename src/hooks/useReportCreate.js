@@ -14,6 +14,8 @@ function useReportCreate() {
     });
 
     const [images, setImages] = useState([]);
+    const [imageError, setImageError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (name, value) => {
         setForm((prev) => ({
@@ -25,14 +27,36 @@ function useReportCreate() {
     const handleImageChange = (files) => {
         const selectedFiles = Array.from(files);
 
+        const invalidFile = selectedFiles.find(
+            (file) =>
+                !file.type.startsWith("image/") ||
+                file.size > 10 * 1024 * 1024
+        );
+
+        if (invalidFile) {
+            setImageError(
+                "이미지 파일만 가능하며, 파일당 최대 10MB까지 등록할 수 있습니다."
+            );
+        } else {
+            setImageError("");
+        }
+
         const validFiles = selectedFiles.filter(
             (file) =>
                 file.type.startsWith("image/") &&
                 file.size <= 10 * 1024 * 1024
         );
 
-        const availableCount =
-            3 - images.length;
+        const availableCount = 3 - images.length;
+
+        if (
+            selectedFiles.length >
+            availableCount
+        ) {
+            setImageError(
+                "사진은 최대 3장까지 등록할 수 있습니다."
+            );
+        }
 
         const newImages = validFiles
             .slice(0, availableCount)
@@ -58,6 +82,8 @@ function useReportCreate() {
                 (_, i) => i !== index
             );
         });
+
+        setImageError("");
     };
 
     const isValid =
@@ -66,11 +92,13 @@ function useReportCreate() {
         form.content.trim();
 
     const handleSubmit = async () => {
-        if (!isValid) {
+        if (!isValid || isSubmitting) {
             return;
         }
 
         try {
+            setIsSubmitting(true);
+
             const response =
                 await createReport({
                     type: form.type,
@@ -78,9 +106,9 @@ function useReportCreate() {
                     content:
                         form.content.trim(),
 
-                    // 여기 중요
                     photos: images.map(
-                        (image) => image.file
+                        (image) =>
+                            image.file
                     ),
                 });
 
@@ -105,13 +133,17 @@ function useReportCreate() {
                 "상태 코드:",
                 error.response?.status
             );
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return {
         form,
         images,
+        imageError,
         isValid,
+        isSubmitting,
 
         handleChange,
         handleImageChange,
