@@ -77,10 +77,10 @@ function FacilityDetail() {
           <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M11 19S1.5 13 1.5 6.8A5.3 5.3 0 0 1 11 3.4a5.3 5.3 0 0 1 9.5 3.4C20.5 13 11 19 11 19Z"
-              stroke="#1A1A1A"
+              stroke="#e61010"
               strokeWidth="1.8"
               strokeLinejoin="round"
-              fill={favorite ? '#1A1A1A' : 'none'}
+              fill={favorite ? '#e61010' : 'none'}
             />
           </svg>
         </FavoriteButton>
