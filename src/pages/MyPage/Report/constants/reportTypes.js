@@ -8,15 +8,15 @@ const REPORT_TYPES = [
             },
             {
                 label: "무장애 경로 정보 오류",
-                value: "",
+                value: "ROUTE_INFORMATION",
             },
             {
                 label: "스포츠강좌 정보 오류",
-                value: "",
+                value: "SPORTS_CLASS_INFORMATION",
             },
             {
                 label: "가맹점 정보 오류",
-                value: "",
+                value: "MERCHANT_INFORMATION",
             },
         ],
     },
@@ -25,7 +25,7 @@ const REPORT_TYPES = [
         options: [
             {
                 label: "운동 추천 오류",
-                value: "",
+                value: "EXERCISE_RECOMMENDATION",
             },
         ],
     },
@@ -34,11 +34,11 @@ const REPORT_TYPES = [
         options: [
             {
                 label: "앱 오류·오작동",
-                value: "",
+                value: "APP_ERROR",
             },
             {
                 label: "접근성 불편",
-                value: "",
+                value: "ACCESSIBILITY",
             },
         ],
     },
@@ -47,7 +47,7 @@ const REPORT_TYPES = [
         options: [
             {
                 label: "기타 건의사항",
-                value: "",
+                value: "SUGGESTION",
             },
         ],
     },

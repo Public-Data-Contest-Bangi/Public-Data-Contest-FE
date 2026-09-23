@@ -79,13 +79,6 @@ function ReportDetail() {
 
                     {isPending && (
                         <S.EditButtonArea>
-                            <S.EditButton
-                                type="button"
-                                onClick={handleEdit}
-                            >
-                                수정
-                            </S.EditButton>
-
                             <S.DeleteButton
                                 type="button"
                                 onClick={handleDelete}

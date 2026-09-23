@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import BottomNav from "../../components/BottomNav";
 import MobileLayout from "../../components/layout/MobileLayout";
 import InfoBanner from "../../components/common/InfoBanner";
@@ -17,36 +19,42 @@ import jumpRope from "../../assets/images/exercisename/jump-rope.png";
 
 const RECOMMEND_DATA = {
     근력: {
+        id: "fitness",
         exercise: "웨이트 트레이닝",
         image: fitness,
         description: "실내 근력활동 개인",
     },
 
     근지구력: {
+        id: "swimming",
         exercise: "수영",
         image: swim,
         description: "실내 전신활동 개인",
     },
 
     심폐지구력: {
+        id: "table-tennis",
         exercise: "탁구",
         image: tabletennis,
         description: "실내 상체활동 개인",
     },
 
     유연성: {
+        id: "yoga",
         exercise: "요가",
         image: yoga,
         description: "실내 유연성활동 개인",
     },
 
     민첩성: {
+        id: "wheelchair-badminton",
         exercise: "배드민턴",
         image: badminton,
         description: "실내 전신활동 개인",
     },
 
     순발력: {
+        id: "jump-rope",
         exercise: "줄넘기",
         image: jumpRope,
         description: "실내 전신활동 개인",
@@ -54,6 +62,8 @@ const RECOMMEND_DATA = {
 };
 
 function FitnessResultRecommend() {
+    const navigate = useNavigate();
+
     const {
         weakestCategory,
         isLoading,
@@ -100,6 +110,17 @@ function FitnessResultRecommend() {
     const recommendation =
         RECOMMEND_DATA[weakestCategory];
 
+    const handleExerciseClick = () => {
+        console.log(
+            "운동 카드 클릭:",
+            recommendation.id
+        );
+
+        navigate(
+            `/exercise/${recommendation.id}`
+        );
+    };
+
     return (
         <MobileLayout>
             <S.Inner>
@@ -119,7 +140,11 @@ function FitnessResultRecommend() {
                         운동이에요
                     </S.ResultText>
 
-                    <S.ExerciseCard>
+                    <S.ExerciseCard
+                        onClick={
+                            handleExerciseClick
+                        }
+                    >
                         <S.CardLeft>
                             <S.ExerciseImage
                                 src={
