@@ -219,17 +219,6 @@ function useReportDetail() {
         report?.status ===
         "답변 대기";
 
-    const handleEdit = () => {
-        navigate(
-            `/report-history/${id}/edit`,
-            {
-                state: {
-                    report,
-                },
-            }
-        );
-    };
-
     const handleDelete = () => {
         if (isDeleting) {
             return;
@@ -304,7 +293,6 @@ function useReportDetail() {
         isDeleting,
         isDeleteModalOpen,
 
-        handleEdit,
         handleDelete,
         handleDeleteCancel,
         handleDeleteConfirm,

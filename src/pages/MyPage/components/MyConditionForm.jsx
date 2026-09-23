@@ -86,15 +86,17 @@ function MyConditionForm({
                 />
             </S.Section>
 
-            <Button
-                disabled={!canSave}
-                height="52px"
-                radius="8px"
-                fontSize="17px"
-                onClick={handleSave}
-            >
-                저장하기
-            </Button>
+            <S.SaveButtonArea>
+                <Button
+                    disabled={!canSave}
+                    height="52px"
+                    radius="8px"
+                    fontSize="17px"
+                    onClick={handleSave}
+                >
+                    저장하기
+                </Button>
+            </S.SaveButtonArea>
 
             <S.SaveMessage $visible={saved}>
                 조건이 저장 되었어요

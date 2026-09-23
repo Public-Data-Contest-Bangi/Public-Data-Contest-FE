@@ -200,3 +200,7 @@ export const SaveMessage = styled.p`
     opacity: ${({ $visible }) =>
         $visible ? 1 : 0};
 `;
+
+export const SaveButtonArea = styled.div`
+    margin-top: 100px;
+`;

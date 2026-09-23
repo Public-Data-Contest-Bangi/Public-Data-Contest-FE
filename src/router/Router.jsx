@@ -27,7 +27,6 @@ import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
 import ReportHistory from "../pages/MyPage/Report/ReportHistory";
 import ReportDetail from "../pages/MyPage/Report/ReportDetail";
 import ReportCreate from "../pages/MyPage/Report/ReportCreate";
-import ReportEdit from "../pages/MyPage/Report/ReportEdit";
 import MyConditionPage from "../pages/MyPage/MyConditionPage";
 import FavoritesPage from "../pages/MyPage/FavoritesPage";
 
@@ -90,11 +89,6 @@ function Router() {
                 <Route
                     path="/report-history/:id"
                     element={<ReportDetail />}
-                />
-
-                <Route
-                    path="/report-history/:id/edit"
-                    element={<ReportEdit />}
                 />
 
                 <Route
