@@ -37,10 +37,10 @@ function ReportForm({
                             >
                                 {group.options.map((type) => (
                                     <option
-                                        key={type}
-                                        value={type}
+                                        key={type.value}
+                                        value={type.value}
                                     >
-                                        {type}
+                                        {type.label}
                                     </option>
                                 ))}
                             </optgroup>
