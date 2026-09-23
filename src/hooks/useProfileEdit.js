@@ -76,6 +76,68 @@ export default function useProfileEdit() {
         setConfirmPasswordStatus,
     ] = useState(null);
 
+    // 모달
+    const [
+        isModalOpen,
+        setIsModalOpen,
+    ] = useState(false);
+
+    const [
+        modalMessage,
+        setModalMessage,
+    ] = useState("");
+
+    const [
+        modalDestination,
+        setModalDestination,
+    ] = useState(null);
+
+    const openModal = (
+        message,
+        destination = null
+    ) => {
+        setModalMessage(message);
+        setModalDestination(destination);
+        setIsModalOpen(true);
+    };
+
+    const clearAuthData = () => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("tokenType");
+        localStorage.removeItem("expiresIn");
+        localStorage.removeItem("memberDetails");
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+
+        if (modalDestination === "login") {
+            // 비밀번호 변경 후 기존 토큰이 무효화될 수 있으므로 삭제
+            clearAuthData();
+
+            navigate(
+                "/login",
+                {
+                    replace: true,
+                }
+            );
+
+            return;
+        }
+
+        if (modalDestination === "mypage") {
+            navigate(
+                "/mypage",
+                {
+                    replace: true,
+                }
+            );
+        }
+
+        setModalDestination(null);
+    };
+
     // 회원정보 조회
     useEffect(() => {
         const fetchMyProfile = async () => {
@@ -221,7 +283,6 @@ export default function useProfileEdit() {
             return;
         }
 
-        // TODO: 이메일 인증 API 연결
         setEmailStatus("sent");
         setVerificationStatus(null);
     };
@@ -233,7 +294,6 @@ export default function useProfileEdit() {
             return;
         }
 
-        // TODO: 인증번호 확인 API 연결
         if (verificationCode === "123456") {
             setVerificationStatus("success");
         } else {
@@ -241,32 +301,38 @@ export default function useProfileEdit() {
         }
     };
 
-    // 현재 비밀번호 입력 확인
+    // 현재 비밀번호 입력 여부 확인
     const handleCurrentPasswordCheck = () => {
         if (!currentPassword.trim()) {
             setCurrentPasswordStatus("error");
             return;
         }
 
-        // 별도 비밀번호 확인 API가 없기 때문에
-        // 실제 일치 여부는 PATCH 요청 시 서버에서 확인
+        // 실제 비밀번호 일치 여부는
+        // PATCH 요청 시 서버에서 확인
         setCurrentPasswordStatus("ready");
     };
 
     // 회원정보 수정
     const handleSubmit = async () => {
         if (!userId.trim()) {
-            alert("아이디를 입력해 주세요.");
+            openModal(
+                "아이디를 입력해 주세요."
+            );
             return;
         }
 
         if (!name.trim()) {
-            alert("이름을 입력해 주세요.");
+            openModal(
+                "이름을 입력해 주세요."
+            );
             return;
         }
 
         if (!nickname.trim()) {
-            alert("닉네임을 입력해 주세요.");
+            openModal(
+                "닉네임을 입력해 주세요."
+            );
             return;
         }
 
@@ -275,7 +341,7 @@ export default function useProfileEdit() {
             newPassword &&
             newPasswordStatus !== "success"
         ) {
-            alert(
+            openModal(
                 "새 비밀번호 형식을 확인해 주세요."
             );
             return;
@@ -285,7 +351,7 @@ export default function useProfileEdit() {
             newPassword &&
             confirmPasswordStatus !== "success"
         ) {
-            alert(
+            openModal(
                 "새 비밀번호가 일치하지 않습니다."
             );
             return;
@@ -295,7 +361,7 @@ export default function useProfileEdit() {
             newPassword &&
             !currentPassword.trim()
         ) {
-            alert(
+            openModal(
                 "현재 비밀번호를 입력해 주세요."
             );
             return;
@@ -307,7 +373,7 @@ export default function useProfileEdit() {
             loginId: userId.trim(),
         };
 
-        // 비밀번호 변경을 하는 경우에만 추가
+        // 비밀번호 변경 시에만 추가
         if (newPassword) {
             profileData.currentPassword =
                 currentPassword;
@@ -332,11 +398,21 @@ export default function useProfileEdit() {
                 response.data
             );
 
-            alert(
-                "회원정보가 수정되었습니다."
-            );
+            // 비밀번호까지 변경한 경우
+            if (newPassword) {
+                openModal(
+                    "비밀번호가 변경되었습니다.\n다시 로그인해 주세요.",
+                    "login"
+                );
 
-            navigate("/mypage");
+                return;
+            }
+
+            // 이름 / 닉네임 / 아이디만 변경한 경우
+            openModal(
+                "회원정보가 수정되었습니다.",
+                "mypage"
+            );
         } catch (error) {
             console.error(
                 "회원정보 수정 실패:",
@@ -346,7 +422,7 @@ export default function useProfileEdit() {
             const message =
                 error.response?.data?.message;
 
-            alert(
+            openModal(
                 message ??
                     "회원정보 수정에 실패했습니다."
             );
@@ -372,6 +448,11 @@ export default function useProfileEdit() {
         currentPasswordStatus,
         newPasswordStatus,
         confirmPasswordStatus,
+
+        // 모달
+        isModalOpen,
+        modalMessage,
+        closeModal,
 
         handleUserIdChange,
         handleNameChange,
