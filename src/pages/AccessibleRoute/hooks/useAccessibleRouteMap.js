@@ -25,7 +25,10 @@ export function useAccessibleRouteMap() {
   const loadFacilityMarkers = async () => {
     const map = mapRef.current;
     const Tmapv2 = window.Tmapv2;
-    if (!map || !Tmapv2) return;
+    if (!map || !Tmapv2) {
+      console.warn('loadFacilityMarkers 호출됐지만 map 또는 Tmapv2 없음:', !!map, !!Tmapv2);
+      return;
+    }
 
     let south, north, west, east, zoom;
 
@@ -93,15 +96,13 @@ export function useAccessibleRouteMap() {
     }
   };
 
+  // 지도 생성
   useEffect(() => {
     let cancelled = false;
     let initTimer = null;
-    let markerLoadTimer = null;
 
     function tryInitMap() {
       if (cancelled) return;
-
-      // 지도가 이미 만들어져 있으면 재생성하지 않음 (StrictMode 이중 실행 방지)
       if (mapRef.current) return;
 
       if (!window.Tmapv2) {
@@ -144,13 +145,6 @@ export function useAccessibleRouteMap() {
       markersRef.current = [departureMarker, arrivalMarker];
 
       setMapLoaded(true);
-
-      // 지도 최초 로드 시에만 시설 마커 조회 (StrictMode 이중 실행 시 타이머 취소되어 한 번만 실행됨)
-      markerLoadTimer = setTimeout(() => {
-        if (!cancelled) {
-          loadFacilityMarkers();
-        }
-      }, 500);
     }
 
     tryInitMap();
@@ -158,9 +152,17 @@ export function useAccessibleRouteMap() {
     return () => {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
-      if (markerLoadTimer) clearTimeout(markerLoadTimer);
     };
   }, []);
+
+  // 지도가 준비되면(mapLoaded === true) 시설 마커 로드
+  // setTimeout 대신 state 기반으로 실행해서, StrictMode 이중 실행 시에도
+  // cleanup이 이 호출 자체를 취소해버리는 문제가 생기지 않음
+  useEffect(() => {
+    if (mapLoaded) {
+      loadFacilityMarkers();
+    }
+  }, [mapLoaded]);
 
   const drawRoute = async () => {
     if (!mapRef.current || !window.Tmapv2) return;
@@ -184,7 +186,6 @@ export function useAccessibleRouteMap() {
 
       const path = coords.map((c) => new Tmapv2.LatLng(c.lat, c.lng));
 
-      // ── 공식 문서 패턴: LatLngBounds를 점 하나로 생성 후 extend, fitBounds에 margin 전달 ──
       const bounds = new Tmapv2.LatLngBounds(path[0]);
       path.forEach((p) => bounds.extend(p));
 
