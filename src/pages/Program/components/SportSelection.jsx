@@ -2,27 +2,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Button from "../../../components/common/Button";
-import { SPORTS_OPTIONS, SPORT_ICONS } from "../constants/sportsOptions";
+import { SPORTS_OPTIONS } from "../constants/sportsOptions";
 
 import * as S from "./SportSelection.styled";
 
 export default function SportSelection() {
     const navigate = useNavigate();
 
-    const [selectedSports, setSelectedSports] = useState([]);
+    const [selectedSportIds, setSelectedSportIds] = useState([]);
 
-    const handleSportToggle = (sport) => {
-        setSelectedSports((prev) =>
-            prev.includes(sport)
-                ? prev.filter((item) => item !== sport)
-                : [...prev, sport]
+    const handleSportToggle = (sportId) => {
+        setSelectedSportIds((prev) =>
+            prev.includes(sportId)
+                ? prev.filter((id) => id !== sportId)
+                : [...prev, sportId]
         );
     };
 
     const handleComplete = () => {
         navigate("/program-browse/region", {
             state: {
-                sports: selectedSports,
+                sports: selectedSportIds,
             },
         });
     };
@@ -45,21 +45,21 @@ export default function SportSelection() {
                 <S.SportGrid>
                     {SPORTS_OPTIONS.map((sport) => {
                         const isSelected =
-                            selectedSports.includes(sport);
+                            selectedSportIds.includes(sport.id);
 
                         return (
                             <S.SportButton
-                                key={sport}
+                                key={sport.id}
                                 type="button"
                                 $selected={isSelected}
                                 onClick={() =>
-                                    handleSportToggle(sport)
+                                    handleSportToggle(sport.id)
                                 }
                             >
-                                {SPORT_ICONS[sport] && (
-                                    <S.SportIcon src={SPORT_ICONS[sport]} alt="" />
+                                {sport.icon && (
+                                    <S.SportIcon src={sport.icon} alt="" />
                                 )}
-                                {sport}
+                                {sport.name}
                             </S.SportButton>
                         );
                     })}
@@ -68,7 +68,7 @@ export default function SportSelection() {
 
             <S.BottomArea>
                 <Button
-                    disabled={selectedSports.length === 0}
+                    disabled={selectedSportIds.length === 0}
                     onClick={handleComplete}
                 >
                     선택 완료
