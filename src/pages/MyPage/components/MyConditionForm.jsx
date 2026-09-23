@@ -73,22 +73,6 @@ function MyConditionForm({
                 </S.HelpText>
             </S.Section>
 
-
-            <S.Section>
-                <S.Label>
-                    관심 종목
-                    <S.SubLabel>
-                        (선택, 중복 선택 가능)
-                    </S.SubLabel>
-                </S.Label>
-
-                <ConditionChoiceGroup
-                    options={SPORTS_OPTIONS}
-                    selected={sports}
-                    onToggle={handleSportsToggle}
-                />
-            </S.Section>
-
             <S.Section>
                 <S.Label>
                     스포츠강좌이용권 보유 여부
@@ -109,7 +93,7 @@ function MyConditionForm({
                 fontSize="17px"
                 onClick={handleSave}
             >
-                완료하고 시작하기
+                저장하기
             </Button>
 
             <S.SaveMessage $visible={saved}>

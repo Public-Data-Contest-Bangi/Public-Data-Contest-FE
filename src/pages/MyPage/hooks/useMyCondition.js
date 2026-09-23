@@ -14,15 +14,14 @@ import {
     saveCondition,
 } from "../utils/myConditionStorage";
 
-// TODO: 백엔드에서 장애유형 ID 받으면 여기만 채우기
 const DISABILITY_ID_MAP = {
-    // "지체장애": 1,
-    // "뇌병변장애": 2,
-    // "시각장애": 3,
-    // "청각장애": 4,
-    // "지적장애": 5,
-    // "자폐성장애": 6,
-    // "기타": 7,
+    "지적장애": 1,
+    "청각장애": 2,
+    "지체장애": 3,
+    "시각장애": 4,
+    "척수장애": 5,
+    "소아마비": 6,
+    "뇌병변": 7,
 };
 
 const normalizeSavedCondition = (

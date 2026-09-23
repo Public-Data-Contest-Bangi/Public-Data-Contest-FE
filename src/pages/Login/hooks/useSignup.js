@@ -9,8 +9,9 @@ import {
     checkNicknameAvailability,
 } from "../../../api/auth";
 
+// 영문 + 숫자 + 특수문자 포함, 8~20자
 const PASSWORD_REGEX =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,20}$/;
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,20}$/;
 
 function useSignup() {
     const navigate = useNavigate();
@@ -25,10 +26,16 @@ function useSignup() {
         verificationCode: "",
     });
 
-    const [idMessage, setIdMessage] = useState("");
-    const [idMessageType, setIdMessageType] =
+    // 아이디
+    const [idMessage, setIdMessage] =
         useState("");
 
+    const [
+        idMessageType,
+        setIdMessageType,
+    ] = useState("");
+
+    // 비밀번호
     const [
         isPasswordFormatError,
         setIsPasswordFormatError,
@@ -39,29 +46,48 @@ function useSignup() {
         setConfirmPasswordMessage,
     ] = useState("");
 
-    const [nicknameMessage, setNicknameMessage] =
-        useState("");
+    // 닉네임
+    const [
+        nicknameMessage,
+        setNicknameMessage,
+    ] = useState("");
+
     const [
         nicknameMessageType,
         setNicknameMessageType,
     ] = useState("");
 
-    const [emailMessage, setEmailMessage] =
-        useState("");
-    const [emailMessageType, setEmailMessageType] =
-        useState("");
+    // 이메일
+    const [
+        emailMessage,
+        setEmailMessage,
+    ] = useState("");
 
+    const [
+        emailMessageType,
+        setEmailMessageType,
+    ] = useState("");
+
+    // 인증번호
     const [
         verificationMessage,
         setVerificationMessage,
     ] = useState("");
+
     const [
         verificationMessageType,
         setVerificationMessageType,
     ] = useState("");
 
-    const [isEmailVerified, setIsEmailVerified] =
-        useState(false);
+    const [
+        isEmailVerified,
+        setIsEmailVerified,
+    ] = useState(false);
+
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(false);
 
     const changeForm = (key, value) => {
         setForm((prev) => ({
@@ -72,124 +98,223 @@ function useSignup() {
 
     // 아이디 입력
     const handleIdChange = (value) => {
-        changeForm("userId", value);
+        changeForm(
+            "userId",
+            value
+        );
 
-        // 값을 수정하면 이전 중복 확인 결과 제거
+        // 아이디를 수정하면
+        // 기존 중복확인 결과 초기화
         setIdMessage("");
         setIdMessageType("");
     };
 
     // 아이디 중복 확인
     const handleIdCheck = async () => {
-        if (!form.userId.trim()) {
-            setIdMessage("아이디를 입력해 주세요.");
-            setIdMessageType("error");
+        const loginId =
+            form.userId.trim();
+
+        if (!loginId) {
+            setIdMessage(
+                "아이디를 입력해 주세요."
+            );
+
+            setIdMessageType(
+                "error"
+            );
+
             return;
         }
 
         try {
+            setIsLoading(true);
+
             await checkLoginIdAvailability(
-                form.userId.trim()
+                loginId
             );
 
             setIdMessage(
                 "사용 가능한 아이디입니다."
             );
-            setIdMessageType("success");
+
+            setIdMessageType(
+                "success"
+            );
         } catch (error) {
+            console.error(
+                "아이디 중복확인 실패:",
+                error.response?.data
+            );
+
             setIdMessage(
                 error.response?.data?.message ||
-                "이미 존재하는 아이디입니다."
+                    "이미 존재하는 아이디입니다."
             );
-            setIdMessageType("error");
+
+            setIdMessageType(
+                "error"
+            );
+        } finally {
+            setIsLoading(false);
         }
     };
 
     // 비밀번호 입력
     const handlePasswordChange = (value) => {
-        changeForm("password", value);
+        changeForm(
+            "password",
+            value
+        );
 
-        // 회원가입 시 에러가 떴던 상태라면
-        // 올바른 형식으로 수정했을 때만 에러 해제
+        if (!value) {
+            setIsPasswordFormatError(false);
+
+            if (form.confirmPassword) {
+                setConfirmPasswordMessage(
+                    "비밀번호가 일치하지 않습니다."
+                );
+            }
+
+            return;
+        }
+
+        // 기존에 형식 오류가 있었으면
+        // 올바른 형식으로 수정했을 때 해제
         if (
-            isPasswordFormatError &&
             PASSWORD_REGEX.test(value)
         ) {
             setIsPasswordFormatError(false);
         }
 
-        // 비밀번호 확인값이 이미 있으면 일치 여부만 확인
+        // 비밀번호 확인값이 이미 입력되어 있으면
+        // 실시간 일치 여부 검사
         if (form.confirmPassword) {
-            if (value !== form.confirmPassword) {
+            if (
+                value !==
+                form.confirmPassword
+            ) {
                 setConfirmPasswordMessage(
                     "비밀번호가 일치하지 않습니다."
                 );
             } else {
-                setConfirmPasswordMessage("");
+                setConfirmPasswordMessage(
+                    ""
+                );
             }
         }
     };
 
     // 비밀번호 확인
-    const handleConfirmPasswordChange = (value) => {
+    const handleConfirmPasswordChange = (
+        value
+    ) => {
         changeForm(
             "confirmPassword",
             value
         );
 
         if (!value) {
-            setConfirmPasswordMessage("");
+            setConfirmPasswordMessage(
+                ""
+            );
             return;
         }
 
-        if (form.password !== value) {
+        if (
+            form.password !== value
+        ) {
             setConfirmPasswordMessage(
                 "비밀번호가 일치하지 않습니다."
             );
         } else {
-            setConfirmPasswordMessage("");
+            setConfirmPasswordMessage(
+                ""
+            );
         }
     };
 
-    // 닉네임 입력
-    const handleNicknameChange = (value) => {
-        changeForm("nickname", value);
+    // 이름 입력
+    const handleNameChange = (value) => {
+        changeForm(
+            "name",
+            value
+        );
+    };
 
+    // 닉네임 입력
+    const handleNicknameChange = (
+        value
+    ) => {
+        changeForm(
+            "nickname",
+            value
+        );
+
+        // 닉네임을 수정하면
+        // 기존 중복확인 결과 초기화
         setNicknameMessage("");
         setNicknameMessageType("");
     };
 
     // 닉네임 중복 확인
-    const handleNicknameCheck = async () => {
-        if (!form.nickname.trim()) {
-            setNicknameMessage(
-                "닉네임을 입력해 주세요."
-            );
-            setNicknameMessageType("error");
-            return;
-        }
+    const handleNicknameCheck =
+        async () => {
+            const nickname =
+                form.nickname.trim();
 
-        try {
-            await checkNicknameAvailability(
-                form.nickname.trim()
-            );
+            if (!nickname) {
+                setNicknameMessage(
+                    "닉네임을 입력해 주세요."
+                );
 
-            setNicknameMessage(
-                "사용 가능한 닉네임입니다."
-            );
-            setNicknameMessageType("success");
-        } catch (error) {
-            setNicknameMessage(
-                error.response?.data?.message ||
-                "이미 존재하는 닉네임입니다."
-            );
-            setNicknameMessageType("error");
-        }
-    };
+                setNicknameMessageType(
+                    "error"
+                );
+
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+
+                await checkNicknameAvailability(
+                    nickname
+                );
+
+                setNicknameMessage(
+                    "사용 가능한 닉네임입니다."
+                );
+
+                setNicknameMessageType(
+                    "success"
+                );
+            } catch (error) {
+                console.error(
+                    "닉네임 중복확인 실패:",
+                    error.response?.data
+                );
+
+                setNicknameMessage(
+                    error.response?.data?.message ||
+                        "이미 존재하는 닉네임입니다."
+                );
+
+                setNicknameMessageType(
+                    "error"
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
     // 이메일 입력
-    const handleEmailChange = (value) => {
-        changeForm("email", value);
+    const handleEmailChange = (
+        value
+    ) => {
+        changeForm(
+            "email",
+            value
+        );
 
         setEmailMessage("");
         setEmailMessageType("");
@@ -197,40 +322,76 @@ function useSignup() {
         setVerificationMessage("");
         setVerificationMessageType("");
 
+        changeForm(
+            "verificationCode",
+            ""
+        );
+
         setIsEmailVerified(false);
     };
 
-    // 이메일 중복 확인 + 인증번호 발송
-    const handleEmailCheck = async () => {
-        if (!form.email) {
-            setEmailMessage(
-                "이메일을 입력해 주세요."
-            );
-            setEmailMessageType("error");
-            return;
-        }
+    // 회원가입 인증번호 발송
+    const handleEmailCheck =
+        async () => {
+            const email =
+                form.email.trim();
 
-        try {
-            await sendSignupEmailVerification(
-                form.email
-            );
+            if (!email) {
+                setEmailMessage(
+                    "이메일을 입력해 주세요."
+                );
 
-            setEmailMessage(
-                "인증번호를 발송했습니다."
-            );
-            setEmailMessageType("success");
-        } catch (error) {
-            setEmailMessage(
-                error.response?.data?.message ||
-                "인증번호 발송에 실패했습니다."
-            );
+                setEmailMessageType(
+                    "error"
+                );
 
-            setEmailMessageType("error");
-        }
-    };
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+
+                await sendSignupEmailVerification(
+                    email
+                );
+
+                setEmailMessage(
+                    "인증번호를 발송했습니다."
+                );
+
+                setEmailMessageType(
+                    "success"
+                );
+
+                // 인증번호를 다시 발송했다면
+                // 이전 인증 상태 초기화
+                setIsEmailVerified(false);
+
+                setVerificationMessage("");
+                setVerificationMessageType("");
+            } catch (error) {
+                console.error(
+                    "인증번호 발송 실패:",
+                    error.response?.data
+                );
+
+                setEmailMessage(
+                    error.response?.data?.message ||
+                        "인증번호 발송에 실패했습니다."
+                );
+
+                setEmailMessageType(
+                    "error"
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
     // 인증번호 입력
-    const handleVerificationCodeChange = (value) => {
+    const handleVerificationCodeChange = (
+        value
+    ) => {
         changeForm(
             "verificationCode",
             value
@@ -238,58 +399,137 @@ function useSignup() {
 
         setVerificationMessage("");
         setVerificationMessageType("");
+
         setIsEmailVerified(false);
     };
 
     // 인증번호 확인
-    const handleVerificationCheck = async () => {
-        if (!form.verificationCode) {
-            setVerificationMessage(
-                "인증번호를 입력해 주세요."
-            );
-            setVerificationMessageType(
-                "error"
-            );
-            return;
-        }
+    const handleVerificationCheck =
+        async () => {
+            const email =
+                form.email.trim();
 
-        try {
-            await confirmSignupEmailVerification(
-                form.email,
-                form.verificationCode
-            );
+            const code =
+                form.verificationCode.trim();
 
-            setIsEmailVerified(true);
+            if (!email) {
+                setVerificationMessage(
+                    "이메일을 입력해 주세요."
+                );
 
-            setVerificationMessage(
-                "인증 되었습니다."
-            );
-            setVerificationMessageType(
-                "success"
-            );
-        } catch (error) {
-            setIsEmailVerified(false);
+                setVerificationMessageType(
+                    "error"
+                );
 
-            setVerificationMessage(
-                "인증번호를 확인해 주세요."
-            );
-            setVerificationMessageType(
-                "error"
-            );
-        }
-    };
+                return;
+            }
+
+            if (!code) {
+                setVerificationMessage(
+                    "인증번호를 입력해 주세요."
+                );
+
+                setVerificationMessageType(
+                    "error"
+                );
+
+                return;
+            }
+
+            try {
+                setIsLoading(true);
+
+                await confirmSignupEmailVerification(
+                    email,
+                    code
+                );
+
+                setIsEmailVerified(true);
+
+                setVerificationMessage(
+                    "인증 되었습니다."
+                );
+
+                setVerificationMessageType(
+                    "success"
+                );
+            } catch (error) {
+                console.error(
+                    "인증번호 확인 실패:",
+                    error.response?.data
+                );
+
+                setIsEmailVerified(false);
+
+                setVerificationMessage(
+                    error.response?.data?.message ||
+                        "인증번호를 확인해 주세요."
+                );
+
+                setVerificationMessageType(
+                    "error"
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
     // 회원가입
     const handleSignup = async () => {
+        const loginId =
+            form.userId.trim();
+
+        const name =
+            form.name.trim();
+
+        const nickname =
+            form.nickname.trim();
+
+        const email =
+            form.email.trim();
+
+        if (!loginId) {
+            setIdMessage(
+                "아이디를 입력해 주세요."
+            );
+
+            setIdMessageType(
+                "error"
+            );
+
+            return;
+        }
+
+        // 아이디 중복확인 완료 여부
+        if (
+            idMessageType !==
+            "success"
+        ) {
+            setIdMessage(
+                "아이디 중복 확인을 완료해 주세요."
+            );
+
+            setIdMessageType(
+                "error"
+            );
+
+            return;
+        }
+
+        // 비밀번호 형식 검사
         if (
             !PASSWORD_REGEX.test(
                 form.password
             )
         ) {
-            setIsPasswordFormatError(true);
+            setIsPasswordFormatError(
+                true
+            );
+
             return;
         }
 
+        // 비밀번호 일치 검사
         if (
             form.password !==
             form.confirmPassword
@@ -297,37 +537,107 @@ function useSignup() {
             setConfirmPasswordMessage(
                 "비밀번호가 일치하지 않습니다."
             );
+
             return;
         }
 
+        if (!name) {
+            return;
+        }
+
+        if (!nickname) {
+            setNicknameMessage(
+                "닉네임을 입력해 주세요."
+            );
+
+            setNicknameMessageType(
+                "error"
+            );
+
+            return;
+        }
+
+        // 닉네임 중복확인 완료 여부
+        if (
+            nicknameMessageType !==
+            "success"
+        ) {
+            setNicknameMessage(
+                "닉네임 중복 확인을 완료해 주세요."
+            );
+
+            setNicknameMessageType(
+                "error"
+            );
+
+            return;
+        }
+
+        if (!email) {
+            setEmailMessage(
+                "이메일을 입력해 주세요."
+            );
+
+            setEmailMessageType(
+                "error"
+            );
+
+            return;
+        }
+
+        // 이메일 인증 완료 여부
         if (!isEmailVerified) {
             setVerificationMessage(
                 "이메일 인증을 완료해 주세요."
             );
+
             setVerificationMessageType(
                 "error"
             );
+
             return;
         }
 
         try {
-            await signup({
-                loginId: form.userId,
-                password: form.password,
-                email: form.email,
-                name: form.name,
-                nickname: form.nickname,
-            });
+            setIsLoading(true);
 
-            navigate("/login");
+            const response =
+                await signup({
+                    loginId,
+                    password:
+                        form.password,
+                    email,
+                    name,
+                    nickname,
+                });
+
+            console.log(
+                "회원가입 성공:",
+                response
+            );
+
+            navigate(
+                "/login",
+                {
+                    replace: true,
+                }
+            );
         } catch (error) {
+            console.error(
+                "회원가입 실패:",
+                error.response?.data
+            );
+
             setVerificationMessage(
                 error.response?.data?.message ||
-                "회원가입에 실패했습니다."
+                    "회원가입에 실패했습니다."
             );
+
             setVerificationMessageType(
                 "error"
             );
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -349,6 +659,9 @@ function useSignup() {
         verificationMessage,
         verificationMessageType,
 
+        isEmailVerified,
+        isLoading,
+
         changeForm,
 
         handleIdChange,
@@ -356,6 +669,8 @@ function useSignup() {
 
         handlePasswordChange,
         handleConfirmPasswordChange,
+
+        handleNameChange,
 
         handleNicknameChange,
         handleNicknameCheck,

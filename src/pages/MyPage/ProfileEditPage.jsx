@@ -7,6 +7,7 @@ import ProfileField from "./components/ProfileField";
 
 import useProfileAvatar from "./hooks/useProfileAvatar";
 import ProfileAvatarPicker from "./components/ProfileAvatarPicker";
+import AlertModal from "../../components/common/AlertModal";
 
 import backIcon from "../../assets/icons/back.png";
 
@@ -29,6 +30,10 @@ export default function ProfileEditPage() {
         currentPasswordStatus,
         newPasswordStatus,
         confirmPasswordStatus,
+
+        isModalOpen,
+        modalMessage,
+        closeModal,
 
         handleUserIdChange,
         handleNameChange,
@@ -271,6 +276,11 @@ export default function ProfileEditPage() {
                     수정 완료
                 </S.SubmitButton>
             </S.Container>
+            <AlertModal
+                isOpen={isModalOpen}
+                message={modalMessage}
+                onConfirm={closeModal}
+            />
         </S.Page>
     );
 }
