@@ -6,7 +6,8 @@ export function useFacilitySearch() {
   const navigate = useNavigate();
   const [province, setProvince] = useState('서울특별시');
   const [district, setDistrict] = useState(REGION_DATA['서울특별시'][0]);
-  const [openMenu, setOpenMenu] = useState(null); // 'province' | 'district' | null
+  const [openMenu, setOpenMenu] = useState(null);
+  const [keyword, setKeyword] = useState('');
 
   const provinceRef = useRef(null);
   const districtRef = useRef(null);
@@ -43,7 +44,7 @@ export function useFacilitySearch() {
   };
 
   const goSearchResult = () => {
-    navigate('/search-result');
+    navigate('/search-result', { state: { keyword: keyword.trim() } });
   };
 
   return {
@@ -52,6 +53,8 @@ export function useFacilitySearch() {
     openMenu,
     provinceRef,
     districtRef,
+    keyword,
+    setKeyword,
     handleSelectProvince,
     handleSelectDistrict,
     toggleMenu,

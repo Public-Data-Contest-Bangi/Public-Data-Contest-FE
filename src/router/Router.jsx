@@ -5,6 +5,7 @@ import FacilityDetail from "../pages/FacilityDetail/FacilityDetail";
 import AccessibleRoute from "../pages/AccessibleRoute/AccessibleRoute";
 import DepartureSearch from "../pages/DepartureSearch/DepartureSearch";
 import FacilitySearch from "../pages/FacilitySearch/FacilitySearch";
+import FacilityMap from "../pages/FacilityMap/FacilityMap";
 
 
 import {
@@ -105,6 +106,11 @@ function Router() {
                 <Route
                     path="/facility-search"
                     element={<FacilitySearch />}
+                />
+
+                <Route
+                    path="/facility-map"
+                    element={<FacilityMap />}
                 />
 
                 <Route

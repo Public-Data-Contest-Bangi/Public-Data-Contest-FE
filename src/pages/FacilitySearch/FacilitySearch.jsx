@@ -10,12 +10,20 @@ function FacilitySearch() {
     openMenu,
     provinceRef,
     districtRef,
+    keyword,
+    setKeyword,
     handleSelectProvince,
     handleSelectDistrict,
     toggleMenu,
     goBack,
     goSearchResult,
   } = useFacilitySearch();
+
+  const handleKeywordKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      goSearchResult();
+    }
+  };
 
   return (
     <div className="facility-search">
@@ -53,7 +61,14 @@ function FacilitySearch() {
           <circle cx="11" cy="11" r="7" stroke="#B3B3B3" strokeWidth="2" />
           <path d="M20 20l-3.5-3.5" stroke="#B3B3B3" strokeWidth="2" strokeLinecap="round" />
         </svg>
-        <input type="text" className="facility-search__input" placeholder="시설명을 검색해주세요" />
+        <input
+          type="text"
+          className="facility-search__input"
+          placeholder="시설명을 검색해주세요"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={handleKeywordKeyDown}
+        />
       </div>
 
       <section className="facility-search__region">
@@ -188,7 +203,6 @@ function FacilitySearch() {
         시설 검색하기
       </button>
 
-      {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
       <div className="facility-search__results" />
     </div>
   );

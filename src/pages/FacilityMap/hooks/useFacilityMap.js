@@ -1,22 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEPARTURE_COORD, ARRIVAL_COORD } from '../utils/mapCoords';
-import { fetchPedestrianRoute } from '../utils/fetchPedestrianRoute';
+import { useNavigate } from 'react-router-dom';
 import { fetchFacilityMarkers } from '../../../api/facilities';
+import { getCurrentCoords } from '../../../utils/geolocation';
 
 function estimateDelta(zoom) {
   return 0.02 * Math.pow(2, 15 - zoom);
 }
 
-export function useAccessibleRouteMap() {
+export function useFacilityMap() {
+  const navigate = useNavigate();
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const polylineRef = useRef(null);
-  const markersRef = useRef([]);
   const facilityMarkersRef = useRef([]);
-  const pollIntervalRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
-  const [routeLoading, setRouteLoading] = useState(false);
+  const [markersLoading, setMarkersLoading] = useState(false);
 
   const clearFacilityMarkers = () => {
     facilityMarkersRef.current.forEach((m) => m.setMap(null));
@@ -27,6 +25,8 @@ export function useAccessibleRouteMap() {
     const map = mapRef.current;
     const Tmapv2 = window.Tmapv2;
     if (!map || !Tmapv2) return;
+
+    setMarkersLoading(true);
 
     let south, north, west, east, zoom;
 
@@ -51,7 +51,6 @@ export function useAccessibleRouteMap() {
 
     try {
       const data = await fetchFacilityMarkers({ south, north, west, east, zoom });
-      console.log('시설 마커 응답 개수:', data.totalCount, data.facilities?.length, '| zoom:', zoom);
 
       clearFacilityMarkers();
 
@@ -66,6 +65,11 @@ export function useAccessibleRouteMap() {
           iconSize: new Tmapv2.Size(26, 26),
           map,
         });
+
+        Tmapv2.event.addListener(marker, 'click', () => {
+          navigate(`/facility-detail/${f.facilityId}`);
+        });
+
         newMarkers.push(marker);
       });
 
@@ -88,9 +92,10 @@ export function useAccessibleRouteMap() {
       });
 
       facilityMarkersRef.current = newMarkers;
-      console.log('생성된 시설 마커 개수:', newMarkers.length);
     } catch (err) {
       console.error('시설 마커 조회 실패:', err.response?.status, err.response?.data || err.message);
+    } finally {
+      setMarkersLoading(false);
     }
   };
 
@@ -98,7 +103,7 @@ export function useAccessibleRouteMap() {
     let cancelled = false;
     let initTimer = null;
 
-    function tryInitMap() {
+    async function tryInitMap() {
       if (cancelled) return;
       if (mapRef.current) return;
 
@@ -111,55 +116,18 @@ export function useAccessibleRouteMap() {
       if (mapRef.current) return;
 
       const Tmapv2 = window.Tmapv2;
+      const coords = await getCurrentCoords();
+
+      if (cancelled) return;
 
       const map = new Tmapv2.Map(mapContainerRef.current, {
-        center: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
+        center: new Tmapv2.LatLng(coords.latitude, coords.longitude),
         width: '100%',
         height: '100%',
         zoom: 15,
       });
 
       mapRef.current = map;
-
-      const departureMarker = new Tmapv2.Marker({
-        position: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
-        icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="%2340D293" stroke="white" stroke-width="3"/></svg>'
-        ),
-        iconSize: new Tmapv2.Size(28, 28),
-        map,
-      });
-
-      const arrivalMarker = new Tmapv2.Marker({
-        position: new Tmapv2.LatLng(ARRIVAL_COORD.lat, ARRIVAL_COORD.lng),
-        icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="%23FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
-        ),
-        iconSize: new Tmapv2.Size(28, 32),
-        map,
-      });
-
-      markersRef.current = [departureMarker, arrivalMarker];
-
-      // Tmapv2.Map은 zoom/이동 변경 이벤트를 공식 지원하지 않아서,
-      // 800ms마다 줌/중심 좌표를 직접 확인해 달라졌으면 마커를 다시 불러옴 (폴링 방식)
-      let lastZoom = map.getZoom();
-      let lastCenterKey = `${map.getCenter().lat()},${map.getCenter().lng()}`;
-
-      const pollInterval = setInterval(() => {
-        const currentZoom = map.getZoom();
-        const center = map.getCenter();
-        const currentCenterKey = `${center.lat()},${center.lng()}`;
-
-        if (currentZoom !== lastZoom || currentCenterKey !== lastCenterKey) {
-          lastZoom = currentZoom;
-          lastCenterKey = currentCenterKey;
-          loadFacilityMarkers();
-        }
-      }, 800);
-
-      pollIntervalRef.current = pollInterval;
-
       setMapLoaded(true);
     }
 
@@ -168,7 +136,6 @@ export function useAccessibleRouteMap() {
     return () => {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     };
   }, []);
 
@@ -178,47 +145,5 @@ export function useAccessibleRouteMap() {
     }
   }, [mapLoaded]);
 
-  const drawRoute = async () => {
-    if (!mapRef.current || !window.Tmapv2) return;
-
-    const appKey = import.meta.env.VITE_TMAP_APP_KEY;
-    if (!appKey) return;
-
-    setRouteLoading(true);
-
-    try {
-      const coords = await fetchPedestrianRoute(DEPARTURE_COORD, ARRIVAL_COORD, appKey);
-
-      if (polylineRef.current) {
-        polylineRef.current.setMap(null);
-        polylineRef.current = null;
-      }
-
-      const Tmapv2 = window.Tmapv2;
-
-      if (coords.length === 0) return;
-
-      const path = coords.map((c) => new Tmapv2.LatLng(c.lat, c.lng));
-
-      const bounds = new Tmapv2.LatLngBounds(path[0]);
-      path.forEach((p) => bounds.extend(p));
-
-      const polyline = new Tmapv2.Polyline({
-        path,
-        strokeColor: '#2F7BFF',
-        strokeWeight: 8,
-        strokeOpacity: 1,
-        map: mapRef.current,
-      });
-      polylineRef.current = polyline;
-
-      mapRef.current.fitBounds(bounds, { left: 30, top: 30, right: 30, bottom: 30 });
-    } catch (err) {
-      console.error('경로 그리기 실패:', err);
-    } finally {
-      setRouteLoading(false);
-    }
-  };
-
-  return { mapContainerRef, mapLoaded, mapError, drawRoute, routeLoading };
+  return { mapContainerRef, mapLoaded, mapError, markersLoading, loadFacilityMarkers };
 }
