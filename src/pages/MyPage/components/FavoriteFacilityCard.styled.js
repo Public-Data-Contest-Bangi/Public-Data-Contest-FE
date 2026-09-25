@@ -20,6 +20,14 @@ export const CardImage = styled.div`
     height: 150px;
 
     background: #e5e5e5;
+    background-image: ${({ $imageUrl }) =>
+        $imageUrl
+            ? `url(${$imageUrl})`
+            : "none"};
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 `;
 
 export const CardBody = styled.div`

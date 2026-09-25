@@ -63,13 +63,33 @@ export const List = styled.div`
     box-sizing: border-box;
 `;
 
-export const EmptyMessage = styled.p`
-    margin: 80px 0 0;
+export const EmptyState = styled.div`
+    width: 100%;
+
+    padding: 120px 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     text-align: center;
+`;
 
-    font-size: 15px;
-    font-weight: 500;
+export const EmptyTitle = styled.p`
+    margin: 0;
 
-    color: #8c8c8c;
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #333333;
+`;
+
+export const EmptyDescription = styled.p`
+    margin: 8px 0 0;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    color: #999999;
 `;

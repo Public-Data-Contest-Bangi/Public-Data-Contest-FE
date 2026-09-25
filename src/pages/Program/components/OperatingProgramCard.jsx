@@ -15,7 +15,9 @@ export default function OperatingProgramCard({
 
     return (
         <S.Card>
-            <S.CardHeader>
+            <S.CardHeader
+                onClick={handleProgramDetail}
+            >
                 <S.ProgramIcon
                     viewBox="0 0 32 32"
                     aria-hidden="true"
@@ -43,9 +45,17 @@ export default function OperatingProgramCard({
                     />
                 </S.ProgramIcon>
 
-                <S.ProgramTitle>
-                    {program.title}
-                </S.ProgramTitle>
+                <S.ProgramTitleArea>
+                    <S.ProgramTitle>
+                        {program.title}
+                    </S.ProgramTitle>
+
+                    {program.voucherAvailable && (
+                        <S.VoucherTag>
+                            바우처 사용 가능
+                        </S.VoucherTag>
+                    )}
+                </S.ProgramTitleArea>
 
                 <S.ArrowIcon
                     viewBox="0 0 12 20"
@@ -66,35 +76,47 @@ export default function OperatingProgramCard({
 
             <S.InfoList>
                 <S.InfoRow>
-                    <S.Label>강좌이름</S.Label>
+                    <S.Label>
+                        강좌이름
+                    </S.Label>
+
                     <S.Value>
                         {program.className}
                     </S.Value>
                 </S.InfoRow>
 
                 <S.InfoRow>
-                    <S.Label>요일</S.Label>
+                    <S.Label>
+                        요일
+                    </S.Label>
+
                     <S.Value>
                         {program.days}
                     </S.Value>
                 </S.InfoRow>
 
                 <S.InfoRow>
-                    <S.Label>시간</S.Label>
+                    <S.Label>
+                        시간
+                    </S.Label>
+
                     <S.Value>
                         {program.time}
                     </S.Value>
                 </S.InfoRow>
 
                 <S.InfoRow>
-                    <S.Label>신청기간</S.Label>
+                    <S.Label>운영기간</S.Label>
                     <S.Value>
-                        {program.applicationPeriod}
+                        {program.operatingPeriod || "-"}
                     </S.Value>
                 </S.InfoRow>
 
                 <S.InfoRow>
-                    <S.Label>가격</S.Label>
+                    <S.Label>
+                        가격
+                    </S.Label>
+
                     <S.Value>
                         {program.price}
                     </S.Value>

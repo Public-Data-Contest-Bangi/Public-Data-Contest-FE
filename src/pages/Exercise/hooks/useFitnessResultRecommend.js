@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { getFitnessResult } from "../../../api/fitnessResult";
+import {
+    getFitnessResult,
+    getFitnessRecommendations,
+} from "../../../api/fitnessResult";
 
 const API_TO_RESULT = (data) => ({
     근력: data.muscleStrengthGrade,
@@ -19,45 +22,73 @@ function useFitnessResultRecommend() {
         location.state?.results || null
     );
 
-    const [isLoading, setIsLoading] =
-        useState(!location.state?.results);
+    const [recommendations, setRecommendations] =
+        useState([]);
 
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
 
     useEffect(() => {
-        // 이전 페이지에서 결과를 받아왔다면
-        // API를 다시 호출하지 않아도 됨
-        if (location.state?.results) {
-            return;
-        }
-
-        const fetchFitnessResult = async () => {
+        const fetchData = async () => {
             try {
                 setIsLoading(true);
                 setError("");
 
-                const response =
-                    await getFitnessResult();
+                // 체력 결과
+                if (location.state?.results) {
+                    setResults(location.state.results);
+                } else {
+                    const fitnessResponse =
+                        await getFitnessResult();
 
-                setResults(
-                    API_TO_RESULT(response.data)
+                    console.log(
+                        "체력 결과 응답:",
+                        fitnessResponse
+                    );
+
+                    setResults(
+                        API_TO_RESULT(
+                            fitnessResponse.data
+                        )
+                    );
+                }
+
+                // 추천 운동
+                const recommendationResponse =
+                    await getFitnessRecommendations();
+
+                console.log(
+                    "운동 추천 응답:",
+                    recommendationResponse
+                );
+
+                setRecommendations(
+                    recommendationResponse.data
+                        ?.recommendations ?? []
                 );
             } catch (error) {
                 console.error(
-                    "체력 결과 조회 실패:",
+                    "체력 추천 조회 실패:",
+                    error
+                );
+
+                console.error(
+                    "서버 응답:",
                     error.response?.data
                 );
 
                 setError(
                     error.response?.data?.message ||
-                    "체력 결과를 불러오지 못했습니다."
+                        "추천 운동을 불러오지 못했습니다."
                 );
+
+                setRecommendations([]);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchFitnessResult();
+        fetchData();
     }, [location.state]);
 
     const weakestCategory = useMemo(() => {
@@ -67,8 +98,7 @@ function useFitnessResultRecommend() {
 
         return Object.entries(results).reduce(
             (currentWeakest, current) =>
-                current[1] >
-                    currentWeakest[1]
+                current[1] > currentWeakest[1]
                     ? current
                     : currentWeakest
         )[0];
@@ -77,6 +107,7 @@ function useFitnessResultRecommend() {
     return {
         results,
         weakestCategory,
+        recommendations,
         isLoading,
         error,
     };

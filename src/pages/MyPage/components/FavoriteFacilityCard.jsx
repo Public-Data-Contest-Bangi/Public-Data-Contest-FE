@@ -1,9 +1,9 @@
-import wheelchairIcon from "../../../assets/icons/wheelchair-icon.png";
-import rampIcon from "../../../assets/icons/ramp-icon.png";
 import elevatorIcon from "../../../assets/icons/elevator-icon.png";
-import restroomIcon from "../../../assets/icons/restroom-icon.png";
 import parkingIcon from "../../../assets/icons/parking-icon.png";
+import rampIcon from "../../../assets/icons/ramp-icon.png";
+import restroomIcon from "../../../assets/icons/restroom-icon.png";
 import sportTagIcon from "../../../assets/icons/sport-tag-icon.png";
+import wheelchairIcon from "../../../assets/icons/wheelchair-icon.png";
 
 import * as S from "./FavoriteFacilityCard.styled";
 
@@ -35,6 +35,7 @@ export default function FavoriteFacilityCard({
 }) {
     const {
         name,
+        imageUrl,
         distance,
         sports,
         accessibility,
@@ -47,7 +48,9 @@ export default function FavoriteFacilityCard({
 
     return (
         <S.Card onClick={onClick}>
-            <S.CardImage />
+            <S.CardImage
+                $imageUrl={imageUrl}
+            />
 
             <S.CardBody>
                 <S.CardTitleRow>
@@ -56,36 +59,44 @@ export default function FavoriteFacilityCard({
                     </S.CardName>
 
                     <S.CardRight>
-                        <S.CardDistance>
-                            {distance}
-                        </S.CardDistance>
+                        {distance && (
+                            <S.CardDistance>
+                                {distance}
+                            </S.CardDistance>
+                        )}
 
                         <S.HeartButton
                             type="button"
                             aria-label="즐겨찾기 취소"
-                            onClick={handleHeartClick}
+                            onClick={
+                                handleHeartClick
+                            }
                         >
                             ♥
                         </S.HeartButton>
                     </S.CardRight>
                 </S.CardTitleRow>
 
-                <S.CardSports>
-                    <S.SportIcon
-                        src={sportTagIcon}
-                        alt=""
-                    />
+                {sports && (
+                    <S.CardSports>
+                        <S.SportIcon
+                            src={sportTagIcon}
+                            alt=""
+                        />
 
-                    {sports}
-                </S.CardSports>
+                        {sports}
+                    </S.CardSports>
+                )}
 
                 <S.CardAccessRow>
-                    {accessibility.map((type) => (
-                        <AccessIcon
-                            key={type}
-                            type={type}
-                        />
-                    ))}
+                    {accessibility.map(
+                        (type) => (
+                            <AccessIcon
+                                key={type}
+                                type={type}
+                            />
+                        )
+                    )}
 
                     <S.CardChevron>
                         ›
