@@ -11,6 +11,7 @@ function ReportDetail() {
     const {
         report,
         isPending,
+        isDeleting,
         isDeleteModalOpen,
         handleEdit,
         handleDelete,
@@ -78,13 +79,6 @@ function ReportDetail() {
 
                     {isPending && (
                         <S.EditButtonArea>
-                            <S.EditButton
-                                type="button"
-                                onClick={handleEdit}
-                            >
-                                수정
-                            </S.EditButton>
-
                             <S.DeleteButton
                                 type="button"
                                 onClick={handleDelete}
@@ -131,6 +125,7 @@ function ReportDetail() {
                     description="삭제한 신고는 다시 복구할 수 없어요."
                     cancelText="취소"
                     confirmText="삭제"
+                    disabled={isDeleting}
                     onCancel={handleDeleteCancel}
                     onConfirm={handleDeleteConfirm}
                 />

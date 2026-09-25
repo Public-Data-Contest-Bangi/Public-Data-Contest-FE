@@ -103,3 +103,18 @@ export const StatusBadge = styled.span`
 
     white-space: nowrap;
 `;
+
+export const EmptyState = styled.div`
+    width: 100%;
+    min-height: 320px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #999999;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+`;
