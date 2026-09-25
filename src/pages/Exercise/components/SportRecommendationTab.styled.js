@@ -69,7 +69,11 @@ export const FitnessChipList = styled.div`
 `;
 
 export const FitnessChip = styled.span`
-    padding: 3px 8px;
+    padding: 4px 9px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
     border-radius: 999px;
 
@@ -77,11 +81,29 @@ export const FitnessChip = styled.span`
 
     color: #20b980;
 
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     line-height: 1.4;
 
     white-space: nowrap;
+`;
+
+export const RankNumber = styled.span`
+    width: 11px;
+    height: 11px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1.5px solid #20b980;
+    border-radius: 50%;
+
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+
+    flex-shrink: 0;
 `;
 
 export const ExerciseList = styled.div`

@@ -11,6 +11,8 @@ import {
 
 import * as S from "./SportRecommendationTab.styled";
 
+const RANK_LABELS = ["①", "②", "③"];
+
 export default function SportRecommendationTab({
     weakestCategory,
     recommendations,
@@ -71,7 +73,7 @@ export default function SportRecommendationTab({
                 </S.IntroTitle>
 
                 <S.IntroDescription>
-                    각 운동으로 보완할 수 있는 체력 요소를 확인해보세요.
+                    각 운동에서 보완 효과가 큰 체력 요소부터 보여드려요.
                 </S.IntroDescription>
             </S.Intro>
 
@@ -112,8 +114,17 @@ export default function SportRecommendationTab({
 
                                         <S.FitnessChipList>
                                             {recommendation.targetFitnessAreas?.map(
-                                                (area) => (
-                                                    <S.FitnessChip key={area}>
+                                                (
+                                                    area,
+                                                    index
+                                                ) => (
+                                                    <S.FitnessChip
+                                                        key={`${area}-${index}`}
+                                                    >
+                                                        <S.RankNumber>
+                                                            {index + 1}
+                                                        </S.RankNumber>
+
                                                         {area}
                                                     </S.FitnessChip>
                                                 )
