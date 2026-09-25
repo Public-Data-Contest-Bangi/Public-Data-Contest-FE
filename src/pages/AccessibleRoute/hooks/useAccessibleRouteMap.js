@@ -16,6 +16,7 @@ export function useAccessibleRouteMap() {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
   const [routeLoading, setRouteLoading] = useState(false);
+  const [markersLoading, setMarkersLoading] = useState(false);
 
   const clearFacilityMarkers = () => {
     facilityMarkersRef.current.forEach((m) => m.setMap(null));
@@ -25,10 +26,9 @@ export function useAccessibleRouteMap() {
   const loadFacilityMarkers = async () => {
     const map = mapRef.current;
     const Tmapv2 = window.Tmapv2;
-    if (!map || !Tmapv2) {
-      console.warn('loadFacilityMarkers 호출됐지만 map 또는 Tmapv2 없음:', !!map, !!Tmapv2);
-      return;
-    }
+    if (!map || !Tmapv2) return;
+
+    setMarkersLoading(true);
 
     let south, north, west, east, zoom;
 
@@ -53,7 +53,7 @@ export function useAccessibleRouteMap() {
 
     try {
       const data = await fetchFacilityMarkers({ south, north, west, east, zoom });
-      console.log('시설 마커 응답 개수:', data.totalCount, data.facilities?.length);
+      console.log('시설 마커 응답 개수:', data.totalCount, data.facilities?.length, '| zoom:', zoom);
 
       clearFacilityMarkers();
 
@@ -63,7 +63,7 @@ export function useAccessibleRouteMap() {
         const marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(f.latitude, f.longitude),
           icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="%23FFFFFF" stroke="%2340D293" stroke-width="3"/></svg>'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="#FFFFFF" stroke="#40D293" stroke-width="3"/></svg>'
           ),
           iconSize: new Tmapv2.Size(26, 26),
           map,
@@ -75,7 +75,7 @@ export function useAccessibleRouteMap() {
         const marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(c.latitude, c.longitude),
           icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="%2340D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${c.count}</text></svg>`
+            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="#40D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${c.count}</text></svg>`
           ),
           iconSize: new Tmapv2.Size(36, 36),
           map,
@@ -93,10 +93,11 @@ export function useAccessibleRouteMap() {
       console.log('생성된 시설 마커 개수:', newMarkers.length);
     } catch (err) {
       console.error('시설 마커 조회 실패:', err.response?.status, err.response?.data || err.message);
+    } finally {
+      setMarkersLoading(false);
     }
   };
 
-  // 지도 생성
   useEffect(() => {
     let cancelled = false;
     let initTimer = null;
@@ -127,7 +128,7 @@ export function useAccessibleRouteMap() {
       const departureMarker = new Tmapv2.Marker({
         position: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
         icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="%2340D293" stroke="white" stroke-width="3"/></svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="#40D293" stroke="white" stroke-width="3"/></svg>'
         ),
         iconSize: new Tmapv2.Size(28, 28),
         map,
@@ -136,7 +137,7 @@ export function useAccessibleRouteMap() {
       const arrivalMarker = new Tmapv2.Marker({
         position: new Tmapv2.LatLng(ARRIVAL_COORD.lat, ARRIVAL_COORD.lng),
         icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="%23FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
         ),
         iconSize: new Tmapv2.Size(28, 32),
         map,
@@ -155,9 +156,6 @@ export function useAccessibleRouteMap() {
     };
   }, []);
 
-  // 지도가 준비되면(mapLoaded === true) 시설 마커 로드
-  // setTimeout 대신 state 기반으로 실행해서, StrictMode 이중 실행 시에도
-  // cleanup이 이 호출 자체를 취소해버리는 문제가 생기지 않음
   useEffect(() => {
     if (mapLoaded) {
       loadFacilityMarkers();
@@ -206,5 +204,13 @@ export function useAccessibleRouteMap() {
     }
   };
 
-  return { mapContainerRef, mapLoaded, mapError, drawRoute, routeLoading };
+  return {
+    mapContainerRef,
+    mapLoaded,
+    mapError,
+    drawRoute,
+    routeLoading,
+    loadFacilityMarkers,
+    markersLoading,
+  };
 }

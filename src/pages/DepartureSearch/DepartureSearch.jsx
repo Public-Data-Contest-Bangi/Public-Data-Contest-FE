@@ -18,7 +18,10 @@ import {
 } from './DepartureSearch.styled';
 
 function DepartureSearch() {
-  const { query, setQuery, results, handleClear, handleSelect, goBack } = useDepartureSearch();
+  const { query, setQuery, results, loading, mode, handleClear, handleSelect, goBack } = useDepartureSearch();
+
+  const title = mode === 'arrival' ? '도착지 검색' : '출발지 검색';
+  const placeholder = mode === 'arrival' ? '도착지를 검색해주세요' : '출발지를 검색해주세요';
 
   return (
     <Container>
@@ -31,7 +34,7 @@ function DepartureSearch() {
             />
           </svg>
         </BackButton>
-        <Title>출발지 검색</Title>
+        <Title>{title}</Title>
       </Header>
 
       <SearchWrap>
@@ -43,7 +46,7 @@ function DepartureSearch() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="출발지를 검색해주세요"
+          placeholder={placeholder}
           autoFocus
         />
         {query && (
@@ -55,10 +58,12 @@ function DepartureSearch() {
         )}
       </SearchWrap>
 
-      {results.length > 0 ? (
+      {loading && <EmptyText>검색 중...</EmptyText>}
+
+      {!loading && query && results.length > 0 && (
         <ResultList>
           {results.map((place) => (
-            <ResultItem key={place.id} type="button" onClick={() => handleSelect(place)}>
+            <ResultItem key={place.poiId} type="button" onClick={() => handleSelect(place)}>
               <ResultPinWrap>
                 <DepartureLocationIcon />
               </ResultPinWrap>
@@ -69,9 +74,9 @@ function DepartureSearch() {
             </ResultItem>
           ))}
         </ResultList>
-      ) : (
-        <EmptyText>검색 결과가 없어요</EmptyText>
       )}
+
+      {!loading && query && results.length === 0 && <EmptyText>검색 결과가 없어요</EmptyText>}
     </Container>
   );
 }

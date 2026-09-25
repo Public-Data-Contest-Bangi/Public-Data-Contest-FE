@@ -10,10 +10,15 @@ function FacilitySearch() {
     openMenu,
     provinceRef,
     districtRef,
+    keyword,
+    setKeyword,
+    regionLoading,
     handleSelectProvince,
     handleSelectDistrict,
     toggleMenu,
     goBack,
+    goCurrentLocationMap,
+    goKeywordSearch,
     goSearchResult,
   } = useFacilitySearch();
 
@@ -53,21 +58,29 @@ function FacilitySearch() {
           <circle cx="11" cy="11" r="7" stroke="#B3B3B3" strokeWidth="2" />
           <path d="M20 20l-3.5-3.5" stroke="#B3B3B3" strokeWidth="2" strokeLinecap="round" />
         </svg>
-        <input type="text" className="facility-search__input" placeholder="시설명을 검색해주세요" />
+        <input
+          type="text"
+          className="facility-search__input"
+          placeholder="시설명을 검색해주세요"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+      </div>
+
+      <button type="button" className="facility-search__keyword-submit" onClick={goKeywordSearch}>
+        검색
+      </button>
+
+      <div className="facility-search__divider">
+        <span>또는</span>
       </div>
 
       <section className="facility-search__region">
-        <div className="facility-search__region-label">
-          <svg width="18" height="18" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M13.5 7.3125C14.2459 7.3125 14.9613 7.60882 15.4887 8.13626C16.0162 8.66371 16.3125 9.37908 16.3125 10.125C16.3125 10.4943 16.2398 10.8601 16.0984 11.2013C15.9571 11.5425 15.7499 11.8526 15.4887 12.1137C15.2276 12.3749 14.9175 12.5821 14.5763 12.7234C14.2351 12.8648 13.8693 12.9375 13.5 12.9375C12.7541 12.9375 12.0387 12.6412 11.5113 12.1137C10.9838 11.5863 10.6875 10.8709 10.6875 10.125C10.6875 9.37908 10.9838 8.66371 11.5113 8.13626C12.0387 7.60882 12.7541 7.3125 13.5 7.3125ZM13.5 2.25C15.5886 2.25 17.5916 3.07969 19.0685 4.55653C20.5453 6.03338 21.375 8.03642 21.375 10.125C21.375 16.0312 13.5 24.75 13.5 24.75C13.5 24.75 5.625 16.0312 5.625 10.125C5.625 8.03642 6.45469 6.03338 7.93153 4.55653C9.40838 3.07969 11.4114 2.25 13.5 2.25ZM13.5 4.5C12.0082 4.5 10.5774 5.09263 9.52252 6.14752C8.46763 7.20242 7.875 8.63316 7.875 10.125C7.875 11.25 7.875 13.5 13.5 21.0487C19.125 13.5 19.125 11.25 19.125 10.125C19.125 8.63316 18.5324 7.20242 17.4775 6.14752C16.4226 5.09263 14.9918 4.5 13.5 4.5Z"
-              fill="var(--color-primary)"
-            />
-          </svg>
-          <span>지역 검색</span>
-        </div>
-
-        <button type="button" className="facility-search__box facility-search__current-location">
+        <button
+          type="button"
+          className="facility-search__box facility-search__current-location"
+          onClick={goCurrentLocationMap}
+        >
           <svg width="20" height="16" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M19.7684 7.58333C17.3742 7.58333 15.435 9.5225 15.435 11.9167C15.435 14.3108 17.3742 16.25 19.7684 16.25C22.1625 16.25 24.1017 14.3108 24.1017 11.9167C24.1017 9.5225 22.1625 7.58333 19.7684 7.58333ZM29.4534 10.8333C29.208 8.63647 28.2229 6.58833 26.6598 5.02525C25.0967 3.46217 23.0486 2.47705 20.8517 2.23167V0H18.685V2.23167C16.4882 2.47705 14.44 3.46217 12.877 5.02525C11.3139 6.58833 10.3288 8.63647 10.0834 10.8333H7.85171V13H10.0834C10.3288 15.1969 11.3139 17.245 12.877 18.8081C14.44 20.3712 16.4882 21.3563 18.685 21.6017V23.8333H20.8517V21.6017C23.0486 21.3563 25.0967 20.3712 26.6598 18.8081C28.2229 17.245 29.208 15.1969 29.4534 13H31.685V10.8333H29.4534ZM19.7684 19.5C15.5759 19.5 12.185 16.1092 12.185 11.9167C12.185 7.72417 15.5759 4.33333 19.7684 4.33333C23.9609 4.33333 27.3517 7.72417 27.3517 11.9167C27.3517 16.1092 23.9609 19.5 19.7684 19.5Z"
@@ -79,6 +92,16 @@ function FacilitySearch() {
 
         <div className="facility-search__divider">
           <span>또는</span>
+        </div>
+
+        <div className="facility-search__region-label">
+          <svg width="18" height="18" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M13.5 7.3125C14.2459 7.3125 14.9613 7.60882 15.4887 8.13626C16.0162 8.66371 16.3125 9.37908 16.3125 10.125C16.3125 10.4943 16.2398 10.8601 16.0984 11.2013C15.9571 11.5425 15.7499 11.8526 15.4887 12.1137C15.2276 12.3749 14.9175 12.5821 14.5763 12.7234C14.2351 12.8648 13.8693 12.9375 13.5 12.9375C12.7541 12.9375 12.0387 12.6412 11.5113 12.1137C10.9838 11.5863 10.6875 10.8709 10.6875 10.125C10.6875 9.37908 10.9838 8.66371 11.5113 8.13626C12.0387 7.60882 12.7541 7.3125 13.5 7.3125ZM13.5 2.25C15.5886 2.25 17.5916 3.07969 19.0685 4.55653C20.5453 6.03338 21.375 8.03642 21.375 10.125C21.375 16.0312 13.5 24.75 13.5 24.75C13.5 24.75 5.625 16.0312 5.625 10.125C5.625 8.03642 6.45469 6.03338 7.93153 4.55653C9.40838 3.07969 11.4114 2.25 13.5 2.25ZM13.5 4.5C12.0082 4.5 10.5774 5.09263 9.52252 6.14752C8.46763 7.20242 7.875 8.63316 7.875 10.125C7.875 11.25 7.875 13.5 13.5 21.0487C19.125 13.5 19.125 11.25 19.125 10.125C19.125 8.63316 18.5324 7.20242 17.4775 6.14752C16.4226 5.09263 14.9918 4.5 13.5 4.5Z"
+              fill="var(--color-primary)"
+            />
+          </svg>
+          <span>지역 검색</span>
         </div>
 
         <div className="facility-search__selects">
@@ -184,11 +207,15 @@ function FacilitySearch() {
         </div>
       </section>
 
-      <button type="button" className="facility-search__submit" onClick={goSearchResult}>
-        시설 검색하기
+      <button
+        type="button"
+        className="facility-search__submit"
+        onClick={goSearchResult}
+        disabled={regionLoading}
+      >
+        {regionLoading ? '이동 중...' : '시설 검색하기'}
       </button>
 
-      {/* 검색결과 리스트 자리 (지금은 빈 공간으로 둠) */}
       <div className="facility-search__results" />
     </div>
   );

@@ -3,7 +3,7 @@ import rampIcon from '../../../assets/icons/ramp-icon.png';
 import elevatorIcon from '../../../assets/icons/elevator-icon.png';
 import restroomIcon from '../../../assets/icons/restroom-icon.png';
 import parkingIcon from '../../../assets/icons/parking-icon.png';
-import { ACCESS_ICON_SIZE } from '../utils/searchResultData';
+import { ACCESS_ICON_SIZE, matchAccessIconType } from '../utils/searchResultData';
 
 const ICON_MAP = {
   wheelchair: wheelchairIcon,
@@ -13,13 +13,15 @@ const ICON_MAP = {
   parking: parkingIcon,
 };
 
-function AccessIcon({ type }) {
-  const src = ICON_MAP[type];
+function AccessIcon({ name }) {
+  const type = matchAccessIconType(name);
+  const src = type ? ICON_MAP[type] : null;
   if (!src) return null;
   return (
     <img
       src={src}
-      alt=""
+      alt={name}
+      title={name}
       style={{ width: ACCESS_ICON_SIZE, height: ACCESS_ICON_SIZE, objectFit: 'contain' }}
     />
   );
