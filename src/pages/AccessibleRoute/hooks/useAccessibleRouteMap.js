@@ -13,10 +13,10 @@ export function useAccessibleRouteMap() {
   const polylineRef = useRef(null);
   const markersRef = useRef([]);
   const facilityMarkersRef = useRef([]);
-  const pollIntervalRef = useRef(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
   const [routeLoading, setRouteLoading] = useState(false);
+  const [markersLoading, setMarkersLoading] = useState(false);
 
   const clearFacilityMarkers = () => {
     facilityMarkersRef.current.forEach((m) => m.setMap(null));
@@ -27,6 +27,8 @@ export function useAccessibleRouteMap() {
     const map = mapRef.current;
     const Tmapv2 = window.Tmapv2;
     if (!map || !Tmapv2) return;
+
+    setMarkersLoading(true);
 
     let south, north, west, east, zoom;
 
@@ -61,7 +63,7 @@ export function useAccessibleRouteMap() {
         const marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(f.latitude, f.longitude),
           icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="%23FFFFFF" stroke="%2340D293" stroke-width="3"/></svg>'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="#FFFFFF" stroke="#40D293" stroke-width="3"/></svg>'
           ),
           iconSize: new Tmapv2.Size(26, 26),
           map,
@@ -73,7 +75,7 @@ export function useAccessibleRouteMap() {
         const marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(c.latitude, c.longitude),
           icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="%2340D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${c.count}</text></svg>`
+            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="#40D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${c.count}</text></svg>`
           ),
           iconSize: new Tmapv2.Size(36, 36),
           map,
@@ -91,6 +93,8 @@ export function useAccessibleRouteMap() {
       console.log('생성된 시설 마커 개수:', newMarkers.length);
     } catch (err) {
       console.error('시설 마커 조회 실패:', err.response?.status, err.response?.data || err.message);
+    } finally {
+      setMarkersLoading(false);
     }
   };
 
@@ -124,7 +128,7 @@ export function useAccessibleRouteMap() {
       const departureMarker = new Tmapv2.Marker({
         position: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
         icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="%2340D293" stroke="white" stroke-width="3"/></svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="#40D293" stroke="white" stroke-width="3"/></svg>'
         ),
         iconSize: new Tmapv2.Size(28, 28),
         map,
@@ -133,32 +137,13 @@ export function useAccessibleRouteMap() {
       const arrivalMarker = new Tmapv2.Marker({
         position: new Tmapv2.LatLng(ARRIVAL_COORD.lat, ARRIVAL_COORD.lng),
         icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="%23FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
+          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
         ),
         iconSize: new Tmapv2.Size(28, 32),
         map,
       });
 
       markersRef.current = [departureMarker, arrivalMarker];
-
-      // Tmapv2.Map은 zoom/이동 변경 이벤트를 공식 지원하지 않아서,
-      // 800ms마다 줌/중심 좌표를 직접 확인해 달라졌으면 마커를 다시 불러옴 (폴링 방식)
-      let lastZoom = map.getZoom();
-      let lastCenterKey = `${map.getCenter().lat()},${map.getCenter().lng()}`;
-
-      const pollInterval = setInterval(() => {
-        const currentZoom = map.getZoom();
-        const center = map.getCenter();
-        const currentCenterKey = `${center.lat()},${center.lng()}`;
-
-        if (currentZoom !== lastZoom || currentCenterKey !== lastCenterKey) {
-          lastZoom = currentZoom;
-          lastCenterKey = currentCenterKey;
-          loadFacilityMarkers();
-        }
-      }, 800);
-
-      pollIntervalRef.current = pollInterval;
 
       setMapLoaded(true);
     }
@@ -168,7 +153,6 @@ export function useAccessibleRouteMap() {
     return () => {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
-      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
     };
   }, []);
 
@@ -220,5 +204,13 @@ export function useAccessibleRouteMap() {
     }
   };
 
-  return { mapContainerRef, mapLoaded, mapError, drawRoute, routeLoading };
+  return {
+    mapContainerRef,
+    mapLoaded,
+    mapError,
+    drawRoute,
+    routeLoading,
+    loadFacilityMarkers,
+    markersLoading,
+  };
 }

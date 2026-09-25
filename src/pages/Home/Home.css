@@ -2,9 +2,8 @@
   position: relative;
   width: 375px;
   margin: 0 auto;
-  min-height: 816px;
+  min-height: 100dvh;
   background: #F9F9F9;
-  padding-bottom: 96px;
   overflow: hidden;
 }
 /* ── 헤더 (Figma 정확 좌표) ───────────────── */
@@ -64,13 +63,15 @@
 /* ── 인사말 아래 컨텐츠 (여백은 추정치) ───────────────── */
 
 .home__body {
-  padding-top: 330px;
+  padding-top: 350px;
   padding-left: 20px;
   padding-right: 20px;
+  padding-bottom: 96px;
 }
 
 .home__liked {
   margin-bottom: 20px;
+  margin-top:-20px
 }
 
 .home__liked-scroll {
@@ -140,6 +141,7 @@
 .home__menu {
   display: flex;
   gap: 12px;
+  margin-top: 30px;
 }
 
 .menu-card {
@@ -212,12 +214,9 @@
 /* ── 하단 안내 문구 (Figma 정확 좌표/폰트/색상) ───────────────── */
 
 .home__banner {
-  position: absolute;
-  top: 704px;
-  left: 5px;
-  width: 366px;
-  height: 21px;
-  margin: 0;
+  position: relative;
+  width: 100%;
+  margin: 20px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
