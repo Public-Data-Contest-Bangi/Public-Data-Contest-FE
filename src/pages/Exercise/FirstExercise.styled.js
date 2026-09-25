@@ -33,7 +33,6 @@ export const Header = styled.header`
 
 export const BackButton = styled.button`
     position: absolute;
-
     left: 0;
 
     border: none;
@@ -41,7 +40,6 @@ export const BackButton = styled.button`
 
     font-size: 36px;
     font-weight: 300;
-
     line-height: 1;
 
     cursor: pointer;
@@ -84,12 +82,14 @@ export const BannerText = styled.div`
 `;
 
 export const BannerTitle = styled.div`
+    margin-top: 10px;
+
+    font-family: Pretendard;
     font-size: 22px;
     line-height: normal;
     font-weight: 700;
-    font-family: Pretendard;
+
     color: #ffffff;
-    margin-top: 10px;
 `;
 
 export const BannerDescription = styled.div`
@@ -157,7 +157,7 @@ export const Question = styled.div`
     font-size: 16px;
     font-weight: 700;
 
-    color: #000;
+    color: #000000;
 `;
 
 /* 드롭다운 */
@@ -179,19 +179,14 @@ export const Select = styled.select`
 
     background-color: #ffffff;
 
-    /* 기본 화살표 제거 */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    /* 커스텀 화살표 */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' fill='none' stroke='%23444444' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 
     background-repeat: no-repeat;
-
-    /* 여기 숫자가 화살표 위치 */
     background-position: right 14px center;
-
     background-size: 12px 8px;
 
     font-size: 12px;
@@ -204,7 +199,39 @@ export const Select = styled.select`
     }
 `;
 
-/* 체크박스 */
+/* 운동 종류 */
+
+export const ExerciseTypeHeader = styled.div`
+    width: calc(100% - 34px);
+
+    margin-left: 34px;
+    margin-bottom: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const RequiredText = styled.span`
+    font-size: 11px;
+    font-weight: 400;
+
+    color: #888888;
+`;
+
+export const SelectAllButton = styled.button`
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #16b978;
+
+    cursor: pointer;
+`;
 
 export const CheckGrid = styled.div`
     width: calc(100% - 34px);
@@ -269,58 +296,4 @@ export const CheckBox = styled.span`
 
     font-size: 10px;
     color: #ffffff;
-`;
-
-/* 시간 */
-
-export const OptionRow = styled.div`
-    width: calc(100% - 34px);
-
-    margin-left: 34px;
-    margin-bottom: 10px;
-
-    display: flex;
-    align-items: center;
-`;
-
-export const OptionLabel = styled.div`
-    width: 58px;
-
-    flex-shrink: 0;
-
-    font-size: 12px;
-    font-weight: 600;
-
-    color: #333333;
-`;
-
-export const ChipGroup = styled.div`
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-`;
-
-export const Chip = styled.button`
-    min-width: 54px;
-    height: 34px;
-
-    padding: 0 13px;
-
-    border: 1px solid
-        ${({ $selected }) =>
-            $selected ? "#20cf8b" : "#dddddd"};
-
-    border-radius: 18px;
-
-    background: ${({ $selected }) =>
-        $selected ? "#eafff5" : "#ffffff"};
-
-    font-size: 12px;
-    font-weight: 500;
-
-    color: ${({ $selected }) =>
-        $selected ? "#16b978" : "#333333"};
-
-    cursor: pointer;
 `;

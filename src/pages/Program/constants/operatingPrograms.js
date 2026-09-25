@@ -5,8 +5,9 @@ export const OPERATING_PROGRAMS = [
         className: "재활필라테스",
         days: "월, 수, 금",
         time: "10:00 ~ 11:00",
-        applicationPeriod: "상시모집",
+        operatingPeriod: "상시 운영",
         price: "90,000원",
+        voucherAvailable: true,
     },
     {
         id: 2,
@@ -14,7 +15,8 @@ export const OPERATING_PROGRAMS = [
         className: "재활필라테스",
         days: "월, 수, 금",
         time: "10:00 ~ 11:00",
-        applicationPeriod: "상시모집",
+        operatingPeriod: "",
         price: "90,000원",
+        voucherAvailable: false,
     },
 ];

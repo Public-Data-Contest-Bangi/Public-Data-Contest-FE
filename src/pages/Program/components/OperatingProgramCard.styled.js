@@ -20,6 +20,8 @@ export const CardHeader = styled.div`
     align-items: center;
 
     gap: 10px;
+
+    cursor: pointer;
 `;
 
 export const ProgramIcon = styled.svg`
@@ -31,9 +33,18 @@ export const ProgramIcon = styled.svg`
     color: #20cc91;
 `;
 
-export const ProgramTitle = styled.h3`
+export const ProgramTitleArea = styled.div`
     flex: 1;
 
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+`;
+
+export const ProgramTitle = styled.h3`
     margin: 0;
 
     color: #202020;
@@ -43,6 +54,22 @@ export const ProgramTitle = styled.h3`
     line-height: 1.3;
 
     letter-spacing: -0.2px;
+`;
+
+export const VoucherTag = styled.span`
+    flex-shrink: 0;
+
+    padding: 3px 7px;
+
+    border-radius: 10px;
+
+    background: #eafff5;
+
+    color: #16b978;
+
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.4;
 `;
 
 export const ArrowIcon = styled.svg`

@@ -6,33 +6,52 @@ import Button from "../../components/common/Button";
 
 import * as S from "./FirstExercise.styled";
 
+const EXERCISE_TYPE_OPTIONS = [
+    "실내",
+    "실외",
+    "개인",
+    "단체",
+    "경쟁 스포츠",
+    "비경쟁 스포츠",
+];
+
 function FirstExercise() {
     const navigate = useNavigate();
 
     const [assistiveDevice, setAssistiveDevice] = useState("");
     const [bodyPart, setBodyPart] = useState("");
-
     const [exerciseTypes, setExerciseTypes] = useState([]);
-    const [days, setDays] = useState([]);
-    const [times, setTimes] = useState([]);
-    const [conditions, setConditions] = useState([]);
 
-    const toggleValue = (value, setter) => {
-        setter((prev) =>
+    const toggleExerciseType = (value) => {
+        setExerciseTypes((prev) =>
             prev.includes(value)
                 ? prev.filter((item) => item !== value)
                 : [...prev, value]
         );
     };
 
+    const isAllSelected =
+        exerciseTypes.length === EXERCISE_TYPE_OPTIONS.length;
+
+    const handleToggleAll = () => {
+        if (isAllSelected) {
+            setExerciseTypes([]);
+            return;
+        }
+
+        setExerciseTypes(EXERCISE_TYPE_OPTIONS);
+    };
+
     const handleSubmit = () => {
+        if (exerciseTypes.length === 0) {
+            alert("선호하는 운동 종류를 최소 한 개 이상 선택해주세요.");
+            return;
+        }
+
         const data = {
             assistiveDevice,
             bodyPart,
             exerciseTypes,
-            days,
-            times,
-            conditions,
         };
 
         console.log("첫 운동 찾기 입력값:", data);
@@ -74,10 +93,11 @@ function FirstExercise() {
                     />
                 </S.Banner>
 
-                {/* 1 */}
+                {/* 1. 보조기구 */}
                 <S.QuestionSection>
                     <S.QuestionHeader>
                         <S.Number>1</S.Number>
+
                         <S.Question>
                             이동에 보조기구를 사용하나요?
                         </S.Question>
@@ -92,24 +112,28 @@ function FirstExercise() {
                         <option value="" disabled>
                             선택해주세요
                         </option>
+
                         <option value="wheelchair">
                             휠체어 사용
                         </option>
+
                         <option value="assistive">
                             보조기구 사용
                         </option>
+
                         <option value="none">
                             해당사항 없음
                         </option>
                     </S.Select>
                 </S.QuestionSection>
 
-                {/* 2 */}
+                {/* 2. 운동 부위 */}
                 <S.QuestionSection>
                     <S.QuestionHeader>
                         <S.Number>2</S.Number>
+
                         <S.Question>
-                            운동하고 싶은 부위가 있나요?
+                            집중해서 운동하고 싶은 부위가 있나요?
                         </S.Question>
                     </S.QuestionHeader>
 
@@ -122,49 +146,74 @@ function FirstExercise() {
                         <option value="" disabled>
                             선택해주세요
                         </option>
-                        <option value="all">상관 없음</option>
-                        <option value="upper">상체 중심</option>
-                        <option value="lower">하체 중심</option>
+
+                        <option value="whole">
+                            전신
+                        </option>
+
+                        <option value="upper">
+                            상체 중심
+                        </option>
+
+                        <option value="lower">
+                            하체 중심
+                        </option>
+
+                        <option value="all">
+                            상관 없음
+                        </option>
                     </S.Select>
                 </S.QuestionSection>
 
-                {/* 3 */}
+                {/* 3. 운동 종류 */}
                 <S.QuestionSection>
                     <S.QuestionHeader>
                         <S.Number>3</S.Number>
+
                         <S.Question>
                             선호하는 운동의 종류가 있나요?
                         </S.Question>
                     </S.QuestionHeader>
 
-                    <S.CheckGrid>
-                        {[
-                            "실내",
-                            "실외",
-                            "개인",
-                            "단체",
-                            "경쟁 스포츠",
-                            "비경쟁 스포츠",
-                        ].map((item) => (
-                            <S.CheckItem
-                                key={item}
-                                $selected={exerciseTypes.includes(item)}
-                                onClick={() =>
-                                    toggleValue(
-                                        item,
-                                        setExerciseTypes
-                                    )
-                                }
-                            >
-                                <S.CheckBox
-                                    $selected={exerciseTypes.includes(item)}
-                                >
-                                    {exerciseTypes.includes(item) && "✓"}
-                                </S.CheckBox>
+                    <S.ExerciseTypeHeader>
+                        <S.RequiredText>
+                            최소 1개 이상 선택해주세요.
+                        </S.RequiredText>
 
-                                {item}
-                            </S.CheckItem>
-                        ))}
+                        <S.SelectAllButton
+                            type="button"
+                            onClick={handleToggleAll}
+                        >
+                            {isAllSelected
+                                ? "모두 해제"
+                                : "모두 선택"}
+                        </S.SelectAllButton>
+                    </S.ExerciseTypeHeader>
+
+                    <S.CheckGrid>
+                        {EXERCISE_TYPE_OPTIONS.map((item) => {
+                            const isSelected =
+                                exerciseTypes.includes(item);
+
+                            return (
+                                <S.CheckItem
+                                    type="button"
+                                    key={item}
+                                    $selected={isSelected}
+                                    onClick={() =>
+                                        toggleExerciseType(item)
+                                    }
+                                >
+                                    <S.CheckBox
+                                        $selected={isSelected}
+                                    >
+                                        {isSelected && "✓"}
+                                    </S.CheckBox>
+
+                                    {item}
+                                </S.CheckItem>
+                            );
+                        })}
                     </S.CheckGrid>
                 </S.QuestionSection>
 
