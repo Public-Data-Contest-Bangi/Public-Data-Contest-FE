@@ -4,6 +4,43 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../../api/auth";
 import { getMyCondition } from "../../../api/myCondition";
 
+const getRoleFromAccessToken = (token) => {
+    try {
+        const payload = token.split(".")[1];
+
+        const base64 = payload
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+        const decodedPayload = JSON.parse(
+            decodeURIComponent(
+                atob(base64)
+                    .split("")
+                    .map(
+                        (char) =>
+                            "%" +
+                            (
+                                "00" +
+                                char
+                                    .charCodeAt(0)
+                                    .toString(16)
+                            ).slice(-2)
+                    )
+                    .join("")
+            )
+        );
+
+        return decodedPayload.role;
+    } catch (error) {
+        console.error(
+            "토큰 role 확인 실패:",
+            error
+        );
+
+        return null;
+    }
+};
+
 function useLogin() {
     const navigate = useNavigate();
 
@@ -49,7 +86,6 @@ function useLogin() {
         try {
             setLoginMessage("");
 
-            // 로그인
             const response =
                 await login({
                     loginId:
@@ -65,7 +101,6 @@ function useLogin() {
                 memberDetails,
             } = response.data;
 
-            // 토큰 저장
             localStorage.setItem(
                 "accessToken",
                 accessToken
@@ -95,8 +130,35 @@ function useLogin() {
                 );
             }
 
-            // 로그인 성공 후
-            // 내 조건 존재 여부 확인
+            // 토큰에서 권한 확인
+            const role =
+                getRoleFromAccessToken(
+                    accessToken
+                );
+
+            console.log(
+                "로그인 사용자 권한:",
+                role
+            );
+
+            localStorage.setItem(
+                "role",
+                role ?? ""
+            );
+
+            // 관리자라면 조건 조회 없이 바로 관리자 페이지
+            if (role === "ADMIN") {
+                navigate(
+                    "/admin",
+                    {
+                        replace: true,
+                    }
+                );
+
+                return;
+            }
+
+            // 일반 사용자만 이용 조건 확인
             try {
                 const conditionResponse =
                     await getMyCondition();
@@ -109,7 +171,6 @@ function useLogin() {
                     condition
                 );
 
-                // 조건이 아직 없는 사용자
                 if (
                     !condition ||
                     !Array.isArray(
@@ -120,37 +181,45 @@ function useLogin() {
                         .length === 0
                 ) {
                     navigate(
-                        "/preference"
+                        "/preference",
+                        {
+                            replace: true,
+                        }
                     );
 
                     return;
                 }
 
-                // 이미 조건을 저장한 사용자
-                navigate("/");
-            } catch (conditionError) {
+                navigate("/", {
+                    replace: true,
+                });
+            } catch (
+                conditionError
+            ) {
                 console.error(
                     "내 조건 조회:",
                     conditionError
                         .response?.data
                 );
 
-                // 저장된 조건 자체가 없는 경우
                 if (
                     conditionError
                         .response
                         ?.status === 404
                 ) {
                     navigate(
-                        "/preference"
+                        "/preference",
+                        {
+                            replace: true,
+                        }
                     );
 
                     return;
                 }
 
-                // 예상치 못한 오류일 경우
-                // 로그인 자체는 성공했으므로 홈 이동
-                navigate("/");
+                navigate("/", {
+                    replace: true,
+                });
             }
         } catch (error) {
             console.error(

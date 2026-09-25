@@ -100,3 +100,57 @@ export const ErrorMessage = styled.p`
 
     font-size: 13px;
 `;
+
+export const AgreementField = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+`;
+
+export const CheckboxLabel = styled.label`
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+`;
+
+export const Checkbox = styled.input`
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+
+    accent-color: #42dba0;
+
+    cursor: pointer;
+`;
+
+export const AgreementText = styled.span`
+    color: #222222;
+
+    font-size: 13px;
+    font-weight: 500;
+`;
+
+export const Required = styled.span`
+    margin-left: 4px;
+
+    color: #42dba0;
+
+    font-size: 12px;
+    font-weight: 600;
+`;
+
+export const AgreementDescription = styled.p`
+    margin: 0 0 0 26px;
+
+    color: #888888;
+
+    font-size: 10px;
+    line-height: 1.5;
+`;

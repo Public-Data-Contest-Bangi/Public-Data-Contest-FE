@@ -4,7 +4,43 @@ import Button from "../../components/common/Button";
 import useSignup from "./hooks/useSignup";
 import * as S from "./Signup.styled";
 
+import { useState } from "react";
+
 function Signup() {
+    const [locationAgreed, setLocationAgreed] =
+        useState(false);
+
+    const [locationError, setLocationError] =
+        useState("");
+
+    const handleSignupWithLocation = () => {
+        if (!locationAgreed) {
+            setLocationError(
+                "현재 위치 수집 동의는 필수입니다."
+            );
+            return;
+        }
+
+        setLocationError("");
+
+        if (!navigator.geolocation) {
+            setLocationError(
+                "현재 브라우저에서는 위치 정보를 사용할 수 없습니다."
+            );
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            () => {
+                handleSignup();
+            },
+            () => {
+                setLocationError(
+                    "회원가입을 위해 위치 권한을 허용해주세요."
+                );
+            }
+        );
+    };
     const {
         form,
 
@@ -73,7 +109,7 @@ function Signup() {
 
                     {idMessage &&
                         (idMessageType ===
-                        "success" ? (
+                            "success" ? (
                             <S.SuccessMessage>
                                 {idMessage}
                             </S.SuccessMessage>
@@ -195,7 +231,7 @@ function Signup() {
 
                     {nicknameMessage &&
                         (nicknameMessageType ===
-                        "success" ? (
+                            "success" ? (
                             <S.SuccessMessage>
                                 {
                                     nicknameMessage
@@ -238,7 +274,7 @@ function Signup() {
 
                     {emailMessage &&
                         (emailMessageType ===
-                        "success" ? (
+                            "success" ? (
                             <S.SuccessMessage>
                                 {emailMessage}
                             </S.SuccessMessage>
@@ -281,7 +317,7 @@ function Signup() {
 
                     {verificationMessage &&
                         (verificationMessageType ===
-                        "success" ? (
+                            "success" ? (
                             <S.SuccessMessage>
                                 {
                                     verificationMessage
@@ -295,6 +331,43 @@ function Signup() {
                             </S.ErrorMessage>
                         ))}
                 </S.Field>
+
+                {/* 현재 위치 수집 동의 */}
+                <S.AgreementField>
+                    <S.CheckboxLabel>
+                        <S.Checkbox
+                            type="checkbox"
+                            checked={locationAgreed}
+                            onChange={(e) => {
+                                setLocationAgreed(
+                                    e.target.checked
+                                );
+
+                                if (e.target.checked) {
+                                    setLocationError("");
+                                }
+                            }}
+                        />
+
+                        <S.AgreementText>
+                            현재 위치 수집에 동의합니다.
+                            <S.Required>
+                                (필수)
+                            </S.Required>
+                        </S.AgreementText>
+                    </S.CheckboxLabel>
+
+                    <S.AgreementDescription>
+                        주변 체육시설 및 위치 기반 서비스를
+                        제공하기 위해 현재 위치를 사용해요.
+                    </S.AgreementDescription>
+
+                    {locationError && (
+                        <S.ErrorMessage>
+                            {locationError}
+                        </S.ErrorMessage>
+                    )}
+                </S.AgreementField>
 
                 <Button
                     type="button"

@@ -44,6 +44,7 @@ import FitnessResultRecommend from "../pages/Exercise/FitnessResultRecommend";
 import ExerciseDetailPage from "../pages/Exercise/ExerciseDetailPage";
 
 import ScrollToTop from "../components/ScrollToTop";
+import AdminPage from "../pages/Admin/AdminPage";
 
 function Router() {
     return (
@@ -209,6 +210,11 @@ function Router() {
                 <Route
                     path="/facility-detail/:id/programs"
                     element={<OperatingProgramPage />}
+                />
+
+                <Route
+                    path="/admin"
+                    element={<AdminPage />}
                 />
             </Routes>
         </BrowserRouter>
