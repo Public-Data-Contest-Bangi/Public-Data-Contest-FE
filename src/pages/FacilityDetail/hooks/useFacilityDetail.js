@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchFacilityDetail } from '../../../api/facilityDetail';
+import { addFavoriteFacility, removeFavoriteFacility } from '../../../api/favorite';
 import { getCurrentCoords } from '../../../utils/geolocation';
 
 export function useFacilityDetail() {
@@ -13,6 +14,7 @@ export function useFacilityDetail() {
 
   const [activeSlide, setActiveSlide] = useState(0);
   const [favorite, setFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
   const trackRef = useRef(null);
 
   useEffect(() => {
@@ -57,8 +59,24 @@ export function useFacilityDetail() {
     setActiveSlide(index);
   };
 
-  const toggleFavorite = () => {
-    setFavorite((prev) => !prev);
+  const toggleFavorite = async () => {
+    if (favoriteLoading) return;
+
+    setFavoriteLoading(true);
+    const nextFavorite = !favorite;
+
+    try {
+      if (nextFavorite) {
+        await addFavoriteFacility(id);
+      } else {
+        await removeFavoriteFacility(id);
+      }
+      setFavorite(nextFavorite);
+    } catch (err) {
+      console.error('즐겨찾기 처리 실패:', err.response?.status, err.response?.data || err.message);
+    } finally {
+      setFavoriteLoading(false);
+    }
   };
 
   const handleProgramClick = () => {
@@ -70,7 +88,16 @@ export function useFacilityDetail() {
   };
 
   const goAccessibleRoute = () => {
-    navigate('/accessible-route');
+    if (!facility) {
+      navigate('/accessible-route');
+      return;
+    }
+    navigate('/accessible-route', {
+      state: {
+        arrival: facility.name,
+        arrivalCoord: { latitude: facility.latitude, longitude: facility.longitude },
+      },
+    });
   };
 
   return {
@@ -79,6 +106,7 @@ export function useFacilityDetail() {
     error,
     activeSlide,
     favorite,
+    favoriteLoading,
     trackRef,
     slideCount,
     handleScroll,

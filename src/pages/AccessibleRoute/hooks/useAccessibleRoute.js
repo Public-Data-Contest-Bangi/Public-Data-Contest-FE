@@ -5,9 +5,21 @@ export function useAccessibleRoute() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [departure, setDeparture] = useState(location.state?.departure || '현재 위치');
-  const [arrival, setArrival] = useState('중구 체육센터');
+  const [departure, setDeparture] = useState('현재 위치');
+  const [arrival, setArrival] = useState(location.state?.arrival || '도착지를 선택해주세요');
+  const [avoidStairs, setAvoidStairs] = useState(false);
+
+  const [selectedFacility, setSelectedFacility] = useState(null);
   const [sheetExpanded, setSheetExpanded] = useState(false);
+
+  const initialArrival = location.state?.arrival || null;
+  const initialArrivalCoord = location.state?.arrivalCoord || null;
+
+  const handleArrivalSelected = (facility) => {
+    setArrival(facility.name);
+    setSelectedFacility(facility);
+    setSheetExpanded(false);
+  };
 
   const handleSwap = () => {
     setDeparture(arrival);
@@ -18,16 +30,34 @@ export function useAccessibleRoute() {
     setSheetExpanded((prev) => !prev);
   };
 
-  const goDepartureSearch = () => {
-    navigate('/departure-search');
+  const closeSheet = () => {
+    setSelectedFacility(null);
+    setSheetExpanded(false);
+    setArrival('도착지를 선택해주세요');
+  };
+
+  const goSelectedFacilityDetail = () => {
+    if (!selectedFacility) return;
+    navigate(`/facility-detail/${selectedFacility.facilityId}`);
+  };
+
+  const toggleAvoidStairs = () => {
+    setAvoidStairs((prev) => !prev);
   };
 
   return {
     departure,
     arrival,
-    sheetExpanded,
+    avoidStairs,
+    toggleAvoidStairs,
+    initialArrival,
+    initialArrivalCoord,
+    handleArrivalSelected,
     handleSwap,
+    selectedFacility,
+    sheetExpanded,
     toggleSheet,
-    goDepartureSearch,
+    closeSheet,
+    goSelectedFacilityDetail,
   };
 }

@@ -1,22 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEPARTURE_COORD, ARRIVAL_COORD } from '../utils/mapCoords';
-import { fetchPedestrianRoute } from '../utils/fetchPedestrianRoute';
 import { fetchFacilityMarkers } from '../../../api/facilities';
+import { searchRoute } from '../../../api/routes';
+import { getCurrentCoords } from '../../../utils/geolocation';
 
 function estimateDelta(zoom) {
   return 0.02 * Math.pow(2, 15 - zoom);
 }
 
-export function useAccessibleRouteMap() {
+function latLngToWorldPixel(lat, lng, zoom) {
+  const scale = 256 * Math.pow(2, zoom);
+  const sinLat = Math.sin((lat * Math.PI) / 180);
+  const x = (0.5 + lng / 360) * scale;
+  const y = (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale;
+  return { x, y };
+}
+
+export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onArrivalSelected }) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-  const polylineRef = useRef(null);
-  const markersRef = useRef([]);
   const facilityMarkersRef = useRef([]);
+  const currentLocationMarkerRef = useRef(null);
+  const arrivalMarkerRef = useRef(null);
+  const polylineRef = useRef(null);
+
+  const facilitiesDataRef = useRef([]);
+  const clustersDataRef = useRef([]);
+
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
-  const [routeLoading, setRouteLoading] = useState(false);
   const [markersLoading, setMarkersLoading] = useState(false);
+  const [locating, setLocating] = useState(false);
+  const [routeLoading, setRouteLoading] = useState(false);
+
+  const [departureCoord, setDepartureCoord] = useState(null);
+  const [arrivalCoord, setArrivalCoord] = useState(initialArrivalCoord || null);
 
   const clearFacilityMarkers = () => {
     facilityMarkersRef.current.forEach((m) => m.setMap(null));
@@ -53,9 +70,11 @@ export function useAccessibleRouteMap() {
 
     try {
       const data = await fetchFacilityMarkers({ south, north, west, east, zoom });
-      console.log('시설 마커 응답 개수:', data.totalCount, data.facilities?.length, '| zoom:', zoom);
 
       clearFacilityMarkers();
+
+      facilitiesDataRef.current = data.facilities || [];
+      clustersDataRef.current = data.clusters || [];
 
       const newMarkers = [];
 
@@ -80,17 +99,10 @@ export function useAccessibleRouteMap() {
           iconSize: new Tmapv2.Size(36, 36),
           map,
         });
-
-        Tmapv2.event.addListener(marker, 'click', () => {
-          map.setCenter(new Tmapv2.LatLng(c.latitude, c.longitude));
-          map.setZoom((map.getZoom() || 15) + 2);
-        });
-
         newMarkers.push(marker);
       });
 
       facilityMarkersRef.current = newMarkers;
-      console.log('생성된 시설 마커 개수:', newMarkers.length);
     } catch (err) {
       console.error('시설 마커 조회 실패:', err.response?.status, err.response?.data || err.message);
     } finally {
@@ -98,11 +110,126 @@ export function useAccessibleRouteMap() {
     }
   };
 
+  const showArrivalMarker = (Tmapv2, map, coord) => {
+    if (arrivalMarkerRef.current) {
+      arrivalMarkerRef.current.setMap(null);
+    }
+
+    if (!coord) return;
+
+    const marker = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(coord.latitude, coord.longitude),
+      icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
+      ),
+      iconSize: new Tmapv2.Size(28, 32),
+      map,
+    });
+
+    arrivalMarkerRef.current = marker;
+  };
+
+  const handleContainerClick = (domEvent) => {
+    const map = mapRef.current;
+    const container = mapContainerRef.current;
+    if (!map || !container) return;
+
+    const zoom = map.getZoom();
+    const center = map.getCenter();
+    const centerLat = typeof center.lat === 'function' ? center.lat() : center.lat;
+    const centerLng = typeof center.lng === 'function' ? center.lng() : center.lng;
+
+    const centerPixel = latLngToWorldPixel(centerLat, centerLng, zoom);
+
+    const rect = container.getBoundingClientRect();
+    const clickX = domEvent.clientX - rect.left;
+    const clickY = domEvent.clientY - rect.top;
+
+    const clickWorldX = centerPixel.x + (clickX - container.clientWidth / 2);
+    const clickWorldY = centerPixel.y + (clickY - container.clientHeight / 2);
+
+    let closestFacility = null;
+    let closestFacilityDist = Infinity;
+
+    facilitiesDataRef.current.forEach((f) => {
+      const p = latLngToWorldPixel(f.latitude, f.longitude, zoom);
+      const dist = Math.hypot(p.x - clickWorldX, p.y - clickWorldY);
+      if (dist < closestFacilityDist) {
+        closestFacilityDist = dist;
+        closestFacility = f;
+      }
+    });
+
+    if (closestFacility && closestFacilityDist <= 16) {
+      const Tmapv2 = window.Tmapv2;
+      const coord = { latitude: closestFacility.latitude, longitude: closestFacility.longitude };
+      setArrivalCoord(coord);
+      showArrivalMarker(Tmapv2, map, coord);
+      if (onArrivalSelected) {
+        onArrivalSelected(closestFacility);
+      }
+      return;
+    }
+
+    let closestCluster = null;
+    let closestClusterDist = Infinity;
+
+    clustersDataRef.current.forEach((c) => {
+      const p = latLngToWorldPixel(c.latitude, c.longitude, zoom);
+      const dist = Math.hypot(p.x - clickWorldX, p.y - clickWorldY);
+      if (dist < closestClusterDist) {
+        closestClusterDist = dist;
+        closestCluster = c;
+      }
+    });
+
+    if (closestCluster && closestClusterDist <= 20) {
+      const Tmapv2 = window.Tmapv2;
+      map.setCenter(new Tmapv2.LatLng(closestCluster.latitude, closestCluster.longitude));
+      map.setZoom((map.getZoom() || 15) + 2);
+    }
+  };
+
+  const showCurrentLocationMarker = (Tmapv2, map, coords) => {
+    if (currentLocationMarkerRef.current) {
+      currentLocationMarkerRef.current.setMap(null);
+    }
+
+    const marker = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(coords.latitude, coords.longitude),
+      icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#4A90E2" opacity="0.2"/><circle cx="16" cy="16" r="8" fill="#2F7BFF" stroke="white" stroke-width="3"/></svg>'
+      ),
+      iconSize: new Tmapv2.Size(32, 32),
+      map,
+    });
+
+    currentLocationMarkerRef.current = marker;
+  };
+
+  const moveToCurrentLocation = async () => {
+    const map = mapRef.current;
+    const Tmapv2 = window.Tmapv2;
+    if (!map || !Tmapv2) return;
+
+    setLocating(true);
+
+    try {
+      const coords = await getCurrentCoords();
+      setDepartureCoord(coords);
+      map.setCenter(new Tmapv2.LatLng(coords.latitude, coords.longitude));
+      map.setZoom(16);
+      showCurrentLocationMarker(Tmapv2, map, coords);
+    } finally {
+      setLocating(false);
+    }
+  };
+
   useEffect(() => {
     let cancelled = false;
     let initTimer = null;
 
-    function tryInitMap() {
+    async function tryInitMap() {
       if (cancelled) return;
       if (mapRef.current) return;
 
@@ -115,9 +242,15 @@ export function useAccessibleRouteMap() {
       if (mapRef.current) return;
 
       const Tmapv2 = window.Tmapv2;
+      const coords = await getCurrentCoords();
+
+      if (cancelled) return;
+      if (mapRef.current) return;
+
+      const centerCoord = initialArrivalCoord || coords;
 
       const map = new Tmapv2.Map(mapContainerRef.current, {
-        center: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
+        center: new Tmapv2.LatLng(centerCoord.latitude, centerCoord.longitude),
         width: '100%',
         height: '100%',
         zoom: 15,
@@ -125,25 +258,14 @@ export function useAccessibleRouteMap() {
 
       mapRef.current = map;
 
-      const departureMarker = new Tmapv2.Marker({
-        position: new Tmapv2.LatLng(DEPARTURE_COORD.lat, DEPARTURE_COORD.lng),
-        icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="14" cy="14" r="10" fill="#40D293" stroke="white" stroke-width="3"/></svg>'
-        ),
-        iconSize: new Tmapv2.Size(28, 28),
-        map,
-      });
+      mapContainerRef.current.addEventListener('click', handleContainerClick);
 
-      const arrivalMarker = new Tmapv2.Marker({
-        position: new Tmapv2.LatLng(ARRIVAL_COORD.lat, ARRIVAL_COORD.lng),
-        icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
-        ),
-        iconSize: new Tmapv2.Size(28, 32),
-        map,
-      });
+      setDepartureCoord(coords);
+      showCurrentLocationMarker(Tmapv2, map, coords);
 
-      markersRef.current = [departureMarker, arrivalMarker];
+      if (initialArrivalCoord) {
+        showArrivalMarker(Tmapv2, map, initialArrivalCoord);
+      }
 
       setMapLoaded(true);
     }
@@ -153,7 +275,11 @@ export function useAccessibleRouteMap() {
     return () => {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
+      if (mapContainerRef.current) {
+        mapContainerRef.current.removeEventListener('click', handleContainerClick);
+      }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -162,45 +288,82 @@ export function useAccessibleRouteMap() {
     }
   }, [mapLoaded]);
 
-  const drawRoute = async () => {
-    if (!mapRef.current || !window.Tmapv2) return;
-
-    const appKey = import.meta.env.VITE_TMAP_APP_KEY;
-    if (!appKey) return;
+  const drawRoute = async (routeType) => {
+    const map = mapRef.current;
+    const Tmapv2 = window.Tmapv2;
+    if (!map || !Tmapv2) return;
+    if (!departureCoord || !arrivalCoord) return;
 
     setRouteLoading(true);
 
     try {
-      const coords = await fetchPedestrianRoute(DEPARTURE_COORD, ARRIVAL_COORD, appKey);
+      const data = await searchRoute({
+        startLatitude: departureCoord.latitude,
+        startLongitude: departureCoord.longitude,
+        endLatitude: arrivalCoord.latitude,
+        endLongitude: arrivalCoord.longitude,
+        routeType,
+      });
+
+      const coords = (data.pathSegments || []).flatMap((seg) => seg.coordinates || []);
 
       if (polylineRef.current) {
         polylineRef.current.setMap(null);
         polylineRef.current = null;
       }
 
-      const Tmapv2 = window.Tmapv2;
-
       if (coords.length === 0) return;
 
-      const path = coords.map((c) => new Tmapv2.LatLng(c.lat, c.lng));
+      const path = coords.map((c) => new Tmapv2.LatLng(c.latitude, c.longitude));
 
       const bounds = new Tmapv2.LatLngBounds(path[0]);
       path.forEach((p) => bounds.extend(p));
 
       const polyline = new Tmapv2.Polyline({
         path,
-        strokeColor: '#2F7BFF',
+        strokeColor: routeType === 'AVOID_STAIRS' ? '#9B59FF' : '#2F7BFF',
         strokeWeight: 8,
         strokeOpacity: 1,
-        map: mapRef.current,
+        map,
       });
       polylineRef.current = polyline;
 
-      mapRef.current.fitBounds(bounds, { left: 30, top: 30, right: 30, bottom: 30 });
+      map.fitBounds(bounds, { left: 30, top: 30, right: 30, bottom: 30 });
     } catch (err) {
-      console.error('경로 그리기 실패:', err);
+      console.error('경로 검색 실패:', err.response?.status, err.response?.data || err.message);
     } finally {
       setRouteLoading(false);
+    }
+  };
+
+  const resetArrival = () => {
+    setArrivalCoord(null);
+
+    if (arrivalMarkerRef.current) {
+      arrivalMarkerRef.current.setMap(null);
+      arrivalMarkerRef.current = null;
+    }
+
+    if (polylineRef.current) {
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
+    }
+  };
+
+  const swapCoords = () => {
+    setDepartureCoord((prevDep) => {
+      const prevArr = arrivalCoord;
+      setArrivalCoord(prevDep);
+      return prevArr;
+    });
+
+    const Tmapv2 = window.Tmapv2;
+    const map = mapRef.current;
+    if (Tmapv2 && map && arrivalCoord) {
+      showCurrentLocationMarker(Tmapv2, map, arrivalCoord);
+    }
+    if (Tmapv2 && map && departureCoord) {
+      showArrivalMarker(Tmapv2, map, departureCoord);
     }
   };
 
@@ -208,9 +371,14 @@ export function useAccessibleRouteMap() {
     mapContainerRef,
     mapLoaded,
     mapError,
-    drawRoute,
-    routeLoading,
-    loadFacilityMarkers,
     markersLoading,
+    loadFacilityMarkers,
+    locating,
+    moveToCurrentLocation,
+    routeLoading,
+    drawRoute,
+    arrivalCoord,
+    swapCoords,
+    resetArrival,
   };
 }

@@ -8,6 +8,15 @@ function estimateDelta(zoom) {
   return 0.02 * Math.pow(2, 15 - zoom);
 }
 
+// 표준 웹 지도 Web Mercator 투영법 (구글/네이버/카카오/티맵 공통 방식) - 위경도 → 전체 지도상의 픽셀 좌표
+function latLngToWorldPixel(lat, lng, zoom) {
+  const scale = 256 * Math.pow(2, zoom);
+  const sinLat = Math.sin((lat * Math.PI) / 180);
+  const x = (0.5 + lng / 360) * scale;
+  const y = (0.5 - Math.log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * scale;
+  return { x, y };
+}
+
 export function useFacilityMap() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -18,6 +27,9 @@ export function useFacilityMap() {
   const currentLocationMarkerRef = useRef(null);
   const arrivalMarkerRef = useRef(null);
   const polylineRef = useRef(null);
+
+  const facilitiesDataRef = useRef([]);
+  const clustersDataRef = useRef([]);
 
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
@@ -72,6 +84,9 @@ export function useFacilityMap() {
 
       clearFacilityMarkers();
 
+      facilitiesDataRef.current = data.facilities || [];
+      clustersDataRef.current = data.clusters || [];
+
       const newMarkers = [];
 
       (data.facilities || []).forEach((f) => {
@@ -83,12 +98,6 @@ export function useFacilityMap() {
           iconSize: new Tmapv2.Size(26, 26),
           map,
         });
-
-        Tmapv2.event.addListener(marker, 'click', () => {
-          setSelectedFacility(f);
-          setSheetExpanded(false);
-        });
-
         newMarkers.push(marker);
       });
 
@@ -101,12 +110,6 @@ export function useFacilityMap() {
           iconSize: new Tmapv2.Size(36, 36),
           map,
         });
-
-        Tmapv2.event.addListener(marker, 'click', () => {
-          map.setCenter(new Tmapv2.LatLng(c.latitude, c.longitude));
-          map.setZoom((map.getZoom() || 15) + 2);
-        });
-
         newMarkers.push(marker);
       });
 
@@ -115,6 +118,63 @@ export function useFacilityMap() {
       console.error('시설 마커 조회 실패:', err.response?.status, err.response?.data || err.message);
     } finally {
       setMarkersLoading(false);
+    }
+  };
+
+  const handleContainerClick = (domEvent) => {
+    const map = mapRef.current;
+    const container = mapContainerRef.current;
+    if (!map || !container) return;
+
+    const zoom = map.getZoom();
+    const center = map.getCenter();
+    const centerLat = typeof center.lat === 'function' ? center.lat() : center.lat;
+    const centerLng = typeof center.lng === 'function' ? center.lng() : center.lng;
+
+    const centerPixel = latLngToWorldPixel(centerLat, centerLng, zoom);
+
+    const rect = container.getBoundingClientRect();
+    const clickX = domEvent.clientX - rect.left;
+    const clickY = domEvent.clientY - rect.top;
+
+    // 클릭한 화면 좌표를, 지도 중심 기준 "전체 지도상의 픽셀 좌표"로 변환
+    const clickWorldX = centerPixel.x + (clickX - container.clientWidth / 2);
+    const clickWorldY = centerPixel.y + (clickY - container.clientHeight / 2);
+
+    let closestFacility = null;
+    let closestFacilityDist = Infinity;
+
+    facilitiesDataRef.current.forEach((f) => {
+      const p = latLngToWorldPixel(f.latitude, f.longitude, zoom);
+      const dist = Math.hypot(p.x - clickWorldX, p.y - clickWorldY);
+      if (dist < closestFacilityDist) {
+        closestFacilityDist = dist;
+        closestFacility = f;
+      }
+    });
+
+    if (closestFacility && closestFacilityDist <= 16) {
+      setSelectedFacility(closestFacility);
+      setSheetExpanded(false);
+      return;
+    }
+
+    let closestCluster = null;
+    let closestClusterDist = Infinity;
+
+    clustersDataRef.current.forEach((c) => {
+      const p = latLngToWorldPixel(c.latitude, c.longitude, zoom);
+      const dist = Math.hypot(p.x - clickWorldX, p.y - clickWorldY);
+      if (dist < closestClusterDist) {
+        closestClusterDist = dist;
+        closestCluster = c;
+      }
+    });
+
+    if (closestCluster && closestClusterDist <= 20) {
+      const Tmapv2 = window.Tmapv2;
+      map.setCenter(new Tmapv2.LatLng(closestCluster.latitude, closestCluster.longitude));
+      map.setZoom((map.getZoom() || 15) + 2);
     }
   };
 
@@ -207,6 +267,8 @@ export function useFacilityMap() {
 
       mapRef.current = map;
 
+      mapContainerRef.current.addEventListener('click', handleContainerClick);
+
       const myCoords = await getCurrentCoords();
       if (!cancelled) {
         setDepartureCoord(myCoords);
@@ -225,6 +287,9 @@ export function useFacilityMap() {
     return () => {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
+      if (mapContainerRef.current) {
+        mapContainerRef.current.removeEventListener('click', handleContainerClick);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -322,6 +387,18 @@ export function useFacilityMap() {
   const closeSheet = () => {
     setSelectedFacility(null);
     setSheetExpanded(false);
+    setArrival('');
+    setArrivalCoord(null);
+
+    if (arrivalMarkerRef.current) {
+      arrivalMarkerRef.current.setMap(null);
+      arrivalMarkerRef.current = null;
+    }
+
+    if (polylineRef.current) {
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
+    }
   };
 
   const goSelectedFacilityDetail = () => {
