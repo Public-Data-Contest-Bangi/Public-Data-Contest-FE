@@ -99,6 +99,9 @@ export const ProfileImage = styled.img`
 `;
 
 export const ProfileInfo = styled.div`
+    flex: 1;
+    min-width: 0;
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -114,7 +117,12 @@ export const UserName = styled.strong`
 `;
 
 export const UserEmail = styled.span`
+    width: 100%;
     margin-bottom: 15px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     font-size: 16px;
     font-weight: 500;

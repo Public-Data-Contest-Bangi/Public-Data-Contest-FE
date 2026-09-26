@@ -1,6 +1,7 @@
 import MobileLayout from "../../../components/layout/MobileLayout";
 import Header from "../../../components/common/Header";
 import Button from "../../../components/common/Button";
+import BottomNav from "../../../components/BottomNav";
 
 import useReportHistory from "./hooks/useReportHistory";
 
@@ -75,6 +76,8 @@ function ReportHistory() {
                         </Button>
                     </S.ButtonArea>
                 </S.Content>
+
+                <BottomNav />
             </S.Inner>
         </MobileLayout>
     );

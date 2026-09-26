@@ -42,6 +42,7 @@ const SPORT_IMAGE_FILE = {
     BILLIARDS: "billiards.png",
 };
 
+// 기존 체력 추천 화면에서 사용
 export const SPORT_ROUTE = {
     KENDO: "kendo",
     GOLF: "golf",
@@ -76,7 +77,65 @@ export const SPORT_ROUTE = {
     BILLIARDS: "billiards",
 };
 
-export const getExerciseImage = (sportCode) => {
+// 백엔드 sportId → sportCode
+const SPORT_CODE_BY_ID = {
+    1: "KENDO",
+    2: "GOLF",
+    3: "BASKETBALL",
+    4: "DANCE",
+    5: "ROLLER_INLINE",
+    6: "DANCE_ART",
+    7: "VOLLEYBALL",
+    8: "BADMINTON",
+    9: "BOXING",
+    10: "BOWLING",
+    11: "SKATING",
+    12: "SWIMMING",
+    13: "SQUASH",
+    14: "HORSE_RIDING",
+    15: "BASEBALL",
+    16: "AEROBICS",
+    17: "YOGA",
+    18: "JUDO",
+    19: "JUMP_ROPE",
+    20: "SOCCER",
+    21: "TABLE_TENNIS",
+    22: "TAEKWONDO",
+    23: "TENNIS",
+    24: "FENCING",
+    25: "PILATES",
+    26: "HAPKIDO",
+    27: "FITNESS",
+    28: "CROQUET",
+    29: "JIU_JITSU",
+    30: "CLIMBING",
+    31: "BILLIARDS",
+};
+
+// 첫 운동 추천 화면에서 sportId 기준으로 사용
+export const SPORT_ROUTE_BY_ID = Object.fromEntries(
+    Object.entries(SPORT_CODE_BY_ID).map(
+        ([sportId, sportCode]) => [
+            sportId,
+            SPORT_ROUTE[sportCode],
+        ]
+    )
+);
+
+// sportCode, sportId 둘 다 받을 수 있도록 처리
+export const getExerciseImage = (
+    sportCodeOrId
+) => {
+    const sportCode =
+        typeof sportCodeOrId === "number" ||
+        /^\d+$/.test(
+            String(sportCodeOrId)
+        )
+            ? SPORT_CODE_BY_ID[
+                  Number(sportCodeOrId)
+              ]
+            : sportCodeOrId;
+
     const fileName =
         SPORT_IMAGE_FILE[sportCode];
 
@@ -87,5 +146,8 @@ export const getExerciseImage = (sportCode) => {
     const imagePath =
         `../../../assets/images/exercisename/${fileName}`;
 
-    return exerciseImages[imagePath] || fitness;
+    return (
+        exerciseImages[imagePath] ||
+        fitness
+    );
 };

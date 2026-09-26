@@ -35,45 +35,22 @@ export const IntroDescription = styled.p`
     word-break: keep-all;
 `;
 
-export const FitnessKeyword = styled.span`
-    padding: 4px 8px;
-
-    border-radius: 20px;
-
-    background: #edf9f4;
-
-    color: #24b77f;
-
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 1.2;
-
-    white-space: nowrap;
-`;
-
-
-export const ExerciseTitleRow = styled.div`
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: 7px;
-`;
 
 export const FitnessChipList = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
-    gap: 4px;
+    gap: 6px;
 `;
 
 export const FitnessChip = styled.span`
-    padding: 4px 9px;
+    padding: 5px 9px;
 
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+
+    gap: 5px;
 
     border-radius: 999px;
 
@@ -89,22 +66,33 @@ export const FitnessChip = styled.span`
 `;
 
 export const RankNumber = styled.span`
-    width: 11px;
-    height: 11px;
+    width: 16px;
+    height: 16px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
+    flex: 0 0 16px;
+
+    box-sizing: border-box;
+
     border: 1.5px solid #20b980;
     border-radius: 50%;
 
-    font-size: 9px;
-    font-weight: 700;
-    line-height: 1;
+    color: #20b980;
 
-    flex-shrink: 0;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+
+    line-height: 16px;
+
+    padding: 0;
+    margin: 0;
 `;
+
 
 export const ExerciseList = styled.div`
     width: 100%;
@@ -181,22 +169,6 @@ export const ExerciseName = styled.div`
     font-size: 18px;
     font-weight: 700;
     line-height: 1.3;
-`;
-
-export const ExerciseDescription = styled.div`
-    color: #555555;
-
-    font-size: 12.5px;
-    font-weight: 400;
-    line-height: 1.4;
-
-    word-break: keep-all;
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
 `;
 
 export const Arrow = styled.span`

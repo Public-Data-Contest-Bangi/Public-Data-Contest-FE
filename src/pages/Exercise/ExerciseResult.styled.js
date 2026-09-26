@@ -32,8 +32,6 @@ export const Content = styled.main`
     box-sizing: border-box;
 `;
 
-/* 제목 */
-
 export const Title = styled.h1`
     margin: 0 0 22px;
 
@@ -44,60 +42,110 @@ export const Title = styled.h1`
     line-height: normal;
 `;
 
-/* 상단 추천 배너 */
-
 export const ResultBanner = styled.div`
     position: relative;
-    overflow: hidden;
 
     width: 100%;
-    height: 165px;
+    height: 150px;
 
-    margin-bottom: 41px;
-    padding: 25px 16px;
+    margin-bottom: 14px;
+    padding: 18px 18px;
+
+    display: flex;
+    align-items: center;
 
     box-sizing: border-box;
 
-    border-radius: 13px;
+    border: 1px solid #d2f3e5;
+    border-radius: 16px;
 
-    background: #40D293;
+    background: #effbf6;
+
+    overflow: hidden;
 `;
 
 export const BannerText = styled.div`
     position: relative;
     z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`;
+
+export const BannerBadge = styled.span`
+    margin-bottom: 8px;
+    padding: 4px 8px;
+
+    border-radius: 20px;
+
+    background: #d7f7e9;
+
+    color: #279c70;
+
+    font-size: 11px;
+    font-weight: 700;
 `;
 
 export const BannerTitle = styled.div`
-    color: #ffffff;
+    color: #173c2e;
 
-    font-size: 22px;
-    font-weight: 600;
-    line-height: normal;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
 `;
 
 export const BannerDescription = styled.div`
-    margin-top: 55px;
+    margin-top: 8px;
 
-    color: #fff;
+    color: #63756d;
 
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
 `;
 
 export const BannerCharacter = styled.img`
     position: absolute;
 
-    right: 8px;
-    bottom: 10px;
+    right: 4px;
+    bottom: -2px;
 
-    width: 150px;
-    height: 150px;
+    width: 132px;
+    height: 132px;
 
     object-fit: contain;
 `;
 
-/* 운동 추천 카드 */
+export const MatchGuide = styled.div`
+    width: 100%;
+
+    margin: 0 0 16px;
+    padding: 0 3px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    box-sizing: border-box;
+
+    color: #747474;
+
+    font-size: 11px;
+    font-weight: 400;
+`;
+
+export const MatchDot = styled.span`
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #40d293;
+`;
 
 export const ExerciseList = styled.div`
     display: flex;
@@ -108,26 +156,29 @@ export const ExerciseList = styled.div`
 
 export const ExerciseCard = styled.button`
     width: 100%;
-    height: 94px;
+    min-height: 94px;
 
-    padding: 0 16px;
+    padding: 12px 16px;
 
     display: flex;
     align-items: center;
 
     box-sizing: border-box;
 
-    border: 1px solid #bcbcbc;
-    border-radius: 8px;
+    border: 1px solid #d2d2d2;
+    border-radius: 11px;
 
     background: #ffffff;
 
     cursor: pointer;
 
-    transition: 0.15s;
+    transition:
+        background 0.15s,
+        border-color 0.15s;
 
     &:active {
-        background: #f7f7f7;
+        border-color: #40d293;
+        background: #f6fdf9;
     }
 `;
 
@@ -135,15 +186,16 @@ export const ExerciseIcon = styled.img`
     width: 73px;
     height: 70px;
 
-    object-fit: contain;
-    flex-shrink: 0;
     margin-right: 15px;
     margin-left: -5px;
-    margin-top: -10px;
+
+    object-fit: contain;
+    flex-shrink: 0;
 `;
 
 export const ExerciseInfo = styled.div`
     flex: 1;
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
@@ -153,21 +205,38 @@ export const ExerciseInfo = styled.div`
 `;
 
 export const ExerciseName = styled.div`
-    color: #000;
+    color: #111111;
 
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
 `;
 
-export const ExerciseDescription = styled.div`
-    color: #222;
+export const ExerciseCharacteristics = styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 
-    font-size: 14px;
-    font-weight: 400;
+    gap: 4px 8px;
+`;
+
+export const Characteristic = styled.span`
+    color: ${({ $matched }) =>
+        $matched
+            ? "#2fc98f"
+            : "#555555"};
+
+    font-size: 13px;
+
+    font-weight: ${({ $matched }) =>
+        $matched ? 700 : 400};
+
+    line-height: 1.4;
 `;
 
 export const Arrow = styled.div`
-    margin-left: auto;
+    margin-left: 10px;
+
+    flex-shrink: 0;
 
     color: #111111;
 
@@ -176,36 +245,46 @@ export const Arrow = styled.div`
     line-height: 1;
 `;
 
-/* 하단 안내 */
+export const StatusText = styled.div`
+    width: 100%;
+
+    padding: 40px 0;
+
+    text-align: center;
+
+    color: #747474;
+
+    font-size: 14px;
+`;
 
 export const MessageBox = styled.div`
     width: 100%;
-    height: 70px;
+    min-height: 72px;
 
-    margin-top: 86px;
-    padding: 0 16px;
+    margin-top: 70px;
+    padding: 8px 16px 8px 12px;
 
     display: flex;
     align-items: center;
 
     box-sizing: border-box;
 
-    border-radius: 10px;
+    border: 1px solid #d7f4e8;
+    border-radius: 13px;
 
-    background: #dff9ef;
-
-    overflow: hidden;
+    background: #effbf6;
 `;
 
 export const MessageCharacter = styled.img`
-    width: 113px;
-    height: 84px;
+    width: 78px;
+    height: 78px;
 
-    margin-top: 13px;
-    margin-right: 5px;
+    margin-right: 30px;
+    margin-left: 10px;
+
+    flex-shrink: 0;
 
     object-fit: contain;
-
 `;
 
 export const MessageText = styled.div`
@@ -216,15 +295,15 @@ export const MessageText = styled.div`
 `;
 
 export const MessageTitle = styled.div`
-    color: #222;
+    color: #173c2e;
 
     font-size: 15px;
     font-weight: 700;
 `;
 
 export const MessageDescription = styled.div`
-    color: #777777;
+    color: #7a8a83;
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
 `;

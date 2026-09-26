@@ -23,7 +23,7 @@ export const Content = styled.main`
 `;
 
 export const Title = styled.h1`
-    margin: 30px 0 22px;
+    margin: 20px 0 22px;
 
     color: #111111;
 

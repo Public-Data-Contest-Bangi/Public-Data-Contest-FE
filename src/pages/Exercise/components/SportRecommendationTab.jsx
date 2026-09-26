@@ -11,7 +11,6 @@ import {
 
 import * as S from "./SportRecommendationTab.styled";
 
-const RANK_LABELS = ["①", "②", "③"];
 
 export default function SportRecommendationTab({
     weakestCategory,
@@ -114,10 +113,7 @@ export default function SportRecommendationTab({
 
                                         <S.FitnessChipList>
                                             {recommendation.targetFitnessAreas?.map(
-                                                (
-                                                    area,
-                                                    index
-                                                ) => (
+                                                (area, index) => (
                                                     <S.FitnessChip
                                                         key={`${area}-${index}`}
                                                     >
@@ -143,6 +139,9 @@ export default function SportRecommendationTab({
             <S.BannerArea>
                 <InfoBanner
                     image={bannerMascot}
+                    imageSize="120px"
+                    imageOffsetY="3px"
+                    contentOffsetX="-20px"
                 >
                     지금, 나에게 딱 맞는 운동으로
                     <br />

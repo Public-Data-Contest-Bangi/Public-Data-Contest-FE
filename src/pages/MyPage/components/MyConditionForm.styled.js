@@ -2,8 +2,12 @@ import styled from "styled-components";
 
 export const Content = styled.main`
     width: 100%;
+    min-height: calc(100dvh - 72px);
 
-    padding: 0 16px 96px;
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 16px 110px;
 
     box-sizing: border-box;
 `;
@@ -202,5 +206,6 @@ export const SaveMessage = styled.p`
 `;
 
 export const SaveButtonArea = styled.div`
-    margin-top: 100px;
+    margin-top: 50px;
+    padding-top: 24px;
 `;

@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/common/Header";
 import MobileLayout from "../../components/layout/MobileLayout";
-
-import * as S from "./FitnessResultIntro.styled";
+import InfoBanner from "../../components/common/InfoBanner";
 
 import mascot from "../../assets/images/findidcharacter.png";
 import bannerMascot from "../../assets/images/fitness-recommend.png";
-import InfoBanner from "../../components/common/InfoBanner";
+
+import * as S from "./FitnessResultIntro.styled";
 
 function FitnessResultIntro() {
     const navigate = useNavigate();
@@ -65,7 +65,8 @@ function FitnessResultIntro() {
                 <InfoBanner
                     image={bannerMascot}
                     imageSize="120px"
-                    imageOffsetY="8px"
+                    imageOffsetY="4px"
+                    contentOffsetX="-18px"
                 >
                     국민체력 100 결과를 바탕으로
                     <br />
