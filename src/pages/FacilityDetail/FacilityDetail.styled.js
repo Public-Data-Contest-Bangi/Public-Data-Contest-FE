@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   width: 375px;
-  min-height: 816px;
+  min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
@@ -267,7 +267,6 @@ export const ProgramTitle = styled.span`
   font-size: 15px;
   font-weight: 700;
   color: #000000;
-  text-decoration: underline;
 `;
 
 export const ProgramLink = styled.span`

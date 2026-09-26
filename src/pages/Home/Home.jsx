@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import mascotImg from '../../assets/images/mascot-dumbbell.png';
@@ -5,10 +6,43 @@ import searchProgramImg from '../../assets/images/icon-search-program.png';
 import recommendImg from '../../assets/images/icon-exercise-recommend.png';
 import logoMark from '../../assets/images/logo-mark.png';
 import BottomNav from '../../components/BottomNav';
-import { LIKED_FACILITIES } from './utils/homeData';
+import useMyPageProfile from '../MyPage/hooks/useMyPageProfile';
+import { getFavoriteFacilities } from '../../api/favorite';
+import { getCurrentCoords } from '../../utils/geolocation';
 
 function Home() {
   const navigate = useNavigate();
+  const { nickname, isLoading: profileLoading } = useMyPageProfile();
+
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadFavorites() {
+      try {
+        const coords = await getCurrentCoords();
+        const response = await getFavoriteFacilities({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          page: 0,
+          size: 3,
+        });
+
+        if (!cancelled) {
+          setFavorites(response.data?.facilities ?? []);
+        }
+      } catch (error) {
+        console.error('홈 화면 찜한 시설 조회 실패', error);
+      }
+    }
+
+    loadFavorites();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <div className="home">
@@ -19,7 +53,7 @@ function Home() {
       <img src={mascotImg} alt="Dfit 마스코트" className="home__mascot" />
 
       <p className="home__greeting">
-        혜원님,
+        {profileLoading ? '' : nickname}님,
         <br />
         오늘도 움직여볼까요?
       </p>
@@ -28,7 +62,12 @@ function Home() {
         <section className="home__liked">
           <div className="home__liked-scroll">
             <div className="liked-item">
-              <div className="liked-card liked-card--active">
+              <div
+                className="liked-card liked-card--active"
+                onClick={() => navigate('/favorites')}
+                role="button"
+                tabIndex={0}
+              >
                 <svg
                   className="liked-card__heart"
                   viewBox="0 0 24 24"
@@ -48,9 +87,26 @@ function Home() {
               </div>
             </div>
 
-            {LIKED_FACILITIES.map((facility) => (
-              <div className="liked-item" key={facility.id}>
-                <div className="liked-card liked-card--placeholder" />
+            {favorites.map((facility) => (
+              <div
+                className="liked-item"
+                key={facility.facilityId}
+                onClick={() => navigate(`/facility-detail/${facility.facilityId}`)}
+                role="button"
+                tabIndex={0}
+              >
+                <div
+                  className="liked-card liked-card--placeholder"
+                  style={
+                    facility.representativeImageUrl
+                      ? {
+                          backgroundImage: `url(${facility.representativeImageUrl})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        }
+                      : undefined
+                  }
+                />
 
                 <span className="liked-item__caption">{facility.name}</span>
               </div>

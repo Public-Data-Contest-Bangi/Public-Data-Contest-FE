@@ -3,12 +3,11 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   width: 375px;
-  min-height: 816px;
+  min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
   box-sizing: border-box;
-  padding-bottom: 96px;
   display: flex;
   flex-direction: column;
 
@@ -107,6 +106,43 @@ export const GpsButton = styled.button`
   cursor: pointer;
 `;
 
+/* ── 계단 회피 토글 ───────────────── */
+
+export const AvoidStairsRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex-shrink: 0;
+`;
+
+export const AvoidStairsToggle = styled.button`
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  border: none;
+  background: ${(props) => (props.$active ? 'var(--color-primary)' : '#e4e4e4')};
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+
+  span {
+    position: absolute;
+    top: 3px;
+    left: ${(props) => (props.$active ? '21px' : '3px')};
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: left 0.2s ease;
+  }
+`;
+
 /* ── 경로 검색 버튼 (공용 Button 감싸는 wrapper) ───────────────── */
 
 export const SearchButtonWrap = styled.div`
@@ -119,7 +155,7 @@ export const SearchButtonWrap = styled.div`
 export const MapPlaceholder = styled.div`
   position: relative;
   flex: 1;
-  min-height: 320px;
+  min-height: 0;
   background: #eef2f2;
   display: flex;
   flex-direction: column;
@@ -154,6 +190,28 @@ export const MapLocateButton = styled.button`
   cursor: pointer;
 `;
 
+export const ResearchAreaButton = styled.button`
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+`;
+
 /* ── 시설 상세정보 시트 ───────────────── */
 
 export const FacilitySheet = styled.div`
@@ -169,6 +227,20 @@ export const FacilitySheet = styled.div`
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
   padding: 16px 20px;
   box-sizing: border-box;
+`;
+
+export const SheetCloseButton = styled.button`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 export const SheetToggle = styled.button`
@@ -277,4 +349,22 @@ export const AccessibilityItemLabel = styled.span`
   color: #666666;
   text-align: center;
   line-height: 1.3;
+`;
+
+export const AccessibilityEmptyText = styled.p`
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #b3b3b3;
+`;
+
+export const DetailButton = styled.button`
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
 `;
