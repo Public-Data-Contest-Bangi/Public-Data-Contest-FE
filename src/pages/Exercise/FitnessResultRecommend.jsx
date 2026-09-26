@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import BottomNav from "../../components/BottomNav";
+import Header from "../../components/common/Header";
 import MobileLayout from "../../components/layout/MobileLayout";
 
 import BodyweightRecommendationTab from "./components/BodyweightRecommendationTab";
@@ -31,6 +32,8 @@ function FitnessResultRecommend() {
     return (
         <MobileLayout>
             <S.Inner>
+                <Header title="체력 결과로 추천" />
+
                 <S.Content>
                     <S.Title>
                         추천 결과
@@ -68,8 +71,7 @@ function FitnessResultRecommend() {
                         </S.TabButton>
                     </S.TabContainer>
 
-                    {activeTab ===
-                    "sport" ? (
+                    {activeTab === "sport" ? (
                         <SportRecommendationTab
                             weakestCategory={
                                 weakestCategory
