@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchFacilityMarkers } from '../../../api/facilities';
 import { searchRoute } from '../../../api/routes';
 import { getCurrentCoords } from '../../../utils/geolocation';
@@ -7,6 +8,7 @@ function estimateDelta(zoom) {
   return 0.02 * Math.pow(2, 15 - zoom);
 }
 
+// 표준 웹 지도 Web Mercator 투영법 (구글/네이버/카카오/티맵 공통 방식) - 위경도 → 전체 지도상의 픽셀 좌표
 function latLngToWorldPixel(lat, lng, zoom) {
   const scale = 256 * Math.pow(2, zoom);
   const sinLat = Math.sin((lat * Math.PI) / 180);
@@ -15,7 +17,10 @@ function latLngToWorldPixel(lat, lng, zoom) {
   return { x, y };
 }
 
-export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onArrivalSelected }) {
+export function useFacilityMap() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const facilityMarkersRef = useRef([]);
@@ -31,9 +36,15 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
   const [markersLoading, setMarkersLoading] = useState(false);
   const [locating, setLocating] = useState(false);
   const [routeLoading, setRouteLoading] = useState(false);
+  const [avoidStairs, setAvoidStairs] = useState(false);
 
+  const [departure, setDeparture] = useState('현재 위치');
+  const [arrival, setArrival] = useState(location.state?.arrival || '');
+  const [arrivalCoord, setArrivalCoord] = useState(location.state?.arrivalCoord || null);
   const [departureCoord, setDepartureCoord] = useState(null);
-  const [arrivalCoord, setArrivalCoord] = useState(initialArrivalCoord || null);
+
+  const [selectedFacility, setSelectedFacility] = useState(null);
+  const [sheetExpanded, setSheetExpanded] = useState(false);
 
   const clearFacilityMarkers = () => {
     facilityMarkersRef.current.forEach((m) => m.setMap(null));
@@ -110,25 +121,6 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     }
   };
 
-  const showArrivalMarker = (Tmapv2, map, coord) => {
-    if (arrivalMarkerRef.current) {
-      arrivalMarkerRef.current.setMap(null);
-    }
-
-    if (!coord) return;
-
-    const marker = new Tmapv2.Marker({
-      position: new Tmapv2.LatLng(coord.latitude, coord.longitude),
-      icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
-      ),
-      iconSize: new Tmapv2.Size(28, 32),
-      map,
-    });
-
-    arrivalMarkerRef.current = marker;
-  };
-
   const handleContainerClick = (domEvent) => {
     const map = mapRef.current;
     const container = mapContainerRef.current;
@@ -145,6 +137,7 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     const clickX = domEvent.clientX - rect.left;
     const clickY = domEvent.clientY - rect.top;
 
+    // 클릭한 화면 좌표를, 지도 중심 기준 "전체 지도상의 픽셀 좌표"로 변환
     const clickWorldX = centerPixel.x + (clickX - container.clientWidth / 2);
     const clickWorldY = centerPixel.y + (clickY - container.clientHeight / 2);
 
@@ -161,13 +154,8 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     });
 
     if (closestFacility && closestFacilityDist <= 16) {
-      const Tmapv2 = window.Tmapv2;
-      const coord = { latitude: closestFacility.latitude, longitude: closestFacility.longitude };
-      setArrivalCoord(coord);
-      showArrivalMarker(Tmapv2, map, coord);
-      if (onArrivalSelected) {
-        onArrivalSelected(closestFacility);
-      }
+      setSelectedFacility(closestFacility);
+      setSheetExpanded(false);
       return;
     }
 
@@ -207,12 +195,33 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     currentLocationMarkerRef.current = marker;
   };
 
+  const showArrivalMarker = (Tmapv2, map, coord) => {
+    if (arrivalMarkerRef.current) {
+      arrivalMarkerRef.current.setMap(null);
+    }
+
+    if (!coord) return;
+
+    const marker = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(coord.latitude, coord.longitude),
+      icon: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
+      ),
+      iconSize: new Tmapv2.Size(28, 32),
+      map,
+    });
+
+    arrivalMarkerRef.current = marker;
+    map.setCenter(new Tmapv2.LatLng(coord.latitude, coord.longitude));
+  };
+
   const moveToCurrentLocation = async () => {
     const map = mapRef.current;
     const Tmapv2 = window.Tmapv2;
     if (!map || !Tmapv2) return;
 
     setLocating(true);
+    setDeparture('현재 위치');
 
     try {
       const coords = await getCurrentCoords();
@@ -242,29 +251,32 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
       if (mapRef.current) return;
 
       const Tmapv2 = window.Tmapv2;
-      const coords = await getCurrentCoords();
+
+      const regionCoord = location.state?.regionCoord;
+      const initialCoord = regionCoord || (await getCurrentCoords());
 
       if (cancelled) return;
       if (mapRef.current) return;
 
-      const centerCoord = initialArrivalCoord || coords;
-
       const map = new Tmapv2.Map(mapContainerRef.current, {
-        center: new Tmapv2.LatLng(centerCoord.latitude, centerCoord.longitude),
+        center: new Tmapv2.LatLng(initialCoord.latitude, initialCoord.longitude),
         width: '100%',
         height: '100%',
-        zoom: 15,
+        zoom: regionCoord ? 14 : 15,
       });
 
       mapRef.current = map;
 
       mapContainerRef.current.addEventListener('click', handleContainerClick);
 
-      setDepartureCoord(coords);
-      showCurrentLocationMarker(Tmapv2, map, coords);
+      const myCoords = await getCurrentCoords();
+      if (!cancelled) {
+        setDepartureCoord(myCoords);
+        showCurrentLocationMarker(Tmapv2, map, myCoords);
+      }
 
-      if (initialArrivalCoord) {
-        showArrivalMarker(Tmapv2, map, initialArrivalCoord);
+      if (location.state?.arrivalCoord) {
+        showArrivalMarker(Tmapv2, map, location.state.arrivalCoord);
       }
 
       setMapLoaded(true);
@@ -287,6 +299,20 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
       loadFacilityMarkers();
     }
   }, [mapLoaded]);
+
+  const handleSwap = () => {
+    setDeparture(arrival);
+    setArrival(departure);
+    setDepartureCoord((prevDep) => {
+      const prevArr = arrivalCoord;
+      setArrivalCoord(prevDep);
+      return prevArr;
+    });
+  };
+
+  const goArrivalSearch = () => {
+    navigate('/departure-search', { state: { mode: 'arrival' } });
+  };
 
   const drawRoute = async (routeType) => {
     const map = mapRef.current;
@@ -336,7 +362,32 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     }
   };
 
-  const resetArrival = () => {
+  const goSearchRoute = () => {
+    if (!arrival || !arrivalCoord) {
+      goArrivalSearch();
+      return;
+    }
+    drawRoute(avoidStairs ? 'AVOID_STAIRS' : 'NORMAL');
+  };
+
+  const toggleAvoidStairs = () => {
+    setAvoidStairs((prev) => {
+      const next = !prev;
+      if (arrivalCoord) {
+        drawRoute(next ? 'AVOID_STAIRS' : 'NORMAL');
+      }
+      return next;
+    });
+  };
+
+  const toggleSheet = () => {
+    setSheetExpanded((prev) => !prev);
+  };
+
+  const closeSheet = () => {
+    setSelectedFacility(null);
+    setSheetExpanded(false);
+    setArrival('');
     setArrivalCoord(null);
 
     if (arrivalMarkerRef.current) {
@@ -350,21 +401,9 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     }
   };
 
-  const swapCoords = () => {
-    setDepartureCoord((prevDep) => {
-      const prevArr = arrivalCoord;
-      setArrivalCoord(prevDep);
-      return prevArr;
-    });
-
-    const Tmapv2 = window.Tmapv2;
-    const map = mapRef.current;
-    if (Tmapv2 && map && arrivalCoord) {
-      showCurrentLocationMarker(Tmapv2, map, arrivalCoord);
-    }
-    if (Tmapv2 && map && departureCoord) {
-      showArrivalMarker(Tmapv2, map, departureCoord);
-    }
+  const goSelectedFacilityDetail = () => {
+    if (!selectedFacility) return;
+    navigate(`/facility-detail/${selectedFacility.facilityId}`);
   };
 
   return {
@@ -373,12 +412,20 @@ export function useAccessibleRouteMap({ initialArrival, initialArrivalCoord, onA
     mapError,
     markersLoading,
     loadFacilityMarkers,
+    departure,
+    arrival,
     locating,
-    moveToCurrentLocation,
     routeLoading,
-    drawRoute,
-    arrivalCoord,
-    swapCoords,
-    resetArrival,
+    avoidStairs,
+    handleSwap,
+    goArrivalSearch,
+    moveToCurrentLocation,
+    goSearchRoute,
+    toggleAvoidStairs,
+    selectedFacility,
+    sheetExpanded,
+    toggleSheet,
+    closeSheet,
+    goSelectedFacilityDetail,
   };
 }

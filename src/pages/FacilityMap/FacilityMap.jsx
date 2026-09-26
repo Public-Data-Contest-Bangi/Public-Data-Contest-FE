@@ -1,29 +1,31 @@
-import Header from '../../components/common/Header';
 import Button from '../../components/common/Button';
+import Header from '../../components/common/Header';
 import BottomNav from '../../components/BottomNav';
-import { useAccessibleRoute } from './hooks/useAccessibleRoute';
-import { useAccessibleRouteMap } from './hooks/useAccessibleRouteMap';
+import swapIcon from '../../assets/icons/swap-icon.png';
 import locationIcon from '../../assets/icons/location-icon.png';
+import { useFacilityMap } from './hooks/useFacilityMap';
 import {
   Container,
   RouteCard,
   Row,
   Dot,
   PinIconWrap,
+  DashedLine,
+  SwapButton,
   RowLabel,
   RowValue,
   GpsButton,
+  SearchButtonWrap,
   AvoidStairsRow,
   AvoidStairsToggle,
-  SearchButtonWrap,
   MapPlaceholder,
   MapContainer,
   MapPlaceholderText,
   MapLocateButton,
   ResearchAreaButton,
   FacilitySheet,
-  SheetCloseButton,
   SheetToggle,
+  SheetCloseButton,
   Thumbnail,
   SheetInfo,
   FacilityName,
@@ -35,48 +37,35 @@ import {
   AccessibilityLabelText,
   AccessibilityEmptyText,
   DetailButton,
-} from './AccessibleRoute.styled';
+} from './FacilityMap.styled';
 
-function AccessibleRoute() {
-  const {
-    departure,
-    arrival,
-    avoidStairs,
-    toggleAvoidStairs,
-    initialArrival,
-    initialArrivalCoord,
-    handleArrivalSelected,
-    selectedFacility,
-    sheetExpanded,
-    toggleSheet,
-    closeSheet,
-    goSelectedFacilityDetail,
-  } = useAccessibleRoute();
-
+function FacilityMap() {
   const {
     mapContainerRef,
     mapLoaded,
     mapError,
     markersLoading,
     loadFacilityMarkers,
+    departure,
+    arrival,
     locating,
-    moveToCurrentLocation,
     routeLoading,
-    drawRoute,
-    arrivalCoord,
-  } = useAccessibleRouteMap({
-    initialArrival,
-    initialArrivalCoord,
-    onArrivalSelected: handleArrivalSelected,
-  });
-
-  const handleSearchRoute = () => {
-    drawRoute(avoidStairs ? 'AVOID_STAIRS' : 'NORMAL');
-  };
+    avoidStairs,
+    handleSwap,
+    goArrivalSearch,
+    moveToCurrentLocation,
+    goSearchRoute,
+    toggleAvoidStairs,
+    selectedFacility,
+    sheetExpanded,
+    toggleSheet,
+    closeSheet,
+    goSelectedFacilityDetail,
+  } = useFacilityMap();
 
   return (
     <Container>
-      <Header title="경로 안내" />
+      <Header title="지도" />
 
       <RouteCard>
         <Row>
@@ -95,6 +84,12 @@ function AccessibleRoute() {
           </GpsButton>
         </Row>
 
+        <DashedLine>
+          <SwapButton type="button" aria-label="출발/도착 바꾸기" onClick={handleSwap}>
+            <img src={swapIcon} alt="" style={{ width: 14, height: 16, objectFit: 'contain' }} />
+          </SwapButton>
+        </DashedLine>
+
         <Row>
           <PinIconWrap>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -106,8 +101,13 @@ function AccessibleRoute() {
             </svg>
           </PinIconWrap>
           <RowLabel>도착</RowLabel>
-          <RowValue style={{ color: arrival === '도착지를 선택해주세요' ? '#b3b3b3' : '#1a1a1a' }}>
-            {arrival}
+          <RowValue
+            as="button"
+            type="button"
+            style={{ textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: arrival ? '#1a1a1a' : '#b3b3b3' }}
+            onClick={goArrivalSearch}
+          >
+            {arrival || '도착지를 검색해주세요'}
           </RowValue>
         </Row>
       </RouteCard>
@@ -126,7 +126,7 @@ function AccessibleRoute() {
       </AvoidStairsRow>
 
       <SearchButtonWrap>
-        <Button type="button" radius="16px" onClick={handleSearchRoute} disabled={routeLoading || !arrivalCoord}>
+        <Button type="button" radius="16px" onClick={goSearchRoute} disabled={routeLoading}>
           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 2L2 8l6 2 2 6 6-14Z" stroke="#ffffff" strokeWidth="1.6" strokeLinejoin="round" />
@@ -210,4 +210,4 @@ function AccessibleRoute() {
   );
 }
 
-export default AccessibleRoute;
+export default FacilityMap;

@@ -44,7 +44,7 @@ function SearchFilter() {
     toggleSportMenu,
     toggleSport,
     setVoucher,
-    goSearchResult,
+    applyFilters,
     closeFilter,
   } = useSearchFilter();
 
@@ -152,10 +152,12 @@ function SearchFilter() {
       </Body>
 
       <Footer>
-        <CancelButton type="button" onClick={goSearchResult}>
+        <CancelButton type="button" onClick={closeFilter}>
           취소
         </CancelButton>
-        <ApplyButton type="button">적용하기</ApplyButton>
+        <ApplyButton type="button" onClick={applyFilters}>
+          적용하기
+        </ApplyButton>
       </Footer>
     </Container>
   );

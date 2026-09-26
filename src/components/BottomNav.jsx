@@ -44,11 +44,10 @@ function BottomNav() {
                 type="button"
                 aria-label="지도"
                 $active={
-                    location.pathname.includes("facility") ||
-                    location.pathname.includes("accessible-route")
+                    location.pathname.includes("facility-map")
                 }
                 onClick={() =>
-                    navigate("/facility-search")
+                    navigate("/facility-map")
                 }
             >
                 <S.NavIcon

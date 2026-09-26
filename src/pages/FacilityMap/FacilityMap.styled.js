@@ -16,8 +16,6 @@ export const Container = styled.div`
   }
 `;
 
-/* ── 출발/도착 카드 ───────────────── */
-
 export const RouteCard = styled.div`
   position: relative;
   margin: 4px 20px 16px;
@@ -106,8 +104,6 @@ export const GpsButton = styled.button`
   cursor: pointer;
 `;
 
-/* ── 계단 회피 토글 ───────────────── */
-
 export const AvoidStairsRow = styled.div`
   display: flex;
   align-items: center;
@@ -143,14 +139,10 @@ export const AvoidStairsToggle = styled.button`
   }
 `;
 
-/* ── 경로 검색 버튼 (공용 Button 감싸는 wrapper) ───────────────── */
-
 export const SearchButtonWrap = styled.div`
   margin: 0 20px 20px;
   flex-shrink: 0;
 `;
-
-/* ── 지도 자리(placeholder) ───────────────── */
 
 export const MapPlaceholder = styled.div`
   position: relative;
@@ -164,6 +156,7 @@ export const MapPlaceholder = styled.div`
   gap: 8px;
   overflow: hidden;
 `;
+
 export const MapContainer = styled.div`
   position: absolute;
   inset: 0;
@@ -177,7 +170,7 @@ export const MapPlaceholderText = styled.span`
 export const MapLocateButton = styled.button`
   position: absolute;
   right: 16px;
-  bottom: 16px;
+  bottom: 112px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -212,7 +205,7 @@ export const ResearchAreaButton = styled.button`
   }
 `;
 
-/* ── 시설 상세정보 시트 ───────────────── */
+/* ── 마커 클릭 시 하단 시설 미리보기 시트 ───────────────── */
 
 export const FacilitySheet = styled.div`
   position: fixed;
@@ -319,36 +312,6 @@ export const AccessibilityLabelText = styled.span`
   font-size: 14px;
   font-weight: 700;
   color: #000000;
-`;
-
-export const AccessibilityGrid = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-`;
-
-export const AccessibilityItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-`;
-
-export const AccessibilityIconWrap = styled.div`
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: #f3f3f3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const AccessibilityItemLabel = styled.span`
-  font-size: 12px;
-  color: #666666;
-  text-align: center;
-  line-height: 1.3;
 `;
 
 export const AccessibilityEmptyText = styled.p`
