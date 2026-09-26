@@ -25,6 +25,7 @@ export const Content = styled.main`
 export const Tags = styled.div`
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
     gap: 8px;
 
@@ -32,14 +33,16 @@ export const Tags = styled.div`
 `;
 
 export const Tag = styled.div`
-    min-width: 43px;
+    width: fit-content;
     height: 32px;
 
-    padding: 0 10px;
+    padding: 0 12px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    flex-shrink: 0;
 
     box-sizing: border-box;
 
@@ -52,6 +55,9 @@ export const Tag = styled.div`
 
     font-size: 14px;
     font-weight: 500;
+
+    white-space: nowrap;
+    word-break: keep-all;
 `;
 
 /* 안내 문구 */
@@ -189,4 +195,15 @@ export const Address = styled.div`
     font-size: 10px;
     font-weight: 400;
     line-height: normal;
+`;
+
+export const StateText = styled.div`
+    width: 100%;
+
+    padding: 40px 0;
+
+    color: #888888;
+
+    font-size: 14px;
+    text-align: center;
 `;

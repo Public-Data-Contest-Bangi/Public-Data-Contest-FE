@@ -104,7 +104,7 @@ function ExerciseResult() {
     ) => {
         const route =
             SPORT_ROUTE_BY_ID[
-                exercise.sportId
+            exercise.sportId
             ];
 
         if (!route) {
@@ -115,7 +115,19 @@ function ExerciseResult() {
             return;
         }
 
-        navigate(`/exercise/${route}`);
+        navigate(
+            `/exercise/${route}`,
+            {
+                state: {
+                    sportId: exercise.sportId,
+                    sportName: exercise.sportName,
+                    exerciseCharacteristics:
+                        exercise.exerciseCharacteristics,
+                    supportGuide:
+                        exercise.supportGuide,
+                },
+            }
+        );
     };
 
     return (
@@ -153,7 +165,7 @@ function ExerciseResult() {
                     {!isLoading &&
                         !isError &&
                         recommendations.length >
-                            0 && (
+                        0 && (
                             <S.MatchGuide>
                                 <S.MatchDot />
 
@@ -176,7 +188,7 @@ function ExerciseResult() {
                             불러오지 못했어요.
                         </S.StatusText>
                     ) : recommendations.length ===
-                      0 ? (
+                        0 ? (
                         <S.StatusText>
                             추천 결과가 없어요.
                         </S.StatusText>
