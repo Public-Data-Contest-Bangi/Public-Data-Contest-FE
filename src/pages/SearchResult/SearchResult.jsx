@@ -1,6 +1,7 @@
 import BottomNav from '../../components/BottomNav';
 import { useSearchResult } from './hooks/useSearchResult';
 import { formatDistance } from './utils/searchResultData';
+import { SPORT_OPTIONS, ACCESSIBILITY_ITEMS } from '../SearchFilter/utils/searchFilterOptions';
 import AccessIcon from './components/AccessIcon';
 import {
   Container,
@@ -9,6 +10,8 @@ import {
   Title,
   FilterButton,
   CountText,
+  ChipRow,
+  Chip,
   List,
   Card,
   CardImage,
@@ -22,7 +25,30 @@ import {
 } from './SearchResult.styled';
 
 function SearchResult() {
-  const { keyword, facilities, totalCount, loading, error, goBack, goFilter, goDetail } = useSearchResult();
+  const {
+    keyword,
+    accessibilityCodes,
+    sportIds,
+    voucherStatus,
+    facilities,
+    totalCount,
+    loading,
+    error,
+    goBack,
+    goFilter,
+    goDetail,
+  } = useSearchResult();
+
+  // 선택된 필터를 화면에 보여줄 라벨로 변환
+  const accessibilityLabels = ACCESSIBILITY_ITEMS.filter((item) =>
+    item.code && accessibilityCodes.includes(item.code)
+  ).map((item) => item.label);
+
+  const sportLabels = SPORT_OPTIONS.filter((s) => sportIds.includes(s.id)).map((s) => s.name);
+
+  const voucherLabel = voucherStatus === 'AVAILABLE' ? '스포츠 바우처 이용 가능' : null;
+
+  const filterChips = [...accessibilityLabels, ...sportLabels, ...(voucherLabel ? [voucherLabel] : [])];
 
   return (
     <Container>
@@ -52,7 +78,17 @@ function SearchResult() {
 
       {!loading && !error && (
         <>
-          <CountText>총 {totalCount}개</CountText>
+          <CountText>
+            {keyword ? `'${keyword}' 검색 결과 ` : ''}총 {totalCount}개
+          </CountText>
+
+          {filterChips.length > 0 && (
+            <ChipRow>
+              {filterChips.map((label) => (
+                <Chip key={label}>{label}</Chip>
+              ))}
+            </ChipRow>
+          )}
 
           {facilities.length === 0 ? (
             <CountText>검색 결과가 없어요</CountText>

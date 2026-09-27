@@ -111,20 +111,20 @@ function SearchFilter() {
             {sportMenuOpen && (
               <SelectMenu onClick={(e) => e.stopPropagation()}>
                 {SPORT_OPTIONS.map((option) => (
-                  <li key={option}>
+                  <li key={option.id}>
                     <SelectMenuItem>
                       <HiddenCheckbox
-                        checked={selectedSports.includes(option)}
-                        onChange={() => toggleSport(option)}
+                        checked={selectedSports.includes(option.name)}
+                        onChange={() => toggleSport(option.name)}
                       />
                       <CheckboxBox>
-                        {selectedSports.includes(option) && (
+                        {selectedSports.includes(option.name) && (
                           <svg width="14" height="12" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M1 5l3.5 3.5L11 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         )}
                       </CheckboxBox>
-                      <span>{option}</span>
+                      <span>{option.name}</span>
                     </SelectMenuItem>
                   </li>
                 ))}

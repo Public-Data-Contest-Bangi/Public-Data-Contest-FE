@@ -170,7 +170,7 @@ export const MapPlaceholderText = styled.span`
 export const MapLocateButton = styled.button`
   position: absolute;
   right: 16px;
-  bottom: 112px;
+  bottom: 80px;
   width: 40px;
   height: 40px;
   border-radius: 50%;
