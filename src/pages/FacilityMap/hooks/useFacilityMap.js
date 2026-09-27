@@ -153,9 +153,15 @@ export function useFacilityMap() {
       }
     });
 
-    if (closestFacility && closestFacilityDist <= 16) {
+        if (closestFacility && closestFacilityDist <= 16) {
+      const Tmapv2 = window.Tmapv2;
+      const coord = { latitude: closestFacility.latitude, longitude: closestFacility.longitude };
+
       setSelectedFacility(closestFacility);
       setSheetExpanded(false);
+      setArrival(closestFacility.name);
+      setArrivalCoord(coord);
+      showArrivalMarker(Tmapv2, map, coord);
       return;
     }
 

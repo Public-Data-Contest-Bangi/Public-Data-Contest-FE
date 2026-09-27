@@ -1,12 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-// 확인된 접근성 코드만 우선 연결 (장애인 화장실 / 엘리베이터)
-// 나머지(휠체어 접근/경사로/장애인 주차장)는 API 코드값 확인 전까지 필터에 반영되지 않음
-const ACCESSIBILITY_CODE_MAP = {
-  restroom: 'ACCESSIBLE_TOILET',
-  elevator: 'ELEVATOR',
-};
+import { ACCESSIBILITY_ITEMS, SPORT_OPTIONS } from '../utils/searchFilterOptions';
 
 export function useSearchFilter() {
   const navigate = useNavigate();
@@ -14,22 +8,23 @@ export function useSearchFilter() {
 
   const incomingKeyword = location.state?.keyword || '';
   const incomingCodes = location.state?.accessibilityCodes || [];
+  const incomingSportIds = location.state?.sportIds || [];
+  const incomingVoucherStatus = location.state?.voucherStatus || 'ALL';
 
-  const initialChecked = useMemo(
-    () => ({
-      wheelchair: false,
-      ramp: false,
-      elevator: incomingCodes.includes(ACCESSIBILITY_CODE_MAP.elevator),
-      restroom: incomingCodes.includes(ACCESSIBILITY_CODE_MAP.restroom),
-      parking: false,
-    }),
+  const initialChecked = useMemo(() => {
+    const result = {};
+    ACCESSIBILITY_ITEMS.forEach((item) => {
+      result[item.id] = item.code ? incomingCodes.includes(item.code) : false;
+    });
+    return result;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  }, []);
 
   const [checked, setChecked] = useState(initialChecked);
-  const [selectedSports, setSelectedSports] = useState([]);
-  const [voucher, setVoucher] = useState('전체');
+  const [selectedSports, setSelectedSports] = useState(
+    SPORT_OPTIONS.filter((s) => incomingSportIds.includes(s.id)).map((s) => s.name)
+  );
+  const [voucher, setVoucher] = useState(incomingVoucherStatus === 'AVAILABLE' ? '이용 가능' : '전체');
   const [sportMenuOpen, setSportMenuOpen] = useState(false);
   const sportRef = useRef(null);
 
@@ -48,7 +43,11 @@ export function useSearchFilter() {
   };
 
   const handleReset = () => {
-    setChecked({ wheelchair: false, ramp: false, elevator: false, restroom: false, parking: false });
+    const resetChecked = {};
+    ACCESSIBILITY_ITEMS.forEach((item) => {
+      resetChecked[item.id] = false;
+    });
+    setChecked(resetChecked);
     setSelectedSports([]);
     setVoucher('전체');
   };
@@ -57,27 +56,37 @@ export function useSearchFilter() {
     setSportMenuOpen((prev) => !prev);
   };
 
-  const toggleSport = (option) => {
+  const toggleSport = (name) => {
     setSelectedSports((prev) =>
-      prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
     );
   };
 
   const applyFilters = () => {
-    const accessibilityCodes = Object.entries(ACCESSIBILITY_CODE_MAP)
-      .filter(([id]) => checked[id])
-      .map(([, code]) => code);
+    const accessibilityCodes = ACCESSIBILITY_ITEMS
+      .filter((item) => item.code && checked[item.id])
+      .map((item) => item.code);
+
+    const sportIds = SPORT_OPTIONS
+      .filter((s) => selectedSports.includes(s.name))
+      .map((s) => s.id);
+
+    const voucherStatus = voucher === '이용 가능' ? 'AVAILABLE' : 'ALL';
 
     navigate('/search-result', {
-      state: { keyword: incomingKeyword, accessibilityCodes },
+      state: { keyword: incomingKeyword, accessibilityCodes, sportIds, voucherStatus },
       replace: true,
     });
   };
 
-  // 적용하지 않고 들어올 때 조건 그대로 되돌아감
   const closeFilter = () => {
     navigate('/search-result', {
-      state: { keyword: incomingKeyword, accessibilityCodes: incomingCodes },
+      state: {
+        keyword: incomingKeyword,
+        accessibilityCodes: incomingCodes,
+        sportIds: incomingSportIds,
+        voucherStatus: incomingVoucherStatus,
+      },
       replace: true,
     });
   };
