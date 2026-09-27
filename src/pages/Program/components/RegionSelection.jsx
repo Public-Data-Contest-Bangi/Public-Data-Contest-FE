@@ -11,13 +11,11 @@ import {
 
 import Button from "../../../components/common/Button";
 
-import {
-    PROVINCES,
-    REGION_DATA,
-} from "../constants/regionData";
-
 import mascotSearchImg from "../../../assets/images/mascot-search.png";
 import locationIcon from "../../../assets/icons/location-icon.png";
+
+import RegionSelectDropdown from "./RegionSelectDropdown";
+import useRegions from "../hooks/useRegions";
 
 import * as S from "./RegionSelection.styled";
 
@@ -28,11 +26,16 @@ export default function RegionSelection() {
     const selectedSports =
         location.state?.sports ?? [];
 
-    const [province, setProvince] =
-        useState("서울특별시");
-
-    const [district, setDistrict] =
-        useState("중구");
+    const {
+        province,
+        district,
+        provinces,
+        districts,
+        regionCode,
+        isLoading,
+        setDistrict,
+        selectProvince,
+    } = useRegions();
 
     const [openMenu, setOpenMenu] =
         useState(null);
@@ -41,7 +44,9 @@ export default function RegionSelection() {
     const districtRef = useRef(null);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (
+            event
+        ) => {
             const clickedProvince =
                 provinceRef.current?.contains(
                     event.target
@@ -73,37 +78,48 @@ export default function RegionSelection() {
         };
     }, []);
 
-    const handleSelectProvince = (value) => {
-        setProvince(value);
-
-        setDistrict(
-            REGION_DATA[value][0]
-        );
-
+    const handleProvinceSelect = (
+        value
+    ) => {
+        selectProvince(value);
         setOpenMenu(null);
     };
 
-    const handleSelectDistrict = (value) => {
+    const handleDistrictSelect = (
+        value
+    ) => {
         setDistrict(value);
         setOpenMenu(null);
     };
 
     const handleCurrentLocation = () => {
         if (!navigator.geolocation) {
+            console.error(
+                "현재 위치 기능을 지원하지 않습니다."
+            );
             return;
         }
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                console.log(
-                    "현재 위치:",
-                    position.coords.latitude,
-                    position.coords.longitude
-                );
+                const {
+                    latitude,
+                    longitude,
+                } = position.coords;
 
-                // TODO(API)
-                // 위도/경도를 행정구역으로 변환하는 API 연결 후
-                // province / district 변경
+                navigate(
+                    "/program-browse/results",
+                    {
+                        state: {
+                            sports:
+                                selectedSports,
+                            latitude,
+                            longitude,
+                            searchMode:
+                                "LOCATION",
+                        },
+                    }
+                );
             },
             (error) => {
                 console.error(
@@ -115,14 +131,49 @@ export default function RegionSelection() {
     };
 
     const handleSearch = () => {
-        navigate(
-            "/program-browse/results",
-            {
-                state: {
-                    sports: selectedSports,
-                    province,
-                    district,
-                },
+        if (!regionCode) {
+            console.error(
+                "regionCode가 없습니다."
+            );
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            console.error(
+                "현재 위치 기능을 지원하지 않습니다."
+            );
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const {
+                    latitude,
+                    longitude,
+                } = position.coords;
+
+                navigate(
+                    "/program-browse/results",
+                    {
+                        state: {
+                            sports:
+                                selectedSports,
+                            province,
+                            district,
+                            regionCode,
+                            latitude,
+                            longitude,
+                            searchMode:
+                                "REGION",
+                        },
+                    }
+                );
+            },
+            (error) => {
+                console.error(
+                    "위치 정보를 가져오지 못했습니다.",
+                    error
+                );
             }
         );
     };
@@ -140,7 +191,9 @@ export default function RegionSelection() {
                     </S.HeroText>
 
                     <S.Mascot
-                        src={mascotSearchImg}
+                        src={
+                            mascotSearchImg
+                        }
                         alt=""
                     />
                 </S.Hero>
@@ -159,10 +212,14 @@ export default function RegionSelection() {
 
                     <S.CurrentLocationButton
                         type="button"
-                        onClick={handleCurrentLocation}
+                        onClick={
+                            handleCurrentLocation
+                        }
                     >
                         <S.TargetIcon
-                            src={locationIcon}
+                            src={
+                                locationIcon
+                            }
                             alt=""
                         />
 
@@ -170,196 +227,69 @@ export default function RegionSelection() {
                     </S.CurrentLocationButton>
 
                     <S.Divider>
-                        <span>또는</span>
+                        <span>
+                            또는
+                        </span>
                     </S.Divider>
 
                     <S.SelectList>
-                        {/* 시/도 */}
-                        <S.SelectWrapper
-                            ref={provinceRef}
-                            onClick={() =>
+                        <RegionSelectDropdown
+                            type="province"
+                            value={province}
+                            placeholder="시/도 선택"
+                            options={provinces}
+                            isOpen={
+                                openMenu === "province"
+                            }
+                            isLoading={isLoading}
+                            wrapperRef={provinceRef}
+                            onToggle={() =>
                                 setOpenMenu(
-                                    openMenu ===
-                                        "province"
+                                    openMenu === "province"
                                         ? null
                                         : "province"
                                 )
                             }
-                        >
-                            <S.BuildingIcon
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <rect
-                                    x="5"
-                                    y="3"
-                                    width="14"
-                                    height="18"
-                                    rx="1"
-                                />
+                            onSelect={
+                                handleProvinceSelect
+                            }
+                        />
 
-                                <path d="M8 7H10M14 7H16M8 11H10M14 11H16M8 15H10M14 15H16M11 21V17H13V21" />
-                            </S.BuildingIcon>
-
-                            <S.SelectButton
-                                type="button"
-                                tabIndex={-1}
-                            >
-                                {province}
-                            </S.SelectButton>
-
-                            <svg
-                                className={
-                                    openMenu ===
-                                        "province"
-                                        ? "region-select__chevron region-select__chevron--open"
-                                        : "region-select__chevron"
-                                }
-                                width="12"
-                                height="12"
-                                viewBox="0 0 12 12"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M3 4.5L6 7.5L9 4.5"
-                                    stroke="#8C8C8C"
-                                    strokeWidth="1.4"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-
-                            {openMenu ===
-                                "province" && (
-                                    <S.SelectMenu
-                                        onClick={(event) =>
-                                            event.stopPropagation()
-                                        }
-                                    >
-                                        {PROVINCES.map(
-                                            (item) => (
-                                                <li
-                                                    key={
-                                                        item
-                                                    }
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            handleSelectProvince(
-                                                                item
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item
-                                                        }
-                                                    </button>
-                                                </li>
-                                            )
-                                        )}
-                                    </S.SelectMenu>
-                                )}
-                        </S.SelectWrapper>
-
-                        {/* 구/군 */}
-                        <S.SelectWrapper
-                            ref={districtRef}
-                            onClick={() =>
+                        <RegionSelectDropdown
+                            type="district"
+                            value={district}
+                            placeholder="시/군/구 선택"
+                            options={districts}
+                            isOpen={
+                                openMenu === "district"
+                            }
+                            isLoading={isLoading}
+                            disabled={!province}
+                            wrapperRef={districtRef}
+                            onToggle={() =>
                                 setOpenMenu(
-                                    openMenu ===
-                                        "district"
+                                    openMenu === "district"
                                         ? null
                                         : "district"
                                 )
                             }
-                        >
-                            <S.LocationIcon
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <path d="M12 2C8.1 2 5 5.1 5 9C5 14.3 12 22 12 22C12 22 19 14.3 19 9C19 5.1 15.9 2 12 2Z" />
-
-                                <circle
-                                    cx="12"
-                                    cy="9"
-                                    r="2.4"
-                                />
-                            </S.LocationIcon>
-
-                            <S.SelectButton
-                                type="button"
-                                tabIndex={-1}
-                            >
-                                {district}
-                            </S.SelectButton>
-
-                            <svg
-                                className={
-                                    openMenu ===
-                                        "district"
-                                        ? "region-select__chevron region-select__chevron--open"
-                                        : "region-select__chevron"
-                                }
-                                width="12"
-                                height="12"
-                                viewBox="0 0 12 12"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M3 4.5L6 7.5L9 4.5"
-                                    stroke="#8C8C8C"
-                                    strokeWidth="1.4"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-
-                            {openMenu ===
-                                "district" && (
-                                    <S.SelectMenu
-                                        onClick={(event) =>
-                                            event.stopPropagation()
-                                        }
-                                    >
-                                        {REGION_DATA[
-                                            province
-                                        ].map(
-                                            (item) => (
-                                                <li
-                                                    key={
-                                                        item
-                                                    }
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        onClick={() =>
-                                                            handleSelectDistrict(
-                                                                item
-                                                            )
-                                                        }
-                                                    >
-                                                        {
-                                                            item
-                                                        }
-                                                    </button>
-                                                </li>
-                                            )
-                                        )}
-                                    </S.SelectMenu>
-                                )}
-                        </S.SelectWrapper>
+                            onSelect={
+                                handleDistrictSelect
+                            }
+                        />
                     </S.SelectList>
                 </S.RegionSection>
             </S.Content>
 
             <S.BottomArea>
                 <Button
-                    onClick={handleSearch}
+                    onClick={
+                        handleSearch
+                    }
+                    disabled={
+                        isLoading ||
+                        !regionCode
+                    }
                 >
                     프로그램 검색하기
                 </Button>

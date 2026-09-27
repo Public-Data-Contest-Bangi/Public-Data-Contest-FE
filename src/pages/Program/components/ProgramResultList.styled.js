@@ -54,3 +54,14 @@ export const ProgramList = styled.div`
 
     gap: 16px;
 `;
+
+export const StatusText = styled.div`
+    width: 100%;
+
+    padding: 48px 0;
+
+    color: #888888;
+
+    font-size: 14px;
+    text-align: center;
+`;

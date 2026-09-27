@@ -90,3 +90,14 @@ export async function getFacilityPrograms(
 
   return response.data;
 }
+
+// 지역 조회
+export async function fetchRegions() {
+  const response = await client.get(
+    '/api/regions'
+  );
+
+  return (
+    response.data.data?.regions ?? []
+  );
+}
