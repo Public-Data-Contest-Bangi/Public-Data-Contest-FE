@@ -63,9 +63,10 @@ export const Hero = styled.section`
 `;
 
 export const LogoArea = styled.div`
-    margin-left: -20px;
     position: relative;
     z-index: 2;
+
+    margin-left: -20px;
 
     display: flex;
     align-items: center;
@@ -74,7 +75,7 @@ export const LogoArea = styled.div`
 `;
 
 export const LogoMark = styled.img`
-    width: 50x;
+    width: 50px;
     height: 50px;
 
     object-fit: contain;
@@ -186,8 +187,10 @@ export const FavoriteSection = styled.section`
     margin-top: 18px;
 `;
 
+/* 찜 목록 한 줄 가로 스크롤 */
 export const FavoriteScroller = styled.div`
     display: flex;
+    align-items: flex-start;
 
     gap: 12px;
 
@@ -197,6 +200,7 @@ export const FavoriteScroller = styled.div`
     overflow-x: auto;
 
     scrollbar-width: none;
+    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
         display: none;
@@ -204,17 +208,17 @@ export const FavoriteScroller = styled.div`
 `;
 
 export const FavoriteItem = styled.button`
-    width: 88px;
+    width: 76px;
 
     padding: 0;
-
-    flex-shrink: 0;
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    gap: 8px;
+    gap: 7px;
+
+    flex-shrink: 0;
 
     border: none;
 
@@ -226,71 +230,74 @@ export const FavoriteItem = styled.button`
 `;
 
 export const FavoriteImage = styled.img`
-    width: 88px;
-    height: 88px;
+    width: 72px;
+    height: 72px;
 
-    border-radius: 18px;
+    border-radius: 16px;
 
     object-fit: cover;
 
-    background: #f3f3f3;
+    background: #f2f2f2;
+    border: 1px solid #e1f4eb;
 `;
 
 export const FavoritePlaceholder = styled.div`
-    width: 88px;
-    height: 88px;
+    width: 72px;
+    height: 72px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 18px;
+    border-radius: 16px;
 
-    background: #f2f5f4;
+    background: #eefbf5;
 
-    color: #b6c6c0;
+    color: #40d293;
 
-    span {
-        font-size: 24px;
-    }
+    font-size: 24px;
 `;
 
 export const FavoriteName = styled.span`
-    width: 100%;
+    width: 76px;
 
     overflow: hidden;
 
-    color: #555555;
+    color: #444444;
 
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 500;
+
+    text-align: center;
 
     text-overflow: ellipsis;
     white-space: nowrap;
 `;
 
+/* 로딩 / 에러 */
 export const FavoriteState = styled.div`
     width: 100%;
 
-    padding: 28px 10px;
+    padding: 22px 10px;
 
     box-sizing: border-box;
 
-    border-radius: 16px;
+    border-radius: 14px;
 
     background: #f8f8f8;
 
     color: #999999;
 
-    font-size: 12px;
+    font-size: 11px;
     text-align: center;
 `;
 
+/* 찜 0개 */
 export const EmptyFavorite = styled.button`
     width: 100%;
-    min-height: 68px;
+    min-height: 64px;
 
-    padding: 12px 14px;
+    padding: 10px 14px;
 
     display: flex;
     align-items: center;
@@ -335,27 +342,30 @@ export const EmptyText = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 5px;
+    gap: 4px;
 
     strong {
         color: #222222;
 
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
     }
 
     span {
         color: #929292;
 
-        font-size: 11px;
+        font-size: 10px;
     }
 `;
 
 export const EmptyArrow = styled.span`
+    flex-shrink: 0;
+
     color: #8eaaa0;
 
-    font-size: 21px;
+    font-size: 20px;
 `;
+
 /* =========================
    MENU
 ========================= */
