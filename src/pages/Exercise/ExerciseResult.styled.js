@@ -27,7 +27,7 @@ export const Container = styled.div`
 export const Content = styled.main`
     flex: 1;
 
-    padding: 38px 18px 100px;
+    padding: 0 18px 100px;
 
     box-sizing: border-box;
 `;

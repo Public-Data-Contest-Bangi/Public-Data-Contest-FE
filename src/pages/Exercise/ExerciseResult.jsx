@@ -5,6 +5,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import RecommendResult from "../../assets/images/recommend-result.png";
+import Header from "../../components/common/Header";
 
 import BottomNav from "../../components/BottomNav";
 
@@ -119,8 +120,10 @@ function ExerciseResult() {
             `/exercise/${route}`,
             {
                 state: {
-                    sportId: exercise.sportId,
-                    sportName: exercise.sportName,
+                    sportId:
+                        exercise.sportId,
+                    sportName:
+                        exercise.sportName,
                     exerciseCharacteristics:
                         exercise.exerciseCharacteristics,
                     supportGuide:
@@ -134,9 +137,7 @@ function ExerciseResult() {
         <S.Page>
             <S.Container>
                 <S.Content>
-                    <S.Title>
-                        추천 결과
-                    </S.Title>
+                    <Header title="추천 결과" />
 
                     <S.ResultBanner>
                         <S.BannerText>
@@ -157,7 +158,9 @@ function ExerciseResult() {
                         </S.BannerText>
 
                         <S.BannerCharacter
-                            src={RecommendResult}
+                            src={
+                                RecommendResult
+                            }
                             alt="운동 추천 캐릭터"
                         />
                     </S.ResultBanner>
@@ -170,8 +173,9 @@ function ExerciseResult() {
                                 <S.MatchDot />
 
                                 <span>
-                                    초록색은 내가 선택한
-                                    조건과 일치하는
+                                    초록색은 내가
+                                    선택한 조건과
+                                    일치하는
                                     특성이에요.
                                 </span>
                             </S.MatchGuide>
@@ -179,8 +183,8 @@ function ExerciseResult() {
 
                     {isLoading ? (
                         <S.StatusText>
-                            추천 운동을 불러오는
-                            중이에요.
+                            추천 운동을
+                            불러오는 중이에요.
                         </S.StatusText>
                     ) : isError ? (
                         <S.StatusText>
@@ -264,7 +268,8 @@ function ExerciseResult() {
 
                         <S.MessageText>
                             <S.MessageTitle>
-                                어떤 운동이 나와도 좋아요!
+                                어떤 운동이 나와도
+                                좋아요!
                             </S.MessageTitle>
 
                             <S.MessageDescription>

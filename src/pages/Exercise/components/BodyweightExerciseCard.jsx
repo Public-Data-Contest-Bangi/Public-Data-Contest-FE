@@ -19,6 +19,18 @@ export default function BodyweightExerciseCard({
         supportGuide,
     } = exercise;
 
+    const hasRepetitions =
+        dose.repetitions !== null &&
+        dose.repetitions !== undefined &&
+        dose.repetitions !== "";
+
+    const exerciseAmount = hasRepetitions
+        ? dose.repetitions
+        : dose.durationSeconds;
+
+    const exerciseAmountLabel =
+        hasRepetitions ? "횟수" : "초";
+
     return (
         <S.Card>
             <S.TopButton
@@ -80,11 +92,11 @@ export default function BodyweightExerciseCard({
 
                 <S.DoseItem>
                     <S.DoseValue>
-                        {dose.repetitions ?? "-"}
+                        {exerciseAmount ?? "-"}
                     </S.DoseValue>
 
                     <S.DoseLabel>
-                        횟수
+                        {exerciseAmountLabel}
                     </S.DoseLabel>
                 </S.DoseItem>
 
