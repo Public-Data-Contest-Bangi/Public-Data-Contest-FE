@@ -47,7 +47,7 @@ export default function OperatingProgramCard({
 
                 <S.ProgramTitleArea>
                     <S.ProgramTitle>
-                        {program.title}
+                        {program.title || "-"}
                     </S.ProgramTitle>
 
                     {program.voucherAvailable && (
@@ -81,7 +81,7 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.className}
+                        {program.className || "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -91,7 +91,7 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.days}
+                        {program.days || "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -101,7 +101,7 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.time}
+                        {program.time || "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -118,7 +118,7 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.price}
+                        {program.price || "-"}
                     </S.Value>
                 </S.InfoRow>
             </S.InfoList>

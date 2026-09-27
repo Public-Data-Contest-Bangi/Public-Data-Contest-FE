@@ -15,28 +15,32 @@ export const Container = styled.div`
 export const Content = styled.main`
     flex: 1;
 
-    padding: 20px 28px 30px;
+    padding: 16px 24px 40px;
 
     box-sizing: border-box;
 `;
 
-/* 종목 태그 */
+/* =========================
+   종목 특성
+========================= */
+
+export const TagSection = styled.section`
+    margin-bottom: 20px;
+`;
 
 export const Tags = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
 
-    gap: 8px;
-
-    margin-bottom: 37px;
+    gap: 6px;
 `;
 
 export const Tag = styled.div`
     width: fit-content;
-    height: 32px;
+    min-height: 30px;
 
-    padding: 0 12px;
+    padding: 0 11px;
 
     display: flex;
     align-items: center;
@@ -46,34 +50,96 @@ export const Tag = styled.div`
 
     box-sizing: border-box;
 
-    border: 1px solid #aaaaaa;
-    border-radius: 8px;
+    border: 1px solid
+        ${({ $matched }) =>
+            $matched
+                ? "#40D293"
+                : "#D3D3D3"};
 
-    background: #ffffff;
+    border-radius: 9px;
 
-    color: #111111;
+    background: ${({ $matched }) =>
+        $matched
+            ? "#EDFAF5"
+            : "#FFFFFF"};
 
-    font-size: 14px;
-    font-weight: 500;
+    color: ${({ $matched }) =>
+        $matched
+            ? "#20B87D"
+            : "#444444"};
+
+    font-size: 12px;
+    font-weight: ${({ $matched }) =>
+        $matched ? 700 : 500};
 
     white-space: nowrap;
-    word-break: keep-all;
 `;
 
-/* 안내 문구 */
+export const MatchGuide = styled.div`
+    margin-top: 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #888888;
+
+    font-size: 11px;
+    font-weight: 400;
+`;
+
+export const MatchDot = styled.span`
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #40d293;
+`;
+
+/* =========================
+   운동 소개
+========================= */
 
 export const Intro = styled.section`
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    padding: 22px 20px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d9f3e8;
+    border-radius: 16px;
+
+    background: #f5fcf9;
+`;
+
+export const IntroBadge = styled.div`
+    width: fit-content;
+
+    margin-bottom: 12px;
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #ddf8ed;
+
+    color: #279c70;
+
+    font-size: 11px;
+    font-weight: 700;
 `;
 
 export const IntroTitle = styled.h2`
-    margin: 0 0 13px;
+    margin: 0 0 12px;
 
-    color: #000;
+    color: #173c2e;
 
-    font-size: 24px;
+    font-size: 23px;
     font-weight: 700;
-    line-height: normal;
+    line-height: 1.35;
 
     white-space: pre-line;
 `;
@@ -81,80 +147,143 @@ export const IntroTitle = styled.h2`
 export const IntroDescription = styled.p`
     margin: 0;
 
-    color: #222;
+    color: #65756e;
 
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 400;
-    line-height: normal;
+    line-height: 1.55;
+
+    word-break: keep-all;
 `;
 
-/* 시설 목록 */
+/* =========================
+   시설 영역
+========================= */
+
+export const FacilitySection = styled.section`
+    width: 100%;
+`;
+
+export const FacilityHeader = styled.div`
+    width: 100%;
+
+    margin-bottom: 16px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+`;
+
+export const FacilityTitle = styled.h3`
+    margin: 0 0 5px;
+
+    color: #111111;
+
+    font-size: 18px;
+    font-weight: 700;
+`;
+
+export const FacilityDescription = styled.p`
+    margin: 0;
+
+    color: #999999;
+
+    font-size: 11px;
+    font-weight: 400;
+`;
+
+export const FacilityCount = styled.span`
+    padding-bottom: 2px;
+
+    color: #40d293;
+
+    font-size: 12px;
+    font-weight: 700;
+`;
 
 export const FacilityList = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 20px;
+    gap: 12px;
 `;
+
+/* =========================
+   시설 카드
+========================= */
 
 export const FacilityCard = styled.button`
     width: 100%;
-    min-height: 107px;
+    min-height: 108px;
 
-    padding: 14px 13px;
+    padding: 14px;
 
     display: flex;
     align-items: center;
 
-    gap: 20px;
+    gap: 14px;
 
     box-sizing: border-box;
 
-    border: 1px solid #ababab;
-    border-radius: 8px;
+    border: 1px solid #e2e2e2;
+    border-radius: 14px;
 
     background: #ffffff;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.025);
 
     text-align: left;
 
     cursor: pointer;
 
+    transition:
+        transform 0.15s,
+        border-color 0.15s,
+        background 0.15s;
+
     &:active {
-        background: #f7f7f7;
+        transform: scale(0.99);
+
+        border-color: #b8ead5;
+
+        background: #f9fdfb;
     }
 `;
 
 export const FacilityImage = styled.img`
-    width: 71px;
-    height: 71px;
+    width: 76px;
+    height: 76px;
 
-    border-radius: 13px;
+    border-radius: 12px;
 
     object-fit: cover;
 
     flex-shrink: 0;
+
+    background: #f3f3f3;
 `;
 
 export const FacilityImagePlaceholder = styled.div`
-    width: 71px;
-    height: 71px;
+    width: 76px;
+    height: 76px;
 
-    border-radius: 13px;
+    border-radius: 12px;
 
-    background: #dedede;
+    background: #f0f0f0;
 
     flex-shrink: 0;
 `;
 
 export const FacilityInfo = styled.div`
     flex: 1;
-
     min-width: 0;
 
     display: flex;
     flex-direction: column;
 
-    gap: 9px;
+    gap: 8px;
 `;
 
 export const FacilityTop = styled.div`
@@ -163,17 +292,17 @@ export const FacilityTop = styled.div`
     display: flex;
     align-items: flex-start;
 
-    gap: 13px;
+    gap: 8px;
 `;
 
 export const FacilityName = styled.div`
     flex: 1;
 
-    color: #000;
+    color: #111111;
 
     font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
+    font-weight: 700;
+    line-height: 1.35;
 
     word-break: keep-all;
 `;
@@ -181,29 +310,72 @@ export const FacilityName = styled.div`
 export const Distance = styled.span`
     flex-shrink: 0;
 
-    color: #40D293;
+    color: #2cc68c;
 
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
 
     white-space: nowrap;
 `;
 
 export const Address = styled.div`
-    color: #747474;
+    display: -webkit-box;
 
-    font-size: 10px;
+    overflow: hidden;
+
+    color: #888888;
+
+    font-size: 11px;
     font-weight: 400;
-    line-height: normal;
+    line-height: 1.45;
+
+    word-break: keep-all;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 `;
+
+/* =========================
+   상태
+========================= */
 
 export const StateText = styled.div`
     width: 100%;
 
-    padding: 40px 0;
+    padding: 48px 0;
 
     color: #888888;
 
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
+`;
+
+export const EmptyBox = styled.div`
+    width: 100%;
+
+    padding: 34px 20px;
+
+    box-sizing: border-box;
+
+    border-radius: 14px;
+
+    background: #f8f8f8;
+
+    text-align: center;
+`;
+
+export const EmptyTitle = styled.div`
+    margin-bottom: 6px;
+
+    color: #555555;
+
+    font-size: 14px;
+    font-weight: 600;
+`;
+
+export const EmptyDescription = styled.div`
+    color: #999999;
+
+    font-size: 11px;
+    font-weight: 400;
 `;
