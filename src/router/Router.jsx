@@ -2,7 +2,6 @@ import SearchFilter from "../pages/SearchFilter/SearchFilter";
 import SearchResult from "../pages/SearchResult/SearchResult";
 import SearchEmpty from "../pages/SearchEmpty/SearchEmpty";
 import FacilityDetail from "../pages/FacilityDetail/FacilityDetail";
-import AccessibleRoute from "../pages/AccessibleRoute/AccessibleRoute";
 import DepartureSearch from "../pages/DepartureSearch/DepartureSearch";
 import FacilitySearch from "../pages/FacilitySearch/FacilitySearch";
 import FacilityMap from "../pages/FacilityMap/FacilityMap";
@@ -190,7 +189,7 @@ function Router() {
 
                 <Route
                     path="/accessible-route"
-                    element={<AccessibleRoute />}
+                    element={<FacilityMap />}
                 />
 
                 <Route
