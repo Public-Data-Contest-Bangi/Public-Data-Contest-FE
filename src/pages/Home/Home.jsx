@@ -1,39 +1,90 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Home.css';
-import mascotImg from '../../assets/images/mascot-dumbbell.png';
-import searchProgramImg from '../../assets/images/icon-search-program.png';
-import recommendImg from '../../assets/images/icon-exercise-recommend.png';
-import logoMark from '../../assets/images/logo-mark.png';
-import BottomNav from '../../components/BottomNav';
-import useMyPageProfile from '../MyPage/hooks/useMyPageProfile';
-import { getFavoriteFacilities } from '../../api/favorite';
-import { getCurrentCoords } from '../../utils/geolocation';
+import {
+  useEffect,
+  useState,
+} from "react";
+import { useNavigate } from "react-router-dom";
+
+import mascotImg from "../../assets/images/mascot-dumbbell.png";
+import searchProgramImg from "../../assets/images/icon-search-program.png";
+import recommendImg from "../../assets/images/icon-exercise-recommend.png";
+import logoMark from "../../assets/images/logo-mark.png";
+
+import BottomNav from "../../components/BottomNav";
+
+import useMyPageProfile from "../MyPage/hooks/useMyPageProfile";
+
+import {
+  getFavoriteFacilities,
+} from "../../api/favorite";
+
+import {
+  getCurrentCoords,
+} from "../../utils/geolocation";
+
+import * as S from "./Home.styled";
 
 function Home() {
   const navigate = useNavigate();
-  const { nickname, isLoading: profileLoading } = useMyPageProfile();
 
-  const [favorites, setFavorites] = useState([]);
+  const {
+    nickname,
+    isLoading: profileLoading,
+  } = useMyPageProfile();
+
+  const [favorites, setFavorites] =
+    useState([]);
+
+  const [
+    favoritesLoading,
+    setFavoritesLoading,
+  ] = useState(true);
+
+  const [
+    favoritesError,
+    setFavoritesError,
+  ] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
     async function loadFavorites() {
       try {
-        const coords = await getCurrentCoords();
-        const response = await getFavoriteFacilities({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          page: 0,
-          size: 3,
-        });
+        setFavoritesLoading(true);
+        setFavoritesError(false);
+
+        const coords =
+          await getCurrentCoords();
+
+        const response =
+          await getFavoriteFacilities({
+            latitude:
+              coords.latitude,
+            longitude:
+              coords.longitude,
+            page: 0,
+            size: 3,
+          });
 
         if (!cancelled) {
-          setFavorites(response.data?.facilities ?? []);
+          setFavorites(
+            response.data
+              ?.facilities ?? []
+          );
         }
       } catch (error) {
-        console.error('홈 화면 찜한 시설 조회 실패', error);
+        console.error(
+          "홈 화면 찜한 시설 조회 실패",
+          error
+        );
+
+        if (!cancelled) {
+          setFavoritesError(true);
+          setFavorites([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setFavoritesLoading(false);
+        }
       }
     }
 
@@ -45,136 +96,240 @@ function Home() {
   }, []);
 
   return (
-    <div className="home">
-      <img src={logoMark} alt="Dfit" className="home__logo-mark" />
+    <S.Page>
+      <S.Content>
+        <S.Hero>
+          <S.LogoArea>
+            <S.LogoMark
+              src={logoMark}
+              alt="Dfit"
+            />
 
-      <span className="home__logo-text">fit</span>
+            <S.LogoText>
+              fit
+            </S.LogoText>
+          </S.LogoArea>
 
-      <img src={mascotImg} alt="Dfit 마스코트" className="home__mascot" />
+          <S.Greeting>
+            {profileLoading
+              ? "오늘도"
+              : `${nickname}님,`}
+            <br />
+            오늘도 움직여볼까요?
+          </S.Greeting>
 
-      <p className="home__greeting">
-        {profileLoading ? '' : nickname}님,
-        <br />
-        오늘도 움직여볼까요?
-      </p>
+          <S.Mascot
+            src={mascotImg}
+            alt=""
+          />
+        </S.Hero>
 
-      <div className="home__body">
-        <section className="home__liked">
-          <div className="home__liked-scroll">
-            <div className="liked-item">
-              <div
-                className="liked-card liked-card--active"
-                onClick={() => navigate('/favorites')}
-                role="button"
-                tabIndex={0}
-              >
-                <svg
-                  className="liked-card__heart"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 21s-7.2-4.35-9.6-8.55C0.6 9.15 1.65 5.4 5.1 4.35c2.55-0.75 5.1 0.3 6.9 2.55 1.8-2.25 4.35-3.3 6.9-2.55 3.45 1.05 4.5 4.8 2.7 8.1C19.2 16.65 12 21 12 21Z"
-                    stroke="#ffffff"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                  />
-                </svg>
+        <S.FavoriteSection>
+          <S.SectionHeader>
+            <S.SectionTitle>
+              찜한 시설
+            </S.SectionTitle>
 
-                <span className="liked-card__label">찜한 시설</span>
-              </div>
-            </div>
+            <S.MoreButton
+              type="button"
+              onClick={() =>
+                navigate("/favorites")
+              }
+            >
+              전체보기
+              <span>›</span>
+            </S.MoreButton>
+          </S.SectionHeader>
 
-            {favorites.map((facility) => (
-              <div
-                className="liked-item"
-                key={facility.facilityId}
-                onClick={() => navigate(`/facility-detail/${facility.facilityId}`)}
-                role="button"
-                tabIndex={0}
-              >
-                <div
-                  className="liked-card liked-card--placeholder"
-                  style={
-                    facility.representativeImageUrl
-                      ? {
-                          backgroundImage: `url(${facility.representativeImageUrl})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
+          {favoritesLoading ? (
+            <S.FavoriteState>
+              찜한 시설을
+              불러오는 중이에요.
+            </S.FavoriteState>
+          ) : favoritesError ? (
+            <S.FavoriteState>
+              찜한 시설을
+              불러오지 못했어요.
+            </S.FavoriteState>
+          ) : favorites.length ===
+            0 ? (
+            <S.EmptyFavorite
+              type="button"
+              onClick={() =>
+                navigate(
+                  "/facility-search"
+                )
+              }
+            >
+              <S.EmptyHeart>
+                ♡
+              </S.EmptyHeart>
+
+              <S.EmptyText>
+                <strong>
+                  아직 찜한 시설이
+                  없어요
+                </strong>
+
+                <span>
+                  마음에 드는 시설을
+                  찜해보세요!
+                </span>
+              </S.EmptyText>
+
+              <S.EmptyArrow>
+                ›
+              </S.EmptyArrow>
+            </S.EmptyFavorite>
+          ) : (
+            <S.FavoriteScroller>
+              {favorites.map(
+                (
+                  facility
+                ) => (
+                  <S.FavoriteItem
+                    key={
+                      facility.facilityId
+                    }
+                    type="button"
+                    onClick={() =>
+                      navigate(
+                        `/facility-detail/${facility.facilityId}`
+                      )
+                    }
+                  >
+                    {facility.representativeImageUrl ? (
+                      <S.FavoriteImage
+                        src={
+                          facility.representativeImageUrl
                         }
-                      : undefined
+                        alt={
+                          facility.name
+                        }
+                      />
+                    ) : (
+                      <S.FavoritePlaceholder>
+                        <span>
+                          ♡
+                        </span>
+                      </S.FavoritePlaceholder>
+                    )}
+
+                    <S.FavoriteName>
+                      {
+                        facility.name
+                      }
+                    </S.FavoriteName>
+                  </S.FavoriteItem>
+                )
+              )}
+            </S.FavoriteScroller>
+          )}
+        </S.FavoriteSection>
+
+        <S.MenuSection>
+          <S.MenuHeader>
+            <S.SectionTitle>
+              무엇을 해볼까요?
+            </S.SectionTitle>
+          </S.MenuHeader>
+
+          <S.MenuGrid>
+            <S.RecommendCard
+              type="button"
+              onClick={() =>
+                navigate("/exercise-recommend")
+              }
+            >
+              <S.CardText>
+                <S.MenuLabel>
+                  운동 추천
+                </S.MenuLabel>
+
+                <S.MenuDescription>
+                  나에게 맞는
+                  <br />
+                  운동을 찾아봐요
+                </S.MenuDescription>
+              </S.CardText>
+
+              <S.RecommendImage
+                src={recommendImg}
+                alt=""
+              />
+            </S.RecommendCard>
+
+            <S.SideMenu>
+              <S.SmallMenuCard
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/facility-search"
+                  )
+                }
+              >
+                <S.CardText>
+                  <S.MenuLabel>
+                    시설 검색
+                  </S.MenuLabel>
+
+                  <S.SmallDescription>
+                    가까운 
+                    < br/>
+                    체육시설
+                  </S.SmallDescription>
+                </S.CardText>
+
+                <S.MenuIcon
+                  $position="left"
+                  $image={
+                    searchProgramImg
                   }
                 />
+              </S.SmallMenuCard>
 
-                <span className="liked-item__caption">{facility.name}</span>
-              </div>
-            ))}
+              <S.SmallMenuCard
+                type="button"
+                onClick={() =>
+                  navigate(
+                    "/program-browse"
+                  )
+                }
+              >
+                <S.CardText>
+                  <S.MenuLabel>
+                    프로그램
+                    <br />
+                    둘러보기
+                  </S.MenuLabel>
+                </S.CardText>
 
-            <div className="liked-item">
-              <div className="liked-card liked-card--placeholder liked-card--peek" />
-            </div>
-          </div>
-        </section>
+                <S.MenuIcon
+                  $position="right"
+                  $image={
+                    searchProgramImg
+                  }
+                />
+              </S.SmallMenuCard>
+            </S.SideMenu>
+          </S.MenuGrid>
+        </S.MenuSection>
 
-        <section className="home__menu">
-          {/* 운동 추천 */}
-          <div
-            className="menu-card menu-card--large"
-            onClick={() => navigate('/exercise-recommend')}
-            role="button"
-            tabIndex={0}
-          >
-            <span className="menu-card__title">운동 추천</span>
+        <S.InfoBanner>
+          <S.InfoIcon>
+            i
+          </S.InfoIcon>
 
-            <img src={recommendImg} alt="운동 추천" className="menu-card__illust-recommend" />
-          </div>
-
-          <div className="home__menu-side">
-            <div
-              className="menu-card menu-card--small"
-              onClick={() => navigate('/facility-search')}
-              role="button"
-              tabIndex={0}
-            >
-              <span className="menu-card__title">시설 검색</span>
-
-              <div
-                className="menu-card__icon menu-card__icon--search"
-                style={{
-                  backgroundImage: `url(${searchProgramImg})`,
-                }}
-              />
-            </div>
-
-            <div
-              className="menu-card menu-card--small"
-              onClick={() => navigate('/program-browse')}
-              role="button"
-              tabIndex={0}
-            >
-              <span className="menu-card__title">
-                프로그램
-                <br />
-                둘러보기
-              </span>
-
-              <div
-                className="menu-card__icon menu-card__icon--program"
-                style={{
-                  backgroundImage: `url(${searchProgramImg})`,
-                }}
-              />
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <p className="home__banner">모든 체육시설의 무장애 경로는 지도에서 확인할 수 있어요!</p>
+          <span>
+            모든 체육시설의 무장애
+            경로는 지도에서 확인할 수
+            있어요.
+          </span>
+        </S.InfoBanner>
+      </S.Content>
 
       <BottomNav />
-    </div>
+    </S.Page>
   );
 }
 
