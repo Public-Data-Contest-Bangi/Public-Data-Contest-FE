@@ -54,6 +54,7 @@ export function useDepartureSearch() {
     if (mode === 'arrival') {
       navigate('/facility-map', {
         state: {
+          routeMode: location.state?.routeMode,
           arrival: place.name,
           arrivalCoord: { latitude: place.latitude, longitude: place.longitude },
         },
