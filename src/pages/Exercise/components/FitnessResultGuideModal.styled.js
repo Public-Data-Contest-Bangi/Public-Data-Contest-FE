@@ -43,20 +43,20 @@ export const Modal = styled.div`
 `;
 
 export const ModalCharacter = styled.img`
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
 
-    margin-bottom: 5px;
+    margin-bottom: -10px;
 
     object-fit: contain;
 `;
 
 export const Title = styled.h2`
-    margin: 0 0 10px;
+    margin: 0 0 15px;
 
     color: #111111;
 
-    font-size: 19px;
+    font-size: 21px;
     font-weight: 700;
     line-height: 1.4;
 `;
@@ -66,7 +66,7 @@ export const Description = styled.p`
 
     color: #3f3f3f;
 
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 1.65;
 
@@ -77,11 +77,11 @@ export const Description = styled.p`
 `;
 
 export const SubText = styled.p`
-    margin: 8px 0 22px;
+    margin: 10px 0 12px;
 
     color: #888888;
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 400;
     line-height: 1.55;
 `;

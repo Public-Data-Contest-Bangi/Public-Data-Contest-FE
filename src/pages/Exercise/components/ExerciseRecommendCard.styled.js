@@ -42,7 +42,7 @@ export const CardTitle = styled.span`
     color: #111111;
 
     font-size: 19px;
-    font-weight: 600;
+    font-weight: 700;
 `;
 
 export const CardDescription = styled.span`

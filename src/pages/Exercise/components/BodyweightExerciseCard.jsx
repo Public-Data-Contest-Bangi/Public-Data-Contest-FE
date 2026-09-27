@@ -73,10 +73,6 @@ export default function BodyweightExerciseCard({
                 <S.Arrow $open={isOpen} />
             </S.TopButton>
 
-            <S.Reason>
-                {reason}
-            </S.Reason>
-
             <S.DoseBox>
                 <S.DoseItem>
                     <S.DoseValue>

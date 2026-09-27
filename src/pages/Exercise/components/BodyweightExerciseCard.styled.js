@@ -21,7 +21,7 @@ export const TopButton = styled.button`
     display: flex;
     align-items: flex-start;
 
-    gap: 12px;
+    gap: 20px;
 
     border: none;
 
@@ -41,7 +41,7 @@ export const TitleRow = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 8px;
+    gap: 10px;
 
     margin-bottom: 9px;
 `;
@@ -65,7 +65,8 @@ export const TagList = styled.div`
     display: flex;
     flex-wrap: wrap;
 
-    gap: 5px;
+    gap: 7px;
+    margin-left: 17px;
 `;
 
 export const Tag = styled.span`
@@ -101,20 +102,9 @@ export const Arrow = styled.span`
     transition: transform 0.2s;
 `;
 
-export const Reason = styled.p`
-    margin: 15px 0;
-
-    color: #737373;
-
-    font-size: 11.5px;
-    font-weight: 400;
-    line-height: 1.55;
-
-    word-break: keep-all;
-`;
-
 export const DoseBox = styled.div`
     width: 100%;
+    margin-top: 8px;
 
     padding: 10px 2px;
 
@@ -148,7 +138,7 @@ export const DoseValue = styled.strong`
 export const DoseLabel = styled.span`
     color: #999999;
 
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 400;
 `;
 

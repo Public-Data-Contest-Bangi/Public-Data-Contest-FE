@@ -392,7 +392,7 @@ export const RecommendCard = styled.button`
     border: none;
     border-radius: 18px;
 
-    background: #effbf6;
+    background: #f6f6f6;
 
     font-family: inherit;
     text-align: left;
@@ -452,7 +452,7 @@ export const MenuLabel = styled.div`
     color: #171717;
 
     font-size: 15px;
-    font-weight: 800;
+    font-weight: 700;
     line-height: 1.35;
 `;
 

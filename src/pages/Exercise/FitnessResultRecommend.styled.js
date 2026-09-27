@@ -75,3 +75,47 @@ export const TabButton = styled.button`
 
     cursor: pointer;
 `;
+
+export const DetailGuide = styled.div`
+    width: 100%;
+
+    margin: -20px 0 15px;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    box-sizing: border-box;
+
+    border-radius: 10px;
+
+    background: #f5fcf9;
+
+    color: #6f7f78;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+`;
+
+export const GuideIcon = styled.span`
+    width: 17px;
+    height: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #dff8ed;
+
+    color: #27b981;
+
+    font-size: 10px;
+    font-weight: 700;
+`;

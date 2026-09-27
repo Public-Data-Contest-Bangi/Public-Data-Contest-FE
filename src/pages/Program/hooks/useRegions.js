@@ -15,8 +15,13 @@ export default function useRegions() {
     const [province, setProvince] =
         useState("");
 
-    const [district, setDistrict] =
+    const [city, setCity] =
         useState("");
+
+    const [
+        subDistrict,
+        setSubDistrict,
+    ] = useState("");
 
     const [isLoading, setIsLoading] =
         useState(true);
@@ -72,7 +77,7 @@ export default function useRegions() {
         };
     }, []);
 
-    // 시/도 목록
+    // 1단계: 시/도 목록
     const provinces = useMemo(
         () => [
             ...new Set(
@@ -85,61 +90,154 @@ export default function useRegions() {
         [regions]
     );
 
-    // 선택한 시/도에 해당하는 구/군 목록
-    const districts = useMemo(
+    // 선택된 시/도의 지역 데이터
+    const provinceRegions = useMemo(
         () =>
-            regions
-                .filter(
-                    (region) =>
-                        region.provinceName ===
-                        province
-                )
-                .map(
-                    (region) =>
-                        region.districtName
-                ),
+            regions.filter(
+                (region) =>
+                    region.provinceName ===
+                    province
+            ),
         [regions, province]
     );
 
-    // 선택한 시/도 + 구/군의 regionCode
+    // 2단계: 시/군/구 목록
+    //
+    // 예)
+    // "고양시"        -> "고양시"
+    // "고양시 덕양구" -> "고양시"
+    // "마포구"        -> "마포구"
+    const cities = useMemo(
+        () => [
+            ...new Set(
+                provinceRegions
+                    .map((region) => {
+                        const name =
+                            region.districtName?.trim();
+
+                        if (!name) {
+                            return null;
+                        }
+
+                        return name.split(
+                            " "
+                        )[0];
+                    })
+                    .filter(Boolean)
+            ),
+        ],
+        [provinceRegions]
+    );
+
+    // 3단계: 선택한 시 아래의 구 목록
+    //
+    // 예)
+    // city = "고양시"
+    // "고양시 덕양구" -> "덕양구"
+    // "고양시 일산동구" -> "일산동구"
+    const subDistricts = useMemo(
+        () => {
+            if (!city) {
+                return [];
+            }
+
+            return [
+                ...new Set(
+                    provinceRegions
+                        .filter((region) =>
+                            region.districtName?.startsWith(
+                                `${city} `
+                            )
+                        )
+                        .map((region) =>
+                            region.districtName
+                                .slice(
+                                    city.length
+                                )
+                                .trim()
+                        )
+                        .filter(Boolean)
+                ),
+            ];
+        },
+        [
+            provinceRegions,
+            city,
+        ]
+    );
+
+    // 최종 검색에 사용할 regionCode
     const regionCode = useMemo(
-        () =>
-            regions.find(
+        () => {
+            if (!province || !city) {
+                return undefined;
+            }
+
+            // 하위 구까지 선택한 경우
+            if (subDistrict) {
+                const fullName =
+                    `${city} ${subDistrict}`;
+
+                return regions.find(
+                    (region) =>
+                        region.provinceName ===
+                            province &&
+                        region.districtName ===
+                            fullName
+                )?.regionCode;
+            }
+
+            // 서울특별시 → 마포구처럼
+            // 2단계에서 끝나는 지역
+            return regions.find(
                 (region) =>
                     region.provinceName ===
                         province &&
                     region.districtName ===
-                        district
-            )?.regionCode,
+                        city
+            )?.regionCode;
+        },
         [
             regions,
             province,
-            district,
+            city,
+            subDistrict,
         ]
     );
 
-    // 시/도 선택
     const selectProvince = (
         value
     ) => {
         setProvince(value);
 
-        // 시/도가 변경되면
-        // 구/군은 다시 선택하도록 초기화
-        setDistrict("");
+        setCity("");
+        setSubDistrict("");
+    };
+
+    const selectCity = (
+        value
+    ) => {
+        setCity(value);
+
+        setSubDistrict("");
     };
 
     return {
         province,
-        district,
+        city,
+        subDistrict,
+
         provinces,
-        districts,
+        cities,
+        subDistricts,
+
         regionCode,
 
         isLoading,
         error,
 
-        setDistrict,
         selectProvince,
+        selectCity,
+        setSubDistrict,
     };
 }

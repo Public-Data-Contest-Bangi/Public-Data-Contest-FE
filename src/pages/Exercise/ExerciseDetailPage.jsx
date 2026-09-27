@@ -111,24 +111,6 @@ function ExerciseDetailPage() {
                         </S.TagSection>
                     )}
 
-                    <S.Intro>
-                        <S.IntroBadge>
-                            첫 운동 가이드
-                        </S.IntroBadge>
-
-                        <S.IntroTitle>
-                            처음이라면
-                            {"\n"}
-                            기초부터 시작해요
-                        </S.IntroTitle>
-
-                        <S.IntroDescription>
-                            {exercise?.supportGuide ||
-                                location.state
-                                    ?.supportGuide ||
-                                "가까운 체험 가능 시설을 알려드릴게요."}
-                        </S.IntroDescription>
-                    </S.Intro>
 
                     <S.FacilitySection>
                         <S.FacilityHeader>
