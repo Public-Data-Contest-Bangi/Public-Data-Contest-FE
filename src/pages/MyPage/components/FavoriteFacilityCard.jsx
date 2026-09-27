@@ -36,9 +36,10 @@ export default function FavoriteFacilityCard({
     const {
         name,
         imageUrl,
+        address,
         distance,
         sports,
-        accessibility,
+        accessibility = [],
     } = facility;
 
     const handleHeartClick = (event) => {
@@ -47,61 +48,81 @@ export default function FavoriteFacilityCard({
     };
 
     return (
-        <S.Card onClick={onClick}>
-            <S.CardImage
-                $imageUrl={imageUrl}
-            />
+        <S.Card
+            type="button"
+            onClick={onClick}
+        >
+            <S.CardImageArea>
+                {imageUrl ? (
+                    <S.CardImage
+                        src={imageUrl}
+                        alt={name}
+                    />
+                ) : (
+                    <S.ImagePlaceholder>
+                        ♡
+                    </S.ImagePlaceholder>
+                )}
+            </S.CardImageArea>
 
             <S.CardBody>
-                <S.CardTitleRow>
+                <S.TopRow>
                     <S.CardName>
                         {name}
                     </S.CardName>
 
-                    <S.CardRight>
-                        {distance && (
-                            <S.CardDistance>
-                                {distance}
-                            </S.CardDistance>
-                        )}
+                    <S.HeartButton
+                        type="button"
+                        aria-label="즐겨찾기 취소"
+                        onClick={handleHeartClick}
+                    >
+                        ♥
+                    </S.HeartButton>
+                </S.TopRow>
 
-                        <S.HeartButton
-                            type="button"
-                            aria-label="즐겨찾기 취소"
-                            onClick={
-                                handleHeartClick
-                            }
-                        >
-                            ♥
-                        </S.HeartButton>
-                    </S.CardRight>
-                </S.CardTitleRow>
+                <S.MetaRow>
+                    {address && (
+                        <S.Address>
+                            {address}
+                        </S.Address>
+                    )}
+
+                    {distance && (
+                        <S.Distance>
+                            {distance}
+                        </S.Distance>
+                    )}
+                </S.MetaRow>
 
                 {sports && (
-                    <S.CardSports>
+                    <S.SportRow>
                         <S.SportIcon
                             src={sportTagIcon}
                             alt=""
                         />
-
-                        {sports}
-                    </S.CardSports>
+                        <span>{sports}</span>
+                    </S.SportRow>
                 )}
 
-                <S.CardAccessRow>
-                    {accessibility.map(
-                        (type) => (
-                            <AccessIcon
-                                key={type}
-                                type={type}
-                            />
-                        )
-                    )}
+                <S.BottomRow>
+                    <S.AccessList>
+                        {accessibility.map(
+                            (type) => (
+                                <S.AccessBadge
+                                    key={type}
+                                >
+                                    <AccessIcon
+                                        type={type}
+                                    />
+                                </S.AccessBadge>
+                            )
+                        )}
+                    </S.AccessList>
 
                     <S.CardChevron>
                         ›
                     </S.CardChevron>
-                </S.CardAccessRow>
+                </S.BottomRow>
             </S.CardBody>
         </S.Card>
     );

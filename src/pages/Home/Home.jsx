@@ -183,46 +183,34 @@ function Home() {
             </S.EmptyFavorite>
           ) : (
             <S.FavoriteScroller>
-              {favorites.map(
-                (
-                  facility
-                ) => (
-                  <S.FavoriteItem
-                    key={
-                      facility.facilityId
-                    }
-                    type="button"
-                    onClick={() =>
-                      navigate(
-                        `/facility-detail/${facility.facilityId}`
-                      )
-                    }
-                  >
-                    {facility.representativeImageUrl ? (
-                      <S.FavoriteImage
-                        src={
-                          facility.representativeImageUrl
-                        }
-                        alt={
-                          facility.name
-                        }
-                      />
-                    ) : (
-                      <S.FavoritePlaceholder>
-                        <span>
-                          ♡
-                        </span>
-                      </S.FavoritePlaceholder>
-                    )}
-
-                    <S.FavoriteName>
-                      {
-                        facility.name
+              {favorites.map((facility) => (
+                <S.FavoriteItem
+                  key={facility.facilityId}
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      `/facility-detail/${facility.facilityId}`
+                    )
+                  }
+                >
+                  {facility.representativeImageUrl ? (
+                    <S.FavoriteImage
+                      src={
+                        facility.representativeImageUrl
                       }
-                    </S.FavoriteName>
-                  </S.FavoriteItem>
-                )
-              )}
+                      alt={facility.name}
+                    />
+                  ) : (
+                    <S.FavoritePlaceholder>
+                      ♡
+                    </S.FavoritePlaceholder>
+                  )}
+
+                  <S.FavoriteName>
+                    {facility.name}
+                  </S.FavoriteName>
+                </S.FavoriteItem>
+              ))}
             </S.FavoriteScroller>
           )}
         </S.FavoriteSection>
@@ -274,8 +262,8 @@ function Home() {
                   </S.MenuLabel>
 
                   <S.SmallDescription>
-                    가까운 
-                    < br/>
+                    가까운
+                    < br />
                     체육시설
                   </S.SmallDescription>
                 </S.CardText>

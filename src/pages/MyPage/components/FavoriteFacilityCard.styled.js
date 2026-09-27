@@ -1,96 +1,173 @@
 import styled from "styled-components";
 
-export const Card = styled.div`
+export const Card = styled.button`
     width: 100%;
+    min-height: 126px;
 
-    border: 1px solid #dedede;
-    border-radius: 10px;
+    padding: 12px;
 
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #eeeeee;
+    border-radius: 17px;
 
     background: #ffffff;
 
+    font-family: inherit;
+    text-align: left;
+
     cursor: pointer;
 
-    box-sizing: border-box;
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease;
+
+    &:active {
+        background: #f7fcfa;
+        transform: scale(0.99);
+    }
 `;
 
-export const CardImage = styled.div`
+export const CardImageArea = styled.div`
+    width: 92px;
+    height: 102px;
+
+    flex-shrink: 0;
+`;
+
+export const CardImage = styled.img`
     width: 100%;
-    height: 150px;
+    height: 100%;
 
-    background: #e5e5e5;
-    background-image: ${({ $imageUrl }) =>
-        $imageUrl
-            ? `url(${$imageUrl})`
-            : "none"};
+    border-radius: 14px;
 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    object-fit: cover;
+
+    background: #f2f4f3;
+`;
+
+export const ImagePlaceholder = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eef9f4;
+
+    color: #40d293;
+
+    font-size: 29px;
+    font-weight: 300;
 `;
 
 export const CardBody = styled.div`
-    padding: 12px 12px 14px;
-`;
+    flex: 1;
+    min-width: 0;
 
-export const CardTitleRow = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
 
-    margin-bottom: 5px;
+    gap: 7px;
 `;
 
-export const CardName = styled.h3`
-    margin: 0;
+export const TopRow = styled.div`
+    width: 100%;
 
-    font-size: 17px;
-    font-weight: 700;
-
-    color: #1a1a1a;
-`;
-
-export const CardRight = styled.div`
     display: flex;
     align-items: center;
 
     gap: 8px;
 `;
 
-export const CardDistance = styled.span`
-    font-size: 12px;
-    font-weight: 600;
+export const CardName = styled.div`
+    flex: 1;
+    min-width: 0;
 
-    color: #3d3d3d;
+    overflow: hidden;
+
+    color: #181818;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
 export const HeartButton = styled.button`
+    width: 29px;
+    height: 29px;
+
     padding: 0;
 
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border: none;
-    background: transparent;
+    border-radius: 50%;
 
-    font-size: 23px;
-    line-height: 1;
+    background: #edfaf5;
 
-    color: #40D293;
+    color: #40d293;
+
+    font-size: 16px;
 
     cursor: pointer;
 `;
 
-export const CardSports = styled.div`
+export const MetaRow = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 4px;
+    gap: 8px;
+`;
 
-    margin-bottom: 10px;
+export const Address = styled.div`
+    flex: 1;
+    min-width: 0;
 
-    font-size: 12px;
+    overflow: hidden;
+
+    color: #999999;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+`;
+
+export const Distance = styled.span`
+    flex-shrink: 0;
+
+    color: #40c991;
+
+    font-size: 11px;
+    font-weight: 700;
+`;
+
+export const SportRow = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: #666666;
+
+    font-size: 10.5px;
     font-weight: 500;
-
-    color: #555555;
 `;
 
 export const SportIcon = styled.img`
@@ -100,28 +177,44 @@ export const SportIcon = styled.img`
     object-fit: contain;
 `;
 
-export const CardAccessRow = styled.div`
+export const BottomRow = styled.div`
+    margin-top: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const AccessList = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 7px;
+    gap: 5px;
+`;
+
+export const AccessBadge = styled.div`
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #f2faf6;
 `;
 
 export const AccessIcon = styled.img`
-    width: 36px;
-    height: 36px;
+    width: 15px;
+    height: 15px;
 
     object-fit: contain;
 `;
 
 export const CardChevron = styled.span`
-    margin-left: auto;
-    margin-right: 3px;
+    color: #aaaaaa;
 
-    font-size: 32px;
+    font-size: 22px;
     font-weight: 300;
-    line-height: 1;
-
-    color: #1a1a1a;
 `;
-
