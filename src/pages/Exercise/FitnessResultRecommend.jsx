@@ -72,20 +72,28 @@ function FitnessResultRecommend() {
                     </S.TabContainer>
 
                     {activeTab === "sport" ? (
-                        <SportRecommendationTab
-                            weakestCategory={
-                                weakestCategory
-                            }
-                            recommendations={
-                                recommendations
-                            }
-                            isLoading={
-                                isSportLoading
-                            }
-                            error={
-                                sportError
-                            }
-                        />
+                        <> <S.DetailGuide>
+                            <S.GuideIcon>i</S.GuideIcon>
+
+                            <span>
+                                추천 종목을 눌러 가까운 체험 시설을 확인해보세요.
+                            </span>
+                        </S.DetailGuide>
+                            <SportRecommendationTab
+                                weakestCategory={
+                                    weakestCategory
+                                }
+                                recommendations={
+                                    recommendations
+                                }
+                                isLoading={
+                                    isSportLoading
+                                }
+                                error={
+                                    sportError
+                                }
+                            />
+                        </>
                     ) : (
                         <BodyweightRecommendationTab
                             bodyweightResult={

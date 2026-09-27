@@ -28,21 +28,35 @@ export default function RegionSelection() {
 
     const {
         province,
-        district,
+        city,
+        subDistrict,
+
         provinces,
-        districts,
+        cities,
+        subDistricts,
+
         regionCode,
+
         isLoading,
-        setDistrict,
+
         selectProvince,
+        selectCity,
+        setSubDistrict,
     } = useRegions();
 
     const [openMenu, setOpenMenu] =
         useState(null);
 
-    const provinceRef = useRef(null);
-    const districtRef = useRef(null);
+    const provinceRef =
+        useRef(null);
 
+    const cityRef =
+        useRef(null);
+
+    const subDistrictRef =
+        useRef(null);
+
+    // 드롭다운 바깥 클릭 시 닫기
     useEffect(() => {
         const handleClickOutside = (
             event
@@ -52,14 +66,20 @@ export default function RegionSelection() {
                     event.target
                 );
 
-            const clickedDistrict =
-                districtRef.current?.contains(
+            const clickedCity =
+                cityRef.current?.contains(
+                    event.target
+                );
+
+            const clickedSubDistrict =
+                subDistrictRef.current?.contains(
                     event.target
                 );
 
             if (
                 !clickedProvince &&
-                !clickedDistrict
+                !clickedCity &&
+                !clickedSubDistrict
             ) {
                 setOpenMenu(null);
             }
@@ -85,60 +105,86 @@ export default function RegionSelection() {
         setOpenMenu(null);
     };
 
-    const handleDistrictSelect = (
+    const handleCitySelect = (
         value
     ) => {
-        setDistrict(value);
+        selectCity(value);
         setOpenMenu(null);
     };
 
-    const handleCurrentLocation = () => {
-        if (!navigator.geolocation) {
-            console.error(
-                "현재 위치 기능을 지원하지 않습니다."
-            );
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const {
-                    latitude,
-                    longitude,
-                } = position.coords;
-
-                navigate(
-                    "/program-browse/results",
-                    {
-                        state: {
-                            sports:
-                                selectedSports,
-                            latitude,
-                            longitude,
-                            searchMode:
-                                "LOCATION",
-                        },
-                    }
-                );
-            },
-            (error) => {
-                console.error(
-                    "위치 정보를 가져오지 못했습니다.",
-                    error
-                );
-            }
-        );
+    const handleSubDistrictSelect = (
+        value
+    ) => {
+        setSubDistrict(value);
+        setOpenMenu(null);
     };
 
+    // 현재 위치로 검색
+    const handleCurrentLocation =
+        () => {
+            if (
+                !navigator.geolocation
+            ) {
+                console.error(
+                    "현재 위치 기능을 지원하지 않습니다."
+                );
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const {
+                        latitude,
+                        longitude,
+                    } = position.coords;
+
+                    navigate(
+                        "/program-browse/results",
+                        {
+                            state: {
+                                sports:
+                                    selectedSports,
+
+                                latitude,
+                                longitude,
+
+                                searchMode:
+                                    "LOCATION",
+                            },
+                        }
+                    );
+                },
+                (error) => {
+                    console.error(
+                        "위치 정보를 가져오지 못했습니다.",
+                        error
+                    );
+                }
+            );
+        };
+
+    // 하위 구가 존재하는 지역이면
+    // 구까지 선택해야 검색 가능
+    const canSearch =
+        Boolean(regionCode) &&
+        (
+            subDistricts.length ===
+                0 ||
+            Boolean(subDistrict)
+        );
+
+    // 지역 선택으로 검색
     const handleSearch = () => {
-        if (!regionCode) {
+        if (!canSearch) {
             console.error(
-                "regionCode가 없습니다."
+                "지역을 모두 선택해 주세요."
             );
             return;
         }
 
-        if (!navigator.geolocation) {
+        if (
+            !navigator.geolocation
+        ) {
             console.error(
                 "현재 위치 기능을 지원하지 않습니다."
             );
@@ -158,11 +204,23 @@ export default function RegionSelection() {
                         state: {
                             sports:
                                 selectedSports,
+
                             province,
-                            district,
+                            city,
+                            subDistrict,
+
+                            // 기존 코드에서
+                            // district를 사용하는 경우를 위한 값
+                            district:
+                                subDistrict
+                                    ? `${city} ${subDistrict}`
+                                    : city,
+
                             regionCode,
+
                             latitude,
                             longitude,
+
                             searchMode:
                                 "REGION",
                         },
@@ -233,19 +291,30 @@ export default function RegionSelection() {
                     </S.Divider>
 
                     <S.SelectList>
+                        {/* 1단계 */}
                         <RegionSelectDropdown
                             type="province"
-                            value={province}
-                            placeholder="시/도 선택"
-                            options={provinces}
-                            isOpen={
-                                openMenu === "province"
+                            value={
+                                province
                             }
-                            isLoading={isLoading}
-                            wrapperRef={provinceRef}
+                            placeholder="도/시 선택"
+                            options={
+                                provinces
+                            }
+                            isOpen={
+                                openMenu ===
+                                "province"
+                            }
+                            isLoading={
+                                isLoading
+                            }
+                            wrapperRef={
+                                provinceRef
+                            }
                             onToggle={() =>
                                 setOpenMenu(
-                                    openMenu === "province"
+                                    openMenu ===
+                                        "province"
                                         ? null
                                         : "province"
                                 )
@@ -255,28 +324,78 @@ export default function RegionSelection() {
                             }
                         />
 
+                        {/* 2단계 */}
                         <RegionSelectDropdown
-                            type="district"
-                            value={district}
+                            type="city"
+                            value={city}
                             placeholder="시/군/구 선택"
-                            options={districts}
-                            isOpen={
-                                openMenu === "district"
+                            options={
+                                cities
                             }
-                            isLoading={isLoading}
-                            disabled={!province}
-                            wrapperRef={districtRef}
+                            isOpen={
+                                openMenu ===
+                                "city"
+                            }
+                            isLoading={
+                                isLoading
+                            }
+                            disabled={
+                                !province
+                            }
+                            wrapperRef={
+                                cityRef
+                            }
                             onToggle={() =>
                                 setOpenMenu(
-                                    openMenu === "district"
+                                    openMenu ===
+                                        "city"
                                         ? null
-                                        : "district"
+                                        : "city"
                                 )
                             }
                             onSelect={
-                                handleDistrictSelect
+                                handleCitySelect
                             }
                         />
+
+                        {/* 3단계: 하위 구가 있을 때만 표시 */}
+                        {subDistricts.length >
+                            0 && (
+                            <RegionSelectDropdown
+                                type="district"
+                                value={
+                                    subDistrict
+                                }
+                                placeholder="구 선택"
+                                options={
+                                    subDistricts
+                                }
+                                isOpen={
+                                    openMenu ===
+                                    "district"
+                                }
+                                isLoading={
+                                    isLoading
+                                }
+                                disabled={
+                                    !city
+                                }
+                                wrapperRef={
+                                    subDistrictRef
+                                }
+                                onToggle={() =>
+                                    setOpenMenu(
+                                        openMenu ===
+                                            "district"
+                                            ? null
+                                            : "district"
+                                    )
+                                }
+                                onSelect={
+                                    handleSubDistrictSelect
+                                }
+                            />
+                        )}
                     </S.SelectList>
                 </S.RegionSection>
             </S.Content>
@@ -288,7 +407,7 @@ export default function RegionSelection() {
                     }
                     disabled={
                         isLoading ||
-                        !regionCode
+                        !canSearch
                     }
                 >
                     프로그램 검색하기

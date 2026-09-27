@@ -100,61 +100,6 @@ export const MatchDot = styled.span`
     background: #40d293;
 `;
 
-/* =========================
-   운동 소개
-========================= */
-
-export const Intro = styled.section`
-    margin-bottom: 25px;
-    padding: 22px 20px;
-
-    box-sizing: border-box;
-
-    border: 1px solid #d9f3e8;
-    border-radius: 16px;
-
-    background: #f5fcf9;
-`;
-
-export const IntroBadge = styled.div`
-    width: fit-content;
-
-    margin-bottom: 12px;
-    padding: 5px 9px;
-
-    border-radius: 20px;
-
-    background: #ddf8ed;
-
-    color: #279c70;
-
-    font-size: 11px;
-    font-weight: 700;
-`;
-
-export const IntroTitle = styled.h2`
-    margin: 0 0 12px;
-
-    color: #173c2e;
-
-    font-size: 23px;
-    font-weight: 700;
-    line-height: 1.35;
-
-    white-space: pre-line;
-`;
-
-export const IntroDescription = styled.p`
-    margin: 0;
-
-    color: #65756e;
-
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.55;
-
-    word-break: keep-all;
-`;
 
 /* =========================
    시설 영역
