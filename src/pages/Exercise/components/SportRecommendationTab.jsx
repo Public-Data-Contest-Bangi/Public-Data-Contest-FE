@@ -11,9 +11,7 @@ import {
 
 import * as S from "./SportRecommendationTab.styled";
 
-
 export default function SportRecommendationTab({
-    weakestCategory,
     recommendations,
     isLoading,
     error,
@@ -25,7 +23,7 @@ export default function SportRecommendationTab({
     ) => {
         const routeId =
             SPORT_ROUTE[
-            recommendation.sportCode
+                recommendation.sportCode
             ];
 
         if (!routeId) {
@@ -33,11 +31,25 @@ export default function SportRecommendationTab({
                 "운동 상세 페이지 경로가 없습니다:",
                 recommendation.sportCode
             );
-
             return;
         }
 
-        navigate(`/exercise/${routeId}`);
+        const sportName =
+            recommendation.adaptedSportName ||
+            recommendation.sportName;
+
+        navigate(
+            `/exercise/${routeId}`,
+            {
+                state: {
+                    ...recommendation,
+                    sportName,
+                    exerciseCharacteristics:
+                        recommendation.exerciseCharacteristics ??
+                        [],
+                },
+            }
+        );
     };
 
     if (isLoading) {
@@ -113,15 +125,21 @@ export default function SportRecommendationTab({
 
                                         <S.FitnessChipList>
                                             {recommendation.targetFitnessAreas?.map(
-                                                (area, index) => (
+                                                (
+                                                    area,
+                                                    index
+                                                ) => (
                                                     <S.FitnessChip
                                                         key={`${area}-${index}`}
                                                     >
                                                         <S.RankNumber>
-                                                            {index + 1}
+                                                            {index +
+                                                                1}
                                                         </S.RankNumber>
 
-                                                        {area}
+                                                        {
+                                                            area
+                                                        }
                                                     </S.FitnessChip>
                                                 )
                                             )}

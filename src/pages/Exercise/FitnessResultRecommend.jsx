@@ -72,11 +72,11 @@ function FitnessResultRecommend() {
                     </S.TabContainer>
 
                     {activeTab === "sport" ? (
-                        <> <S.DetailGuide>
+                        <><S.DetailGuide>
                             <S.GuideIcon>i</S.GuideIcon>
 
                             <span>
-                                추천 종목을 눌러 가까운 체험 시설을 확인해보세요.
+                                체력 측정 결과와 내 이용 조건을 함께 고려해 추천했어요.
                             </span>
                         </S.DetailGuide>
                             <SportRecommendationTab

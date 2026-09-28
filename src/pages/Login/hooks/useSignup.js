@@ -148,7 +148,7 @@ function useSignup() {
 
             setIdMessage(
                 error.response?.data?.message ||
-                    "이미 존재하는 아이디입니다."
+                "이미 존재하는 아이디입니다."
             );
 
             setIdMessageType(
@@ -296,7 +296,7 @@ function useSignup() {
 
                 setNicknameMessage(
                     error.response?.data?.message ||
-                        "이미 존재하는 닉네임입니다."
+                    "이미 존재하는 닉네임입니다."
                 );
 
                 setNicknameMessageType(
@@ -377,7 +377,7 @@ function useSignup() {
 
                 setEmailMessage(
                     error.response?.data?.message ||
-                        "인증번호 발송에 실패했습니다."
+                    "인증번호 발송에 실패했습니다."
                 );
 
                 setEmailMessageType(
@@ -463,7 +463,7 @@ function useSignup() {
 
                 setVerificationMessage(
                     error.response?.data?.message ||
-                        "인증번호를 확인해 주세요."
+                    "인증번호를 확인해 주세요."
                 );
 
                 setVerificationMessageType(
@@ -475,7 +475,9 @@ function useSignup() {
         };
 
     // 회원가입
-    const handleSignup = async () => {
+    const handleSignup = async (
+        locationConsent
+    ) => {
         const loginId =
             form.userId.trim();
 
@@ -603,12 +605,12 @@ function useSignup() {
 
             const response =
                 await signup({
-                    loginId,
-                    password:
-                        form.password,
-                    email,
-                    name,
-                    nickname,
+                    loginId: form.userId,
+                    password: form.password,
+                    email: form.email,
+                    name: form.name,
+                    nickname: form.nickname,
+                    locationConsent,
                 });
 
             console.log(
@@ -630,7 +632,7 @@ function useSignup() {
 
             setVerificationMessage(
                 error.response?.data?.message ||
-                    "회원가입에 실패했습니다."
+                "회원가입에 실패했습니다."
             );
 
             setVerificationMessageType(

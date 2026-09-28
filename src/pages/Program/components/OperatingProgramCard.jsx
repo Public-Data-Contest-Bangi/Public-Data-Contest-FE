@@ -77,7 +77,7 @@ export default function OperatingProgramCard({
             <S.InfoList>
                 <S.InfoRow>
                     <S.Label>
-                        강좌이름
+                        종목
                     </S.Label>
 
                     <S.Value>

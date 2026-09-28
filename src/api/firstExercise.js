@@ -11,7 +11,7 @@ export const updateFirstExercisePreferences = (
     data,
     { signal } = {}
 ) =>
-    client.put(
+    client.patch(
         "/api/first-exercise/preferences",
         data,
         {

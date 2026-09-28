@@ -346,9 +346,9 @@ export function useFacilityMap() {
                 const distance =
                     Math.hypot(
                         point.x -
-                            clickWorldX,
+                        clickWorldX,
                         point.y -
-                            clickWorldY
+                        clickWorldY
                     );
 
                 if (
@@ -417,9 +417,9 @@ export function useFacilityMap() {
                 const distance =
                     Math.hypot(
                         point.x -
-                            clickWorldX,
+                        clickWorldX,
                         point.y -
-                            clickWorldY
+                        clickWorldY
                     );
 
                 if (
@@ -539,25 +539,25 @@ export function useFacilityMap() {
                 if (cancelled) return;
                 if (mapRef.current) return;
 
-                const map =
-                    new Tmapv2.Map(
-                        mapContainerRef.current,
-                        {
-                            center:
-                                new Tmapv2.LatLng(
-                                    initialCoord.latitude,
-                                    initialCoord.longitude
-                                ),
+                const map = new Tmapv2.Map(
+                    mapContainerRef.current,
+                    {
+                        center: new Tmapv2.LatLng(
+                            initialCoord.latitude,
+                            initialCoord.longitude
+                        ),
 
-                            width: '100%',
-                            height: '100%',
+                        width: '100%',
+                        height: '100%',
 
-                            zoom: regionCoord
-                                ? 14
-                                : 15,
-                        }
-                    );
+                        zoom: regionCoord
+                            ? 14
+                            : 15,
 
+                        zoomControl: true,
+                        scrollwheel: false,
+                    }
+                );
                 mapRef.current = map;
 
                 mapContainerRef.current.addEventListener(
@@ -652,7 +652,7 @@ export function useFacilityMap() {
 
         setDeparture(
             previousArrivalName ||
-                '현재 위치'
+            '현재 위치'
         );
 
         setArrival(

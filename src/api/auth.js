@@ -35,6 +35,7 @@ export const signup = async ({
     email,
     name,
     nickname,
+    locationConsent,
 }) => {
     const response = await client.post(
         "/api/auth/signups",
@@ -44,6 +45,7 @@ export const signup = async ({
             email,
             name,
             nickname,
+            locationConsent,
         }
     );
 

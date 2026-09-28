@@ -23,23 +23,7 @@ function Signup() {
 
         setLocationError("");
 
-        if (!navigator.geolocation) {
-            setLocationError(
-                "현재 브라우저에서는 위치 정보를 사용할 수 없습니다."
-            );
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            () => {
-                handleSignup();
-            },
-            () => {
-                setLocationError(
-                    "회원가입을 위해 위치 권한을 허용해주세요."
-                );
-            }
-        );
+        handleSignup(locationAgreed);
     };
     const {
         form,
@@ -371,7 +355,7 @@ function Signup() {
 
                 <Button
                     type="button"
-                    onClick={handleSignup}
+                    onClick={handleSignupWithLocation}
                 >
                     회원가입
                 </Button>

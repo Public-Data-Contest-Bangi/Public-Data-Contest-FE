@@ -15,7 +15,7 @@ function BottomNav() {
                     location.pathname === "/" ||
                     location.pathname === "/home"
                 }
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/home")}
             >
                 <S.NavIcon
                     viewBox="0 0 24 24"
