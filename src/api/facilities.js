@@ -72,6 +72,9 @@ export async function searchFacilities({
     '/api/facilities',
     {
       params,
+      paramsSerializer: {
+        indexes: null,
+      },
     }
   );
 

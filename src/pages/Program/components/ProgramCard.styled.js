@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Card = styled.article`
     width: 100%;
-    min-height: 180px;
+    min-height: 170px;
 
     display: flex;
     gap: 12px;
@@ -57,7 +57,7 @@ export const TopRow = styled.div`
 export const Name = styled.h3`
     flex: 1;
 
-    margin: 0;
+    margin: 15px 0 0;
 
     color: #202020;
 

@@ -66,35 +66,19 @@ export const LogoArea = styled.div`
     position: relative;
     z-index: 2;
 
-    margin-left: -20px;
-
     display: flex;
     align-items: center;
 
-    gap: 0;
+    width: fit-content;
 `;
 
-export const LogoMark = styled.img`
-    width: 50px;
-    height: 50px;
+export const LogoImage = styled.img`
+    width: 105px;
+    height: auto;
+
+    display: block;
 
     object-fit: contain;
-
-    flex-shrink: 0;
-`;
-
-export const LogoText = styled.span`
-    margin-left: -10px;
-
-    color: #40d293;
-
-    font-family: "Lobster Two", cursive;
-    font-size: 22px;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1;
-
-    transform: translateY(2px);
 `;
 
 export const Greeting = styled.h1`

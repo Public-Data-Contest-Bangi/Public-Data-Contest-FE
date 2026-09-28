@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import mascotImg from "../../assets/images/mascot-dumbbell.png";
 import searchProgramImg from "../../assets/images/icon-search-program.png";
 import recommendImg from "../../assets/images/icon-exercise-recommend.png";
-import logoMark from "../../assets/images/logo-mark.png";
+import dfitLogo from "../../assets/images/Dfit.png";
 
 import BottomNav from "../../components/BottomNav";
 
@@ -100,14 +100,10 @@ function Home() {
       <S.Content>
         <S.Hero>
           <S.LogoArea>
-            <S.LogoMark
-              src={logoMark}
-              alt="Dfit"
+            <S.LogoImage
+              src={dfitLogo}
+              alt="DFit"
             />
-
-            <S.LogoText>
-              fit
-            </S.LogoText>
           </S.LogoArea>
 
           <S.Greeting>

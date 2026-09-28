@@ -12,6 +12,7 @@ import {
 } from "../../../api/facilities";
 
 import ProgramCard from "./ProgramCard";
+import BottomNav from "../../../components/BottomNav";
 
 import * as S from "./ProgramResultList.styled";
 
@@ -63,9 +64,9 @@ export default function ProgramResultList() {
                         sports.map(
                             (sport) =>
                                 typeof sport ===
-                                "object"
+                                    "object"
                                     ? sport.sportId ??
-                                      sport.id
+                                    sport.id
                                     : sport
                         );
 
@@ -76,7 +77,7 @@ export default function ProgramResultList() {
                             longitude,
                             regionCode:
                                 searchMode ===
-                                "REGION"
+                                    "REGION"
                                     ? regionCode
                                     : undefined,
                             sportIds,
@@ -169,17 +170,6 @@ export default function ProgramResultList() {
                     <S.ListTitle>
                         가까운 순
                     </S.ListTitle>
-
-                    <S.SortIcon
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                    >
-                        <path d="M8 5V19" />
-                        <path d="M5 8L8 5L11 8" />
-
-                        <path d="M16 19V5" />
-                        <path d="M13 16L16 19L19 16" />
-                    </S.SortIcon>
                 </S.ListHeader>
 
                 {isLoading ? (
@@ -193,7 +183,7 @@ export default function ProgramResultList() {
                         불러오지 못했어요.
                     </S.StatusText>
                 ) : programs.length ===
-                  0 ? (
+                    0 ? (
                     <S.StatusText>
                         조건에 맞는 시설이
                         없어요.
@@ -215,6 +205,7 @@ export default function ProgramResultList() {
                     </S.ProgramList>
                 )}
             </S.Content>
+            <BottomNav />
         </S.Page>
     );
 }
