@@ -10,9 +10,41 @@ import {
     getFacilityPrograms,
 } from "../../../api/facilities";
 
+import BottomNav from "../../../components/BottomNav";
 import OperatingProgramCard from "./OperatingProgramCard";
 
 import * as S from "./OperatingProgramList.styled";
+
+function formatPrice(price) {
+    if (
+        price === null ||
+        price === undefined ||
+        price === ""
+    ) {
+        return "가격 정보 없음";
+    }
+
+    const numericPrice =
+        Number(price);
+
+    if (
+        Number.isNaN(
+            numericPrice
+        )
+    ) {
+        return String(price);
+    }
+
+    if (
+        numericPrice === 0
+    ) {
+        return "무료";
+    }
+
+    return `${numericPrice.toLocaleString(
+        "ko-KR"
+    )}원`;
+}
 
 export default function OperatingProgramList() {
     const { id: facilityId } =
@@ -74,33 +106,39 @@ export default function OperatingProgramList() {
                                 id:
                                     `${facilityId}-${index}`,
 
+                                // 카드 상단 크게 → 강좌이름
                                 title:
-                                    program.programName,
+                                    program.programName ||
+                                    "강좌 정보 없음",
 
+                                // 기존 강좌이름 자리 → 종목명
                                 className:
-                                    program.sportName,
+                                    program.sportName ||
+                                    "종목 정보 없음",
 
                                 days:
-                                    program.weekday,
+                                    program.weekday ||
+                                    "요일 정보 없음",
 
                                 time:
-                                    program.time,
+                                    program.time ||
+                                    "시간 정보 없음",
 
                                 operatingPeriod:
                                     program.operatingStartDate &&
-                                    program.operatingEndDate
+                                        program.operatingEndDate
                                         ? `${program.operatingStartDate} ~ ${program.operatingEndDate}`
-                                        : "-",
+                                        : "운영기간 정보 없음",
 
                                 price:
-                                    program.price ||
-                                    "-",
+                                    formatPrice(
+                                        program.price
+                                    ),
 
                                 voucherAvailable:
                                     program.voucherAvailable,
                             })
                         );
-
                     setPrograms(
                         mappedPrograms
                     );
@@ -149,7 +187,9 @@ export default function OperatingProgramList() {
                     </S.BannerText>
 
                     <S.CharacterImage
-                        src={programCharacter}
+                        src={
+                            programCharacter
+                        }
                         alt=""
                     />
                 </S.Banner>
@@ -180,7 +220,7 @@ export default function OperatingProgramList() {
                             불러오지 못했어요.
                         </S.StatusText>
                     ) : programs.length ===
-                      0 ? (
+                        0 ? (
                         <S.StatusText>
                             현재 운영 중인
                             프로그램이 없어요.
@@ -205,6 +245,7 @@ export default function OperatingProgramList() {
                     )}
                 </S.Section>
             </S.Content>
-        </S.Page>
+        <BottomNav/>
+        </S.Page >
     );
 }

@@ -190,7 +190,7 @@ function useLogin() {
                     return;
                 }
 
-                navigate("/", {
+                navigate("/home", {
                     replace: true,
                 });
             } catch (
@@ -217,7 +217,7 @@ function useLogin() {
                     return;
                 }
 
-                navigate("/", {
+                navigate("/home", {
                     replace: true,
                 });
             }

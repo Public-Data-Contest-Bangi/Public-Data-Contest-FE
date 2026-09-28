@@ -42,6 +42,40 @@ const SPORT_IMAGE_FILE = {
     BILLIARDS: "billiards.png",
 };
 
+export const SPORT_ID = {
+    KENDO: 1,
+    GOLF: 2,
+    BASKETBALL: 3,
+    DANCE: 4,
+    ROLLER_INLINE: 5,
+    DANCE_ART: 6,
+    VOLLEYBALL: 7,
+    BADMINTON: 8,
+    BOXING: 9,
+    BOWLING: 10,
+    SKATING: 11,
+    SWIMMING: 12,
+    SQUASH: 13,
+    HORSE_RIDING: 14,
+    BASEBALL: 15,
+    AEROBICS: 16,
+    YOGA: 17,
+    JUDO: 18,
+    JUMP_ROPE: 19,
+    SOCCER: 20,
+    TABLE_TENNIS: 21,
+    TAEKWONDO: 22,
+    TENNIS: 23,
+    FENCING: 24,
+    PILATES: 25,
+    HAPKIDO: 26,
+    FITNESS: 27,
+    CROSSFIT: 28,
+    JIU_JITSU: 29,
+    CLIMBING: 30,
+    BILLIARDS: 31,
+};
+
 // 기존 체력 추천 화면에서 사용
 export const SPORT_ROUTE = {
     KENDO: "kendo",

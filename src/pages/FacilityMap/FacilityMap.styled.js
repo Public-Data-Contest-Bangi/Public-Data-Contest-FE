@@ -1,25 +1,27 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  position: relative;
+    position: relative;
 
-  width: 375px;
-  min-height: 100dvh;
+    width: 375px;
+    min-height: 100dvh;
 
-  margin: 0 auto;
+    margin: 0 auto;
 
-  background: #ffffff;
+    background: #ffffff;
 
-  font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', sans-serif;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
-  button {
-    font-family: inherit;
-  }
+    overflow-y: auto;
+
+    button {
+        font-family: inherit;
+    }
 `;
 
 /* ── 출발 / 도착 카드 ───────────────── */
@@ -500,22 +502,23 @@ export const TransitLegStops = styled.div`
 /* ── 지도 ───────────────── */
 
 export const MapPlaceholder = styled.div`
-  position: relative;
+    position: relative;
 
-  flex: 1;
+    width: 100%;
+    height: 520px;
 
-  min-height: 300px;
+    flex-shrink: 0;
 
-  background: #eef2f2;
+    background: #eef2f2;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-  gap: 8px;
+    gap: 8px;
 
-  overflow: hidden;
+    overflow: hidden;
 `;
 
 export const MapContainer = styled.div`

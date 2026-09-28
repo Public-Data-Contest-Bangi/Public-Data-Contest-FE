@@ -12,7 +12,7 @@ export const Page = styled.div`
 export const Content = styled.main`
     width: 100%;
 
-    padding: 18px 20px 32px;
+    padding: 18px 20px 100px;
 
     box-sizing: border-box;
 `;
