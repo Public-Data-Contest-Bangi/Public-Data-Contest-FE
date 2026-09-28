@@ -272,7 +272,7 @@ export const AvoidStairsToggle = styled.button`
 /* ── 검색 버튼 ───────────────── */
 
 export const SearchButtonWrap = styled.div`
-  margin: 0 20px 16px;
+  margin: 14px 20px 16px;
 
   flex-shrink: 0;
 `;

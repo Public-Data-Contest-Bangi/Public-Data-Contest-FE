@@ -31,22 +31,11 @@ export const ListTitle = styled.h2`
 
     color: #202020;
 
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
     line-height: 1;
 `;
 
-export const SortIcon = styled.svg`
-    width: 15px;
-    height: 15px;
-
-    fill: none;
-
-    stroke: #222222;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-`;
 
 export const ProgramList = styled.div`
     display: flex;

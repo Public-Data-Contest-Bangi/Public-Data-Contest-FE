@@ -141,7 +141,7 @@ function Preference() {
                 response
             );
 
-            navigate("/");
+            navigate("/home");
         } catch (error) {
             console.error(
                 "이용 환경 저장 실패:",

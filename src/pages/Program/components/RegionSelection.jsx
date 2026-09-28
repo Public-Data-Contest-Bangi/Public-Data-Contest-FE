@@ -149,7 +149,7 @@ export default function RegionSelection() {
                                 longitude,
 
                                 searchMode:
-                                    "LOCATION",
+                                    "CURRENT_LOCATION",
                             },
                         }
                     );
