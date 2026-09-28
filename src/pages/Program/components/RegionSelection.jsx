@@ -23,8 +23,8 @@ export default function RegionSelection() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const selectedSports =
-        location.state?.sports ?? [];
+    const selectedSportIds =
+        location.state?.sportIds ?? [];
 
     const {
         province,
@@ -123,11 +123,22 @@ export default function RegionSelection() {
     const handleCurrentLocation =
         () => {
             if (
+                selectedSportIds.length === 0
+            ) {
+                console.error(
+                    "선택한 종목 ID가 없습니다."
+                );
+
+                return;
+            }
+
+            if (
                 !navigator.geolocation
             ) {
                 console.error(
                     "현재 위치 기능을 지원하지 않습니다."
                 );
+
                 return;
             }
 
@@ -142,8 +153,10 @@ export default function RegionSelection() {
                         "/program-browse/results",
                         {
                             state: {
-                                sports:
-                                    selectedSports,
+                                ...location.state,
+
+                                sportIds:
+                                    selectedSportIds,
 
                                 latitude,
                                 longitude,
@@ -166,19 +179,30 @@ export default function RegionSelection() {
     // 하위 구가 존재하는 지역이면
     // 구까지 선택해야 검색 가능
     const canSearch =
+        selectedSportIds.length > 0 &&
         Boolean(regionCode) &&
         (
-            subDistricts.length ===
-                0 ||
+            subDistricts.length === 0 ||
             Boolean(subDistrict)
         );
 
     // 지역 선택으로 검색
     const handleSearch = () => {
+        if (
+            selectedSportIds.length === 0
+        ) {
+            console.error(
+                "선택한 종목 ID가 없습니다."
+            );
+
+            return;
+        }
+
         if (!canSearch) {
             console.error(
                 "지역을 모두 선택해 주세요."
             );
+
             return;
         }
 
@@ -188,6 +212,7 @@ export default function RegionSelection() {
             console.error(
                 "현재 위치 기능을 지원하지 않습니다."
             );
+
             return;
         }
 
@@ -202,15 +227,15 @@ export default function RegionSelection() {
                     "/program-browse/results",
                     {
                         state: {
-                            sports:
-                                selectedSports,
+                            ...location.state,
+
+                            sportIds:
+                                selectedSportIds,
 
                             province,
                             city,
                             subDistrict,
 
-                            // 기존 코드에서
-                            // district를 사용하는 경우를 위한 값
                             district:
                                 subDistrict
                                     ? `${city} ${subDistrict}`
@@ -291,7 +316,6 @@ export default function RegionSelection() {
                     </S.Divider>
 
                     <S.SelectList>
-                        {/* 1단계 */}
                         <RegionSelectDropdown
                             type="province"
                             value={
@@ -324,7 +348,6 @@ export default function RegionSelection() {
                             }
                         />
 
-                        {/* 2단계 */}
                         <RegionSelectDropdown
                             type="city"
                             value={city}
@@ -358,7 +381,6 @@ export default function RegionSelection() {
                             }
                         />
 
-                        {/* 3단계: 하위 구가 있을 때만 표시 */}
                         {subDistricts.length >
                             0 && (
                             <RegionSelectDropdown

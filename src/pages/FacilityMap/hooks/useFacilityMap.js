@@ -115,11 +115,6 @@ export function useFacilityMap() {
         setSelectedFacility,
     ] = useState(null);
 
-    const [
-        sheetExpanded,
-        setSheetExpanded,
-    ] = useState(false);
-
     const {
         routeLoading,
         routeMessage,
@@ -565,10 +560,6 @@ export function useFacilityMap() {
 
                 setSelectedFacility(
                     closestFacility
-                );
-
-                setSheetExpanded(
-                    false
                 );
 
                 setArrival(
@@ -1022,20 +1013,9 @@ export function useFacilityMap() {
             );
         };
 
-    const toggleSheet = () => {
-        setSheetExpanded(
-            (prev) =>
-                !prev
-        );
-    };
-
     const closeSheet = () => {
         setSelectedFacility(
             null
-        );
-
-        setSheetExpanded(
-            false
         );
 
         setArrival('');
@@ -1101,9 +1081,6 @@ export function useFacilityMap() {
         toggleAvoidStairs,
 
         selectedFacility,
-        sheetExpanded,
-
-        toggleSheet,
         closeSheet,
 
         goSelectedFacilityDetail,

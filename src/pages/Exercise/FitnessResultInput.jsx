@@ -18,7 +18,9 @@ const FITNESS_ITEMS = [
 function FitnessResultInput() {
     const {
         results,
+        isLoading,
         isSubmitting,
+        isComplete,
         handleSelect,
         handleSubmit,
     } = useFitnessResultInput();
@@ -55,6 +57,9 @@ function FitnessResultInput() {
                                                 <S.GradeButton
                                                     key={grade}
                                                     type="button"
+                                                    disabled={
+                                                        isLoading
+                                                    }
                                                     $selected={
                                                         results[
                                                             category
@@ -93,7 +98,11 @@ function FitnessResultInput() {
                         radius="6px"
                         fontSize="16px"
                         onClick={handleSubmit}
-                        disabled={isSubmitting}
+                        disabled={
+                            isLoading ||
+                            isSubmitting ||
+                            !isComplete
+                        }
                     >
                         {isSubmitting
                             ? "저장 중..."

@@ -11,6 +11,20 @@ export const Card = styled.article`
     background: #ffffff;
 
     box-sizing: border-box;
+        cursor: ${({ $clickable }) =>
+        $clickable
+            ? "pointer"
+            : "default"};
+
+    transition: transform 0.15s ease;
+
+    ${({ $clickable }) =>
+        $clickable &&
+        `
+            &:active {
+                transform: scale(0.99);
+            }
+        `}
 `;
 
 export const CardHeader = styled.div`

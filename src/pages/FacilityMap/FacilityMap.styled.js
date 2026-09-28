@@ -610,7 +610,7 @@ export const FacilitySheet = styled.div`
 
   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
 
-  padding: 16px 20px;
+  padding: 10px 10px;
 
   box-sizing: border-box;
 `;

@@ -72,9 +72,7 @@ function FacilityMap() {
         toggleAvoidStairs,
 
         selectedFacility,
-        sheetExpanded,
 
-        toggleSheet,
         closeSheet,
 
         goSelectedFacilityDetail,
@@ -168,12 +166,12 @@ function FacilityMap() {
 
             {routeMode ===
                 'TRANSIT' && (
-                <TransitRouteCard
-                    data={
-                        transitRouteData
-                    }
-                />
-            )}
+                    <TransitRouteCard
+                        data={
+                            transitRouteData
+                        }
+                    />
+                )}
 
             <MapArea
                 mapContainerRef={
@@ -200,21 +198,9 @@ function FacilityMap() {
             />
 
             <FacilityPreviewSheet
-                facility={
-                    selectedFacility
-                }
-                expanded={
-                    sheetExpanded
-                }
-                onToggle={
-                    toggleSheet
-                }
-                onClose={
-                    closeSheet
-                }
-                onDetail={
-                    goSelectedFacilityDetail
-                }
+                facility={selectedFacility}
+                onClose={closeSheet}
+                onDetail={goSelectedFacilityDetail}
             />
 
             <BottomNav />

@@ -76,10 +76,10 @@ function useFirstExercise() {
 
                     const savedData =
                         responseBody &&
-                        Object.prototype.hasOwnProperty.call(
-                            responseBody,
-                            "success"
-                        )
+                            Object.prototype.hasOwnProperty.call(
+                                responseBody,
+                                "success"
+                            )
                             ? responseBody.data
                             : responseBody;
 
@@ -89,14 +89,14 @@ function useFirstExercise() {
 
                     setAssistiveDevice(
                         ASSISTIVE_DEVICE_FROM_API[
-                            savedData
-                                .assistiveDeviceType
+                        savedData
+                            .assistiveDeviceType
                         ] ?? ""
                     );
 
                     setBodyPart(
                         BODY_PART_FROM_API[
-                            savedData.bodyFocus
+                        savedData.bodyFocus
                         ] ?? ""
                     );
 
@@ -109,22 +109,28 @@ function useFirstExercise() {
                             .map(
                                 (type) =>
                                     EXERCISE_TYPE_FROM_API[
-                                        type
+                                    type
                                     ]
                             )
                             .filter(Boolean)
                     );
                 } catch (error) {
                     if (
-                        error?.name ===
-                        "CanceledError"
+                        error?.name === "CanceledError"
+                    ) {
+                        return;
+                    }
+
+                    // 처음 사용하는 사용자라 저장된 선호가 없는 경우
+                    if (
+                        error.response?.status === 404
                     ) {
                         return;
                     }
 
                     console.error(
                         "첫 운동 입력값 조회 실패:",
-                        error
+                        error.response?.data || error
                     );
                 } finally {
                     setIsLoading(false);
@@ -189,19 +195,19 @@ function useFirstExercise() {
         const requestData = {
             assistiveDeviceType:
                 ASSISTIVE_DEVICE_TO_API[
-                    assistiveDevice
+                assistiveDevice
                 ],
 
             bodyFocus:
                 BODY_PART_TO_API[
-                    bodyPart
+                bodyPart
                 ],
 
             preferredExerciseTypes:
                 exerciseTypes.map(
                     (type) =>
                         EXERCISE_TYPE_TO_API[
-                            type
+                        type
                         ]
                 ),
         };
@@ -227,13 +233,13 @@ function useFirstExercise() {
             console.error(
                 "첫 운동 입력값 저장 실패:",
                 error.response?.data ||
-                    error
+                error
             );
 
             alert(
                 error.response?.data
                     ?.message ||
-                    "첫 운동 정보를 저장하지 못했습니다."
+                "첫 운동 정보를 저장하지 못했습니다."
             );
         } finally {
             setIsSubmitting(false);
