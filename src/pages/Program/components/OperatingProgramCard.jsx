@@ -1,23 +1,98 @@
 import * as S from "./OperatingProgramCard.styled";
 
+function normalizeHomepageUrl(url) {
+    if (!url) {
+        return null;
+    }
+
+    const trimmedUrl =
+        String(url).trim();
+
+    if (
+        !trimmedUrl ||
+        trimmedUrl.toLowerCase() ===
+            "null"
+    ) {
+        return null;
+    }
+
+    if (
+        /^https?:\/\//i.test(
+            trimmedUrl
+        )
+    ) {
+        return trimmedUrl;
+    }
+
+    return `https://${trimmedUrl}`;
+}
+
 export default function OperatingProgramCard({
     program,
 }) {
-    const handleProgramDetail = () => {
-        console.log(
-            "선택한 프로그램:",
-            program
+    const homepageUrl =
+        normalizeHomepageUrl(
+            program.homepageUrl
         );
 
-        // 나중에 프로그램 상세 화면이 생기면 연결
-        // navigate(`/program/${program.id}`);
+    const handleCardClick = () => {
+        if (!homepageUrl) {
+            console.log(
+                "연결할 프로그램 홈페이지가 없습니다.",
+                program
+            );
+
+            return;
+        }
+
+        window.open(
+            homepageUrl,
+            "_blank",
+            "noopener,noreferrer"
+        );
+    };
+
+    const handleKeyDown = (
+        event
+    ) => {
+        if (!homepageUrl) {
+            return;
+        }
+
+        if (
+            event.key === "Enter" ||
+            event.key === " "
+        ) {
+            event.preventDefault();
+            handleCardClick();
+        }
     };
 
     return (
-        <S.Card>
-            <S.CardHeader
-                onClick={handleProgramDetail}
-            >
+        <S.Card
+            onClick={
+                handleCardClick
+            }
+            onKeyDown={
+                handleKeyDown
+            }
+            $clickable={
+                Boolean(
+                    homepageUrl
+                )
+            }
+            role={
+                homepageUrl
+                    ? "link"
+                    : undefined
+            }
+            tabIndex={
+                homepageUrl
+                    ? 0
+                    : undefined
+            }
+        >
+            <S.CardHeader>
                 <S.ProgramIcon
                     viewBox="0 0 32 32"
                     aria-hidden="true"
@@ -47,7 +122,8 @@ export default function OperatingProgramCard({
 
                 <S.ProgramTitleArea>
                     <S.ProgramTitle>
-                        {program.title || "-"}
+                        {program.title ||
+                            "-"}
                     </S.ProgramTitle>
 
                     {program.voucherAvailable && (
@@ -57,19 +133,21 @@ export default function OperatingProgramCard({
                     )}
                 </S.ProgramTitleArea>
 
-                <S.ArrowIcon
-                    viewBox="0 0 12 20"
-                    aria-hidden="true"
-                >
-                    <path
-                        d="M2 2L10 10L2 18"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-                </S.ArrowIcon>
+                {homepageUrl && (
+                    <S.ArrowIcon
+                        viewBox="0 0 12 20"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M2 2L10 10L2 18"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </S.ArrowIcon>
+                )}
             </S.CardHeader>
 
             <S.Divider />
@@ -81,7 +159,8 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.className || "-"}
+                        {program.className ||
+                            "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -91,7 +170,8 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.days || "-"}
+                        {program.days ||
+                            "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -101,14 +181,19 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.time || "-"}
+                        {program.time ||
+                            "-"}
                     </S.Value>
                 </S.InfoRow>
 
                 <S.InfoRow>
-                    <S.Label>운영기간</S.Label>
+                    <S.Label>
+                        운영기간
+                    </S.Label>
+
                     <S.Value>
-                        {program.operatingPeriod || "-"}
+                        {program.operatingPeriod ||
+                            "-"}
                     </S.Value>
                 </S.InfoRow>
 
@@ -118,7 +203,8 @@ export default function OperatingProgramCard({
                     </S.Label>
 
                     <S.Value>
-                        {program.price || "-"}
+                        {program.price ||
+                            "-"}
                     </S.Value>
                 </S.InfoRow>
             </S.InfoList>

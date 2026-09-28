@@ -34,6 +34,9 @@ function Home() {
   const [favorites, setFavorites] =
     useState([]);
 
+  const [favoriteTotalCount, setFavoriteTotalCount] =
+    useState(0);
+
   const [
     favoritesLoading,
     setFavoritesLoading,
@@ -62,13 +65,16 @@ function Home() {
             longitude:
               coords.longitude,
             page: 0,
-            size: 3,
+            size: 6,
           });
 
         if (!cancelled) {
           setFavorites(
-            response.data
-              ?.facilities ?? []
+            response.data?.facilities ?? []
+          );
+
+          setFavoriteTotalCount(
+            response.data?.totalCount ?? 0
           );
         }
       } catch (error) {
@@ -207,6 +213,23 @@ function Home() {
                   </S.FavoriteName>
                 </S.FavoriteItem>
               ))}
+
+              {favoriteTotalCount > favorites.length && (
+                <S.FavoriteMoreItem
+                  type="button"
+                  onClick={() =>
+                    navigate("/favorites")
+                  }
+                >
+                  <S.FavoriteMoreCircle>
+                    +{favoriteTotalCount - favorites.length}
+                  </S.FavoriteMoreCircle>
+
+                  <S.FavoriteMoreText>
+                    더보기
+                  </S.FavoriteMoreText>
+                </S.FavoriteMoreItem>
+              )}
             </S.FavoriteScroller>
           )}
         </S.FavoriteSection>

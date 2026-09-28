@@ -1,4 +1,8 @@
-import { useState } from "react";
+import {
+    useEffect,
+    useState,
+} from "react";
+
 import {
     useLocation,
     useNavigate,
@@ -14,43 +18,46 @@ export default function SportSelection() {
     const location = useLocation();
 
     const [
-        selectedSportIds,
-        setSelectedSportIds,
+        selectedSports,
+        setSelectedSports,
     ] = useState(
         location.state?.sportIds ?? []
     );
 
+    // 뒤로 돌아왔을 때 선택값 유지
+    useEffect(() => {
+        navigate(
+            location.pathname,
+            {
+                replace: true,
+                state: {
+                    ...location.state,
+                    sportIds:
+                        selectedSports,
+                },
+            }
+        );
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSports]);
+
     const handleSportToggle = (
         sportId
     ) => {
-        setSelectedSportIds(
-            (prev) => {
-                const next =
-                    prev.includes(sportId)
-                        ? prev.filter(
-                              (id) =>
-                                  id !==
-                                  sportId
-                          )
-                        : [
-                              ...prev,
-                              sportId,
-                          ];
-
-                navigate(
-                    location.pathname,
-                    {
-                        replace: true,
-                        state: {
-                            ...location.state,
-                            sportIds:
-                                next,
-                        },
-                    }
-                );
-
-                return next;
-            }
+        setSelectedSports(
+            (prev) =>
+                prev.includes(
+                    sportId
+                )
+                    ? prev.filter(
+                          (id) =>
+                              id !==
+                              sportId
+                      )
+                    : [
+                          ...prev,
+                          sportId,
+                      ]
         );
     };
 
@@ -61,7 +68,7 @@ export default function SportSelection() {
                 state: {
                     ...location.state,
                     sportIds:
-                        selectedSportIds,
+                        selectedSports,
                 },
             }
         );
@@ -86,7 +93,7 @@ export default function SportSelection() {
                     {SPORTS_OPTIONS.map(
                         (sport) => {
                             const isSelected =
-                                selectedSportIds.includes(
+                                selectedSports.includes(
                                     sport.id
                                 );
 
@@ -127,7 +134,7 @@ export default function SportSelection() {
             <S.BottomArea>
                 <Button
                     disabled={
-                        selectedSportIds.length ===
+                        selectedSports.length ===
                         0
                     }
                     onClick={

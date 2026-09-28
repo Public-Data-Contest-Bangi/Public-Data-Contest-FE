@@ -2,7 +2,10 @@ import {
     useEffect,
     useState,
 } from "react";
-import { useParams } from "react-router-dom";
+
+import {
+    useParams,
+} from "react-router-dom";
 
 import programCharacter from "../../../assets/images/prgram-character.png";
 
@@ -47,22 +50,30 @@ function formatPrice(price) {
 }
 
 export default function OperatingProgramList() {
-    const { id: facilityId } =
-        useParams();
+    const {
+        id: facilityId,
+    } = useParams();
 
-    const [programs, setPrograms] =
-        useState([]);
+    const [
+        programs,
+        setPrograms,
+    ] = useState([]);
 
-    const [isLoading, setIsLoading] =
-        useState(true);
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(true);
 
-    const [isError, setIsError] =
-        useState(false);
+    const [
+        isError,
+        setIsError,
+    ] = useState(false);
 
     useEffect(() => {
         if (!facilityId) {
             setIsLoading(false);
             setIsError(true);
+
             return;
         }
 
@@ -106,12 +117,10 @@ export default function OperatingProgramList() {
                                 id:
                                     `${facilityId}-${index}`,
 
-                                // 카드 상단 크게 → 강좌이름
                                 title:
                                     program.programName ||
                                     "강좌 정보 없음",
 
-                                // 기존 강좌이름 자리 → 종목명
                                 className:
                                     program.sportName ||
                                     "종목 정보 없음",
@@ -126,7 +135,7 @@ export default function OperatingProgramList() {
 
                                 operatingPeriod:
                                     program.operatingStartDate &&
-                                        program.operatingEndDate
+                                    program.operatingEndDate
                                         ? `${program.operatingStartDate} ~ ${program.operatingEndDate}`
                                         : "운영기간 정보 없음",
 
@@ -137,8 +146,17 @@ export default function OperatingProgramList() {
 
                                 voucherAvailable:
                                     program.voucherAvailable,
+
+                                homepageUrl:
+                                    program.homepageUrl ??
+                                    null,
+
+                                sourceType:
+                                    program.sourceType ??
+                                    null,
                             })
                         );
+
                     setPrograms(
                         mappedPrograms
                     );
@@ -152,6 +170,7 @@ export default function OperatingProgramList() {
 
                     console.error(
                         "운영 프로그램 조회 실패:",
+                        error.response?.data ??
                         error
                     );
 
@@ -220,7 +239,7 @@ export default function OperatingProgramList() {
                             불러오지 못했어요.
                         </S.StatusText>
                     ) : programs.length ===
-                        0 ? (
+                      0 ? (
                         <S.StatusText>
                             현재 운영 중인
                             프로그램이 없어요.
@@ -228,9 +247,7 @@ export default function OperatingProgramList() {
                     ) : (
                         <S.ProgramList>
                             {programs.map(
-                                (
-                                    program
-                                ) => (
+                                (program) => (
                                     <OperatingProgramCard
                                         key={
                                             program.id
@@ -245,7 +262,8 @@ export default function OperatingProgramList() {
                     )}
                 </S.Section>
             </S.Content>
-        <BottomNav/>
-        </S.Page >
+
+            <BottomNav />
+        </S.Page>
     );
 }

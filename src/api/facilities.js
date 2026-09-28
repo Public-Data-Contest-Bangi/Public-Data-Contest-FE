@@ -23,6 +23,7 @@ export async function fetchFacilityMarkers({
   return response.data.data;
 }
 
+// 일반 시설 검색
 export async function searchFacilities({
   searchMode,
   keyword,
@@ -34,6 +35,7 @@ export async function searchFacilities({
   voucherStatus,
   page = 0,
   size = 20,
+  signal,
 }) {
   const params = {
     searchMode,
@@ -72,6 +74,49 @@ export async function searchFacilities({
     '/api/facilities',
     {
       params,
+      signal,
+      paramsSerializer: {
+        indexes: null,
+      },
+    }
+  );
+
+  return response.data.data;
+}
+
+// 프로그램 둘러보기 전용 시설 검색
+export async function searchProgramFacilities({
+  searchMode,
+  latitude,
+  longitude,
+  regionCode,
+  sportIds,
+  page = 0,
+  size = 20,
+  signal,
+}) {
+  const params = {
+    searchMode,
+    latitude,
+    longitude,
+    sportIds,
+    page,
+    size,
+  };
+
+  if (
+    searchMode === 'REGION' &&
+    regionCode
+  ) {
+    params.regionCode =
+      regionCode;
+  }
+
+  const response = await client.get(
+    '/api/program-facilities',
+    {
+      params,
+      signal,
       paramsSerializer: {
         indexes: null,
       },

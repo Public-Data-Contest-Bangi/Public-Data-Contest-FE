@@ -73,12 +73,14 @@ export const LogoArea = styled.div`
 `;
 
 export const LogoImage = styled.img`
-    width: 105px;
+    width: 90px;
     height: auto;
 
     display: block;
 
     object-fit: contain;
+    margin-left: -20px;
+    margin-top: -10px;
 `;
 
 export const Greeting = styled.h1`
@@ -179,9 +181,12 @@ export const FavoriteScroller = styled.div`
     gap: 12px;
 
     margin: 0 -18px;
-    padding: 0 18px;
+    padding: 0 18px 4px;
 
     overflow-x: auto;
+
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
 
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -211,6 +216,56 @@ export const FavoriteItem = styled.button`
     font-family: inherit;
 
     cursor: pointer;
+`;
+
+export const FavoriteMoreItem = styled.button`
+    width: 76px;
+
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    background: transparent;
+
+    font-family: inherit;
+
+    cursor: pointer;
+`;
+
+export const FavoriteMoreCircle = styled.div`
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1px dashed #bcebd8;
+    border-radius: 16px;
+
+    background: #f5fcf9;
+
+    color: #2cc98e;
+
+    font-size: 14px;
+    font-weight: 700;
+`;
+
+export const FavoriteMoreText = styled.span`
+    color: #777777;
+
+    font-size: 10.5px;
+    font-weight: 500;
 `;
 
 export const FavoriteImage = styled.img`
