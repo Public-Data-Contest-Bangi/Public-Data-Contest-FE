@@ -476,7 +476,7 @@ export function useFacilityMap() {
             if (
                 closestFacility &&
                 closestFacilityDist <=
-                    16
+                    26
             ) {
                 const Tmapv2 =
                     window.Tmapv2;
@@ -715,7 +715,7 @@ export function useFacilityMap() {
                                 true,
 
                             scrollwheel:
-                                false,
+                                true,
                         }
                     );
 

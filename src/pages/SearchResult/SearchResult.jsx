@@ -3,6 +3,7 @@ import Header from '../../components/common/Header';
 import { useSearchResult } from './hooks/useSearchResult';
 import { formatDistance } from './utils/searchResultData';
 import { SPORT_OPTIONS, ACCESSIBILITY_ITEMS } from '../SearchFilter/utils/searchFilterOptions';
+import { getSportIcon, getSportDisplayName } from '../FacilityDetail/utils/sportIcons';
 import AccessIcon from './components/AccessIcon';
 import {
   Container,
@@ -12,12 +13,13 @@ import {
   Chip,
   List,
   Card,
-  CardImage,
   CardBody,
   CardTitleRow,
   CardName,
   CardDistance,
   CardSports,
+  SportChip,
+  SportChipIcon,
   CardAccessRow,
   CardChevron,
 } from './SearchResult.styled';
@@ -85,23 +87,23 @@ function SearchResult() {
             <List>
               {facilities.map((facility) => (
                 <Card key={facility.facilityId} onClick={() => goDetail(facility.facilityId)}>
-                  <CardImage
-                    style={
-                      facility.representativeImageUrl
-                        ? {
-                            backgroundImage: `url(${facility.representativeImageUrl})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                          }
-                        : undefined
-                    }
-                  />
                   <CardBody>
                     <CardTitleRow>
                       <CardName>{facility.name}</CardName>
                       <CardDistance>{formatDistance(facility.distanceMeters)}</CardDistance>
                     </CardTitleRow>
-                    <CardSports>{(facility.sports || []).map((s) => s.name).join(' ')}</CardSports>
+                    <CardSports>
+                      {(facility.sports || []).map((s) => {
+                        const icon = getSportIcon(s.name);
+                        const label = getSportDisplayName(s.name);
+                        return (
+                          <SportChip key={s.sportId}>
+                            {icon && <SportChipIcon src={icon} alt="" />}
+                            {label}
+                          </SportChip>
+                        );
+                      })}
+                    </CardSports>
                     <CardAccessRow>
                       {(facility.accessibilities || [])
                         .filter((a) => a.availability === 'AVAILABLE')
