@@ -48,6 +48,8 @@ import {
   RouteButton,
 } from './FacilityDetail.styled';
 
+const FAVORITE_COLOR = '#FF4D4F';
+
 function matchAccessIcon(name) {
   if (name?.includes('휠체어')) return wheelchairIcon;
   if (name?.includes('경사로')) return rampIcon;
@@ -140,16 +142,16 @@ function FacilityDetail() {
         <Title>시설 상세</Title>
         <FavoriteButton
           type="button"
-          aria-label="찜하기"
+          aria-label={favorite ? '찜 해제하기' : '찜하기'}
           onClick={toggleFavorite}
         >
           <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M11 19S1.5 13 1.5 6.8A5.3 5.3 0 0 1 11 3.4a5.3 5.3 0 0 1 9.5 3.4C20.5 13 11 19 11 19Z"
-              stroke="#1A1A1A"
+              stroke={FAVORITE_COLOR}
               strokeWidth="1.8"
               strokeLinejoin="round"
-              fill={favorite ? '#1A1A1A' : 'none'}
+              fill={favorite ? FAVORITE_COLOR : 'none'}
             />
           </svg>
         </FavoriteButton>
@@ -240,7 +242,7 @@ function FacilityDetail() {
         </CardBody>
       </Card>
 
-            {facility.voucherStatus === 'AVAILABLE' && (
+      {facility.voucherStatus === 'AVAILABLE' && (
         <VoucherCard>
           <img src={voucherIcon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
           <VoucherText>
@@ -250,42 +252,17 @@ function FacilityDetail() {
         </VoucherCard>
       )}
 
-      <ProgramCard
-        type="button"
-        onClick={handleProgramClick}
-      >
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <rect
-            x="4"
-            y="3"
-            width="20"
-            height="22"
-            rx="2"
-            fill="var(--color-primary)"
-          />
-          <path
-            d="M9 9h10M9 13h10M9 17h6"
-            stroke="#ffffff"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
+      <ProgramCard type="button" onClick={handleProgramClick}>
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="3" width="20" height="22" rx="2" fill="var(--color-primary)" />
+          <path d="M9 9h10M9 13h10M9 17h6" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
 
         <ProgramTextWrap>
-          <ProgramTitle>
-            운영 프로그램
-          </ProgramTitle>
+          <ProgramTitle>운영 프로그램</ProgramTitle>
         </ProgramTextWrap>
 
-        <ProgramLink>
-          자세히 보기 &gt;
-        </ProgramLink>
+        <ProgramLink>자세히 보기 &gt;</ProgramLink>
       </ProgramCard>
 
       <RouteButton type="button" onClick={goAccessibleRoute}>

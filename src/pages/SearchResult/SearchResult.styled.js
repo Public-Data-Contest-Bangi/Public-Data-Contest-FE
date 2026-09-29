@@ -129,29 +129,41 @@ export const CardBody = styled.div`
 
 export const CardTitleRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 4px;
 `;
 
 export const CardName = styled.h3`
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: 17px;
   font-weight: 700;
   color: #000000;
+  line-height: 23px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 export const CardDistance = styled.span`
+  flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
+  line-height: 23px;
+  white-space: nowrap;
 `;
-
 export const CardSports = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   margin-top: 20px;
   margin-bottom: 12px;
 `;
@@ -159,14 +171,19 @@ export const CardSports = styled.div`
 export const SportChip = styled.span`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 999px;
+  background: #fafafa;
   font-size: 13px;
   color: #8c8c8c;
+  white-space: nowrap;
 `;
 
 export const SportChipIcon = styled.img`
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   flex-shrink: 0;
 `;

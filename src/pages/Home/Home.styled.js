@@ -49,7 +49,7 @@ export const Logo = styled.img`
     position: relative;
     z-index: 3;
 
-    width: 48px;
+    width: 62px;
     height: auto;
 
     display: block;
