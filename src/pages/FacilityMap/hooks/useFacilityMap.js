@@ -1,5 +1,3 @@
-// useFacilityMap.js
-
 import {
     useEffect,
     useRef,
@@ -133,215 +131,148 @@ export function useFacilityMap() {
         arrivalCoord,
     });
 
-    const clearFacilityMarkers =
-        () => {
-            facilityMarkersRef.current.forEach(
-                (marker) => {
-                    marker.setMap(
-                        null
-                    );
+    const clearFacilityMarkers = () => {
+        facilityMarkersRef.current.forEach((marker) => {
+            marker.setMap(null);
+        });
+
+        facilityMarkersRef.current = [];
+    };
+
+    const loadFacilityMarkers = async () => {
+        const map = mapRef.current;
+        const Tmapv2 = window.Tmapv2;
+
+        if (!map || !Tmapv2) return;
+
+        setMarkersLoading(true);
+
+        let south;
+        let north;
+        let west;
+        let east;
+        let zoom;
+
+        try {
+            zoom = map.getZoom();
+
+            const bounds = map.getBounds();
+
+            const sw = bounds.getSouthWest
+                ? bounds.getSouthWest()
+                : bounds.getSW();
+
+            const ne = bounds.getNorthEast
+                ? bounds.getNorthEast()
+                : bounds.getNE();
+
+            south = sw.lat();
+            west = sw.lng();
+            north = ne.lat();
+            east = ne.lng();
+        } catch {
+            const center = map.getCenter();
+
+            zoom = map.getZoom();
+
+            const delta = estimateDelta(zoom);
+
+            south = center.lat() - delta;
+            north = center.lat() + delta;
+            west = center.lng() - delta;
+            east = center.lng() + delta;
+        }
+
+        try {
+            const data =
+                await fetchFacilityMarkers({
+                    south,
+                    north,
+                    west,
+                    east,
+                    zoom,
+                });
+
+            clearFacilityMarkers();
+
+            facilitiesDataRef.current =
+                data.facilities || [];
+
+            clustersDataRef.current =
+                data.clusters || [];
+
+            const newMarkers = [];
+
+            (data.facilities || []).forEach(
+                (facility) => {
+                    const marker =
+                        new Tmapv2.Marker({
+                            position:
+                                new Tmapv2.LatLng(
+                                    facility.latitude,
+                                    facility.longitude
+                                ),
+
+                            icon:
+                                'data:image/svg+xml;charset=UTF-8,' +
+                                encodeURIComponent(
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#40D293" stroke="#40D293" stroke-width="1.5"/><circle cx="8" cy="7" r="3" fill="#FFFFFF"/></svg>'
+                                ),
+
+                            iconSize:
+                                new Tmapv2.Size(
+                                    22,
+                                    27
+                                ),
+
+                            map,
+                        });
+
+                    newMarkers.push(marker);
+                }
+            );
+
+            (data.clusters || []).forEach(
+                (cluster) => {
+                    const marker =
+                        new Tmapv2.Marker({
+                            position:
+                                new Tmapv2.LatLng(
+                                    cluster.latitude,
+                                    cluster.longitude
+                                ),
+
+                            icon:
+                                'data:image/svg+xml;charset=UTF-8,' +
+                                encodeURIComponent(
+                                    `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="#40D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${cluster.count}</text></svg>`
+                                ),
+
+                            iconSize:
+                                new Tmapv2.Size(
+                                    36,
+                                    36
+                                ),
+
+                            map,
+                        });
+
+                    newMarkers.push(marker);
                 }
             );
 
             facilityMarkersRef.current =
-                [];
-        };
-
-    const loadFacilityMarkers =
-        async () => {
-            const map =
-                mapRef.current;
-
-            const Tmapv2 =
-                window.Tmapv2;
-
-            if (
-                !map ||
-                !Tmapv2
-            ) {
-                return;
-            }
-
-            setMarkersLoading(
-                true
+                newMarkers;
+        } catch (err) {
+            console.error(
+                '시설 마커 조회 실패:',
+                err.response?.status,
+                err.response?.data || err.message
             );
-
-            let south;
-            let north;
-            let west;
-            let east;
-            let zoom;
-
-            try {
-                zoom =
-                    map.getZoom();
-
-                const bounds =
-                    map.getBounds();
-
-                const sw =
-                    bounds.getSouthWest
-                        ? bounds.getSouthWest()
-                        : bounds.getSW();
-
-                const ne =
-                    bounds.getNorthEast
-                        ? bounds.getNorthEast()
-                        : bounds.getNE();
-
-                south = sw.lat();
-                west = sw.lng();
-
-                north = ne.lat();
-                east = ne.lng();
-            } catch {
-                const center =
-                    map.getCenter();
-
-                zoom =
-                    map.getZoom();
-
-                const delta =
-                    estimateDelta(
-                        zoom
-                    );
-
-                south =
-                    center.lat() -
-                    delta;
-
-                north =
-                    center.lat() +
-                    delta;
-
-                west =
-                    center.lng() -
-                    delta;
-
-                east =
-                    center.lng() +
-                    delta;
-            }
-
-            try {
-                const data =
-                    await fetchFacilityMarkers(
-                        {
-                            south,
-                            north,
-                            west,
-                            east,
-                            zoom,
-                        }
-                    );
-
-                clearFacilityMarkers();
-
-                facilitiesDataRef.current =
-                    data.facilities ||
-                    [];
-
-                clustersDataRef.current =
-                    data.clusters ||
-                    [];
-
-                const newMarkers =
-                    [];
-
-                (
-                    data.facilities ||
-                    []
-                ).forEach(
-                    (
-                        facility
-                    ) => {
-                        const marker =
-                            new Tmapv2.Marker(
-                                {
-                                    position:
-                                        new Tmapv2.LatLng(
-                                            facility.latitude,
-                                            facility.longitude
-                                        ),
-
-                                    icon:
-                                        'data:image/svg+xml;charset=UTF-8,' +
-                                        encodeURIComponent(
-                                            '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="#FFFFFF" stroke="#40D293" stroke-width="3"/></svg>'
-                                        ),
-
-                                    iconSize:
-                                        new Tmapv2.Size(
-                                            26,
-                                            26
-                                        ),
-
-                                    map,
-                                }
-                            );
-
-                        newMarkers.push(
-                            marker
-                        );
-                    }
-                );
-
-                (
-                    data.clusters ||
-                    []
-                ).forEach(
-                    (
-                        cluster
-                    ) => {
-                        const marker =
-                            new Tmapv2.Marker(
-                                {
-                                    position:
-                                        new Tmapv2.LatLng(
-                                            cluster.latitude,
-                                            cluster.longitude
-                                        ),
-
-                                    icon:
-                                        'data:image/svg+xml;charset=UTF-8,' +
-                                        encodeURIComponent(
-                                            `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><circle cx="18" cy="18" r="16" fill="#40D293" opacity="0.9"/><text x="18" y="23" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="sans-serif">${cluster.count}</text></svg>`
-                                        ),
-
-                                    iconSize:
-                                        new Tmapv2.Size(
-                                            36,
-                                            36
-                                        ),
-
-                                    map,
-                                }
-                            );
-
-                        newMarkers.push(
-                            marker
-                        );
-                    }
-                );
-
-                facilityMarkersRef.current =
-                    newMarkers;
-            } catch (err) {
-                console.error(
-                    '시설 마커 조회 실패:',
-                    err.response
-                        ?.status,
-
-                    err.response
-                        ?.data ||
-                        err.message
-                );
-            } finally {
-                setMarkersLoading(
-                    false
-                );
-            }
-        };
+        } finally {
+            setMarkersLoading(false);
+        }
+    };
 
     const showCurrentLocationMarker =
         (
