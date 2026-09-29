@@ -1,28 +1,21 @@
 import {
     FacilitySheet,
-    SheetToggle,
     SheetCloseButton,
     Thumbnail,
     SheetInfo,
     FacilityName,
     FacilityAddress,
-    ChevronButton,
-    SheetExpanded,
-    AccessibilityLabelRow,
-    AccessibilityDot,
-    AccessibilityLabelText,
-    AccessibilityEmptyText,
     DetailButton,
 } from '../FacilityMap.styled';
 
 function FacilityPreviewSheet({
     facility,
-    expanded,
-    onToggle,
     onClose,
     onDetail,
 }) {
-    if (!facility) return null;
+    if (!facility) {
+        return null;
+    }
 
     return (
         <FacilitySheet>
@@ -31,12 +24,29 @@ function FacilityPreviewSheet({
                 aria-label="닫기"
                 onClick={onClose}
             >
-                ✕
+                <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M1 1l16 16M17 1L1 17"
+                        stroke="#8C8C8C"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                    />
+                </svg>
             </SheetCloseButton>
 
-            <SheetToggle
-                type="button"
-                onClick={onToggle}
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '14px',
+                    padding: '18px 18px 22px',
+                }}
             >
                 <Thumbnail />
 
@@ -49,36 +59,20 @@ function FacilityPreviewSheet({
                         {facility.address}
                     </FacilityAddress>
                 </SheetInfo>
+            </div>
 
-                <ChevronButton
-                    $expanded={expanded}
+            <div
+                style={{
+                    padding: '0 18px 10px',
+                }}
+            >
+                <DetailButton
+                    type="button"
+                    onClick={onDetail}
                 >
-                    ▲
-                </ChevronButton>
-            </SheetToggle>
-
-            {expanded && (
-                <SheetExpanded>
-                    <AccessibilityLabelRow>
-                        <AccessibilityDot />
-
-                        <AccessibilityLabelText>
-                            접근성 정보
-                        </AccessibilityLabelText>
-                    </AccessibilityLabelRow>
-
-                    <AccessibilityEmptyText>
-                        상세 페이지에서 확인할 수 있어요
-                    </AccessibilityEmptyText>
-
-                    <DetailButton
-                        type="button"
-                        onClick={onDetail}
-                    >
-                        상세보기
-                    </DetailButton>
-                </SheetExpanded>
-            )}
+                    상세보기
+                </DetailButton>
+            </div>
         </FacilitySheet>
     );
 }

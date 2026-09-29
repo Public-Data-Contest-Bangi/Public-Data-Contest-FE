@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useMemo,
     useState,
 } from "react";
 
@@ -8,10 +9,11 @@ import {
 } from "react-router-dom";
 
 import {
-    searchFacilities,
+    searchProgramFacilities,
 } from "../../../api/facilities";
 
 import ProgramCard from "./ProgramCard";
+import BottomNav from "../../../components/BottomNav";
 
 import * as S from "./ProgramResultList.styled";
 
@@ -20,20 +22,52 @@ export default function ProgramResultList() {
 
     const {
         sports = [],
+        sportIds: stateSportIds = [],
         regionCode,
         latitude,
         longitude,
         searchMode = "REGION",
     } = location.state ?? {};
 
-    const [programs, setPrograms] =
-        useState([]);
+    const sportIds = useMemo(() => {
+        if (
+            Array.isArray(stateSportIds) &&
+            stateSportIds.length > 0
+        ) {
+            return stateSportIds;
+        }
 
-    const [isLoading, setIsLoading] =
-        useState(true);
+        return sports
+            .map((sport) =>
+                typeof sport === "object"
+                    ? sport.sportId ??
+                      sport.id
+                    : sport
+            )
+            .filter(
+                (id) =>
+                    id !== null &&
+                    id !== undefined
+            );
+    }, [
+        sports,
+        stateSportIds,
+    ]);
 
-    const [isError, setIsError] =
-        useState(false);
+    const [
+        programs,
+        setPrograms,
+    ] = useState([]);
+
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(true);
+
+    const [
+        isError,
+        setIsError,
+    ] = useState(false);
 
     useEffect(() => {
         if (
@@ -44,7 +78,35 @@ export default function ProgramResultList() {
             setIsError(true);
 
             console.error(
-                "시설 검색에 위도/경도가 필요합니다."
+                "프로그램 시설 검색에 위도/경도가 필요합니다."
+            );
+
+            return;
+        }
+
+        if (
+            sportIds.length === 0
+        ) {
+            setIsLoading(false);
+            setIsError(true);
+
+            console.error(
+                "프로그램 시설 검색에 종목 ID가 필요합니다."
+            );
+
+            return;
+        }
+
+        if (
+            searchMode ===
+                "REGION" &&
+            !regionCode
+        ) {
+            setIsLoading(false);
+            setIsError(true);
+
+            console.error(
+                "지역 검색에는 regionCode가 필요합니다."
             );
 
             return;
@@ -59,31 +121,25 @@ export default function ProgramResultList() {
                     setIsLoading(true);
                     setIsError(false);
 
-                    const sportIds =
-                        sports.map(
-                            (sport) =>
-                                typeof sport ===
-                                "object"
-                                    ? sport.sportId ??
-                                      sport.id
-                                    : sport
-                        );
-
                     const data =
-                        await searchFacilities({
+                        await searchProgramFacilities({
                             searchMode,
                             latitude,
                             longitude,
+
                             regionCode:
                                 searchMode ===
                                 "REGION"
                                     ? regionCode
                                     : undefined,
+
                             sportIds,
-                            voucherStatus:
-                                "ALL",
+
                             page: 0,
                             size: 20,
+
+                            signal:
+                                controller.signal,
                         });
 
                     const mappedPrograms =
@@ -131,8 +187,9 @@ export default function ProgramResultList() {
                     }
 
                     console.error(
-                        "시설 검색 실패:",
-                        error
+                        "프로그램 운영 시설 검색 실패:",
+                        error.response?.data ??
+                            error
                     );
 
                     setPrograms([]);
@@ -155,7 +212,7 @@ export default function ProgramResultList() {
             controller.abort();
         };
     }, [
-        sports,
+        sportIds,
         regionCode,
         latitude,
         longitude,
@@ -169,23 +226,12 @@ export default function ProgramResultList() {
                     <S.ListTitle>
                         가까운 순
                     </S.ListTitle>
-
-                    <S.SortIcon
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                    >
-                        <path d="M8 5V19" />
-                        <path d="M5 8L8 5L11 8" />
-
-                        <path d="M16 19V5" />
-                        <path d="M13 16L16 19L19 16" />
-                    </S.SortIcon>
                 </S.ListHeader>
 
                 {isLoading ? (
                     <S.StatusText>
-                        가까운 시설을
-                        찾고 있어요.
+                        프로그램이 있는
+                        시설을 찾고 있어요.
                     </S.StatusText>
                 ) : isError ? (
                     <S.StatusText>
@@ -195,8 +241,9 @@ export default function ProgramResultList() {
                 ) : programs.length ===
                   0 ? (
                     <S.StatusText>
-                        조건에 맞는 시설이
-                        없어요.
+                        선택한 종목의
+                        운영 프로그램이 있는
+                        시설이 없어요.
                     </S.StatusText>
                 ) : (
                     <S.ProgramList>
@@ -215,6 +262,8 @@ export default function ProgramResultList() {
                     </S.ProgramList>
                 )}
             </S.Content>
+
+            <BottomNav />
         </S.Page>
     );
 }

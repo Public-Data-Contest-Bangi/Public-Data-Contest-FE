@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import mascotImg from "../../assets/images/mascot-dumbbell.png";
 import searchProgramImg from "../../assets/images/icon-search-program.png";
 import recommendImg from "../../assets/images/icon-exercise-recommend.png";
-import logoMark from "../../assets/images/logo-mark.png";
+import dfitLogo from "../../assets/images/Dfit.png";
 
 import BottomNav from "../../components/BottomNav";
 
@@ -33,6 +33,9 @@ function Home() {
 
   const [favorites, setFavorites] =
     useState([]);
+
+  const [favoriteTotalCount, setFavoriteTotalCount] =
+    useState(0);
 
   const [
     favoritesLoading,
@@ -62,13 +65,16 @@ function Home() {
             longitude:
               coords.longitude,
             page: 0,
-            size: 3,
+            size: 6,
           });
 
         if (!cancelled) {
           setFavorites(
-            response.data
-              ?.facilities ?? []
+            response.data?.facilities ?? []
+          );
+
+          setFavoriteTotalCount(
+            response.data?.totalCount ?? 0
           );
         }
       } catch (error) {
@@ -100,14 +106,10 @@ function Home() {
       <S.Content>
         <S.Hero>
           <S.LogoArea>
-            <S.LogoMark
-              src={logoMark}
-              alt="Dfit"
+            <S.LogoImage
+              src={dfitLogo}
+              alt="DFit"
             />
-
-            <S.LogoText>
-              fit
-            </S.LogoText>
           </S.LogoArea>
 
           <S.Greeting>
@@ -211,6 +213,23 @@ function Home() {
                   </S.FavoriteName>
                 </S.FavoriteItem>
               ))}
+
+              {favoriteTotalCount > favorites.length && (
+                <S.FavoriteMoreItem
+                  type="button"
+                  onClick={() =>
+                    navigate("/favorites")
+                  }
+                >
+                  <S.FavoriteMoreCircle>
+                    +{favoriteTotalCount - favorites.length}
+                  </S.FavoriteMoreCircle>
+
+                  <S.FavoriteMoreText>
+                    더보기
+                  </S.FavoriteMoreText>
+                </S.FavoriteMoreItem>
+              )}
             </S.FavoriteScroller>
           )}
         </S.FavoriteSection>

@@ -66,35 +66,21 @@ export const LogoArea = styled.div`
     position: relative;
     z-index: 2;
 
-    margin-left: -20px;
-
     display: flex;
     align-items: center;
 
-    gap: 0;
+    width: fit-content;
 `;
 
-export const LogoMark = styled.img`
-    width: 50px;
-    height: 50px;
+export const LogoImage = styled.img`
+    width: 90px;
+    height: auto;
+
+    display: block;
 
     object-fit: contain;
-
-    flex-shrink: 0;
-`;
-
-export const LogoText = styled.span`
-    margin-left: -10px;
-
-    color: #40d293;
-
-    font-family: "Lobster Two", cursive;
-    font-size: 22px;
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1;
-
-    transform: translateY(2px);
+    margin-left: -20px;
+    margin-top: -10px;
 `;
 
 export const Greeting = styled.h1`
@@ -195,9 +181,12 @@ export const FavoriteScroller = styled.div`
     gap: 12px;
 
     margin: 0 -18px;
-    padding: 0 18px;
+    padding: 0 18px 4px;
 
     overflow-x: auto;
+
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
 
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -227,6 +216,56 @@ export const FavoriteItem = styled.button`
     font-family: inherit;
 
     cursor: pointer;
+`;
+
+export const FavoriteMoreItem = styled.button`
+    width: 76px;
+
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    background: transparent;
+
+    font-family: inherit;
+
+    cursor: pointer;
+`;
+
+export const FavoriteMoreCircle = styled.div`
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border: 1px dashed #bcebd8;
+    border-radius: 16px;
+
+    background: #f5fcf9;
+
+    color: #2cc98e;
+
+    font-size: 14px;
+    font-weight: 700;
+`;
+
+export const FavoriteMoreText = styled.span`
+    color: #777777;
+
+    font-size: 10.5px;
+    font-weight: 500;
 `;
 
 export const FavoriteImage = styled.img`

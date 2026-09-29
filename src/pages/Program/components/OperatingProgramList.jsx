@@ -2,7 +2,10 @@ import {
     useEffect,
     useState,
 } from "react";
-import { useParams } from "react-router-dom";
+
+import {
+    useParams,
+} from "react-router-dom";
 
 import programCharacter from "../../../assets/images/prgram-character.png";
 
@@ -10,27 +13,67 @@ import {
     getFacilityPrograms,
 } from "../../../api/facilities";
 
+import BottomNav from "../../../components/BottomNav";
 import OperatingProgramCard from "./OperatingProgramCard";
 
 import * as S from "./OperatingProgramList.styled";
 
+function formatPrice(price) {
+    if (
+        price === null ||
+        price === undefined ||
+        price === ""
+    ) {
+        return "가격 정보 없음";
+    }
+
+    const numericPrice =
+        Number(price);
+
+    if (
+        Number.isNaN(
+            numericPrice
+        )
+    ) {
+        return String(price);
+    }
+
+    if (
+        numericPrice === 0
+    ) {
+        return "무료";
+    }
+
+    return `${numericPrice.toLocaleString(
+        "ko-KR"
+    )}원`;
+}
+
 export default function OperatingProgramList() {
-    const { id: facilityId } =
-        useParams();
+    const {
+        id: facilityId,
+    } = useParams();
 
-    const [programs, setPrograms] =
-        useState([]);
+    const [
+        programs,
+        setPrograms,
+    ] = useState([]);
 
-    const [isLoading, setIsLoading] =
-        useState(true);
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(true);
 
-    const [isError, setIsError] =
-        useState(false);
+    const [
+        isError,
+        setIsError,
+    ] = useState(false);
 
     useEffect(() => {
         if (!facilityId) {
             setIsLoading(false);
             setIsError(true);
+
             return;
         }
 
@@ -75,29 +118,42 @@ export default function OperatingProgramList() {
                                     `${facilityId}-${index}`,
 
                                 title:
-                                    program.programName,
+                                    program.programName ||
+                                    "강좌 정보 없음",
 
                                 className:
-                                    program.sportName,
+                                    program.sportName ||
+                                    "종목 정보 없음",
 
                                 days:
-                                    program.weekday,
+                                    program.weekday ||
+                                    "요일 정보 없음",
 
                                 time:
-                                    program.time,
+                                    program.time ||
+                                    "시간 정보 없음",
 
                                 operatingPeriod:
                                     program.operatingStartDate &&
                                     program.operatingEndDate
                                         ? `${program.operatingStartDate} ~ ${program.operatingEndDate}`
-                                        : "-",
+                                        : "운영기간 정보 없음",
 
                                 price:
-                                    program.price ||
-                                    "-",
+                                    formatPrice(
+                                        program.price
+                                    ),
 
                                 voucherAvailable:
                                     program.voucherAvailable,
+
+                                homepageUrl:
+                                    program.homepageUrl ??
+                                    null,
+
+                                sourceType:
+                                    program.sourceType ??
+                                    null,
                             })
                         );
 
@@ -114,6 +170,7 @@ export default function OperatingProgramList() {
 
                     console.error(
                         "운영 프로그램 조회 실패:",
+                        error.response?.data ??
                         error
                     );
 
@@ -149,7 +206,9 @@ export default function OperatingProgramList() {
                     </S.BannerText>
 
                     <S.CharacterImage
-                        src={programCharacter}
+                        src={
+                            programCharacter
+                        }
                         alt=""
                     />
                 </S.Banner>
@@ -188,9 +247,7 @@ export default function OperatingProgramList() {
                     ) : (
                         <S.ProgramList>
                             {programs.map(
-                                (
-                                    program
-                                ) => (
+                                (program) => (
                                     <OperatingProgramCard
                                         key={
                                             program.id
@@ -205,6 +262,8 @@ export default function OperatingProgramList() {
                     )}
                 </S.Section>
             </S.Content>
+
+            <BottomNav />
         </S.Page>
     );
 }

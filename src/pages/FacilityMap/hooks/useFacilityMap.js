@@ -1,10 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
-import { fetchFacilityMarkers } from '../../../api/facilities';
-import { getCurrentCoords } from '../../../utils/geolocation';
+import {
+    useLocation,
+    useNavigate,
+} from 'react-router-dom';
 
-import { useRouteSearch } from './useRouteSearch';
+import {
+    fetchFacilityMarkers,
+} from '../../../api/facilities';
+
+import {
+    getCurrentCoords,
+} from '../../../utils/geolocation';
+
+import {
+    useRouteSearch,
+} from './useRouteSearch';
 
 import {
     estimateDelta,
@@ -12,51 +27,102 @@ import {
 } from '../utils/mapUtils';
 
 export function useFacilityMap() {
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigate =
+        useNavigate();
 
-    const mapContainerRef = useRef(null);
-    const mapRef = useRef(null);
+    const location =
+        useLocation();
 
-    const facilityMarkersRef = useRef([]);
-    const currentLocationMarkerRef = useRef(null);
-    const arrivalMarkerRef = useRef(null);
+    const mapContainerRef =
+        useRef(null);
 
-    const facilitiesDataRef = useRef([]);
-    const clustersDataRef = useRef([]);
+    const mapRef =
+        useRef(null);
 
-    const [mapLoaded, setMapLoaded] = useState(false);
-    const [mapError, setMapError] = useState(false);
-    const [markersLoading, setMarkersLoading] = useState(false);
-    const [locating, setLocating] = useState(false);
+    const facilityMarkersRef =
+        useRef([]);
 
-    const [avoidStairs, setAvoidStairs] = useState(false);
+    const currentLocationMarkerRef =
+        useRef(null);
 
-    const [departure, setDeparture] = useState('현재 위치');
+    const arrivalMarkerRef =
+        useRef(null);
 
-    const [arrival, setArrival] = useState(
-        location.state?.arrival || ''
+    const facilitiesDataRef =
+        useRef([]);
+
+    const clustersDataRef =
+        useRef([]);
+
+    const [
+        mapLoaded,
+        setMapLoaded,
+    ] = useState(false);
+
+    const [
+        mapError,
+        setMapError,
+    ] = useState(false);
+
+    const [
+        markersLoading,
+        setMarkersLoading,
+    ] = useState(false);
+
+    const [
+        locating,
+        setLocating,
+    ] = useState(false);
+
+    const [
+        avoidStairs,
+        setAvoidStairs,
+    ] = useState(false);
+
+    const [
+        departure,
+        setDeparture,
+    ] = useState(
+        '현재 위치'
     );
 
-    const [arrivalCoord, setArrivalCoord] = useState(
-        location.state?.arrivalCoord || null
+    const [
+        arrival,
+        setArrival,
+    ] = useState(
+        location.state
+            ?.arrival || ''
     );
 
-    const [departureCoord, setDepartureCoord] =
-        useState(null);
+    const [
+        arrivalCoord,
+        setArrivalCoord,
+    ] = useState(
+        location.state
+            ?.arrivalCoord ||
+            null
+    );
 
-    const [selectedFacility, setSelectedFacility] =
-        useState(null);
+    const [
+        departureCoord,
+        setDepartureCoord,
+    ] = useState(null);
 
-    const [sheetExpanded, setSheetExpanded] =
-        useState(false);
+    const [
+        selectedFacility,
+        setSelectedFacility,
+    ] = useState(null);
 
     const {
         routeLoading,
         routeMessage,
+
+        walkRouteData,
         transitRouteData,
+
         drawRoute,
         drawTransitRoute,
+
         clearRoute,
         clearRouteLines,
     } = useRouteSearch({
@@ -208,252 +274,306 @@ export function useFacilityMap() {
         }
     };
 
-    const showCurrentLocationMarker = (
-        Tmapv2,
-        map,
-        coords
-    ) => {
-        if (currentLocationMarkerRef.current) {
-            currentLocationMarkerRef.current.setMap(
-                null
-            );
-        }
-
-        const marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(
-                coords.latitude,
-                coords.longitude
-            ),
-
-            icon:
-                'data:image/svg+xml;charset=UTF-8,' +
-                encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#4A90E2" opacity="0.2"/><circle cx="16" cy="16" r="8" fill="#2F7BFF" stroke="white" stroke-width="3"/></svg>'
-                ),
-
-            iconSize: new Tmapv2.Size(
-                32,
-                32
-            ),
-
+    const showCurrentLocationMarker =
+        (
+            Tmapv2,
             map,
-        });
+            coords
+        ) => {
+            if (
+                currentLocationMarkerRef.current
+            ) {
+                currentLocationMarkerRef.current.setMap(
+                    null
+                );
+            }
 
-        currentLocationMarkerRef.current =
-            marker;
-    };
+            const marker =
+                new Tmapv2.Marker(
+                    {
+                        position:
+                            new Tmapv2.LatLng(
+                                coords.latitude,
+                                coords.longitude
+                            ),
 
-    const showArrivalMarker = (
-        Tmapv2,
-        map,
-        coord
-    ) => {
-        if (arrivalMarkerRef.current) {
-            arrivalMarkerRef.current.setMap(null);
-        }
+                        icon:
+                            'data:image/svg+xml;charset=UTF-8,' +
+                            encodeURIComponent(
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#4A90E2" opacity="0.2"/><circle cx="16" cy="16" r="8" fill="#2F7BFF" stroke="white" stroke-width="3"/></svg>'
+                            ),
 
-        if (!coord) return;
+                        iconSize:
+                            new Tmapv2.Size(
+                                32,
+                                32
+                            ),
 
-        const marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(
-                coord.latitude,
-                coord.longitude
-            ),
+                        map,
+                    }
+                );
 
-            icon:
-                'data:image/svg+xml;charset=UTF-8,' +
-                encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
-                ),
+            currentLocationMarkerRef.current =
+                marker;
+        };
 
-            iconSize: new Tmapv2.Size(
-                28,
-                32
-            ),
-
+    const showArrivalMarker =
+        (
+            Tmapv2,
             map,
-        });
-
-        arrivalMarkerRef.current = marker;
-
-        map.setCenter(
-            new Tmapv2.LatLng(
-                coord.latitude,
-                coord.longitude
-            )
-        );
-    };
-
-    const handleContainerClick = (domEvent) => {
-        const map = mapRef.current;
-        const container =
-            mapContainerRef.current;
-
-        if (!map || !container) return;
-
-        const zoom = map.getZoom();
-        const center = map.getCenter();
-
-        const centerLat =
-            typeof center.lat === 'function'
-                ? center.lat()
-                : center.lat;
-
-        const centerLng =
-            typeof center.lng === 'function'
-                ? center.lng()
-                : center.lng;
-
-        const centerPixel =
-            latLngToWorldPixel(
-                centerLat,
-                centerLng,
-                zoom
-            );
-
-        const rect =
-            container.getBoundingClientRect();
-
-        const clickX =
-            domEvent.clientX - rect.left;
-
-        const clickY =
-            domEvent.clientY - rect.top;
-
-        const clickWorldX =
-            centerPixel.x +
-            (clickX -
-                container.clientWidth / 2);
-
-        const clickWorldY =
-            centerPixel.y +
-            (clickY -
-                container.clientHeight / 2);
-
-        let closestFacility = null;
-        let closestFacilityDist =
-            Infinity;
-
-        facilitiesDataRef.current.forEach(
-            (facility) => {
-                const point =
-                    latLngToWorldPixel(
-                        facility.latitude,
-                        facility.longitude,
-                        zoom
-                    );
-
-                const distance =
-                    Math.hypot(
-                        point.x -
-                            clickWorldX,
-                        point.y -
-                            clickWorldY
-                    );
-
-                if (
-                    distance <
-                    closestFacilityDist
-                ) {
-                    closestFacilityDist =
-                        distance;
-
-                    closestFacility =
-                        facility;
-                }
+            coord
+        ) => {
+            if (
+                arrivalMarkerRef.current
+            ) {
+                arrivalMarkerRef.current.setMap(
+                    null
+                );
             }
-        );
 
-        if (
-            closestFacility &&
-            closestFacilityDist <= 16
-        ) {
-            const Tmapv2 =
-                window.Tmapv2;
-
-            const coord = {
-                latitude:
-                    closestFacility.latitude,
-                longitude:
-                    closestFacility.longitude,
-            };
-
-            setSelectedFacility(
-                closestFacility
-            );
-
-            setSheetExpanded(false);
-
-            setArrival(
-                closestFacility.name
-            );
-
-            setArrivalCoord(coord);
-
-            clearRoute();
-
-            showArrivalMarker(
-                Tmapv2,
-                map,
-                coord
-            );
-
-            return;
-        }
-
-        let closestCluster = null;
-        let closestClusterDist =
-            Infinity;
-
-        clustersDataRef.current.forEach(
-            (cluster) => {
-                const point =
-                    latLngToWorldPixel(
-                        cluster.latitude,
-                        cluster.longitude,
-                        zoom
-                    );
-
-                const distance =
-                    Math.hypot(
-                        point.x -
-                            clickWorldX,
-                        point.y -
-                            clickWorldY
-                    );
-
-                if (
-                    distance <
-                    closestClusterDist
-                ) {
-                    closestClusterDist =
-                        distance;
-
-                    closestCluster =
-                        cluster;
-                }
+            if (!coord) {
+                return;
             }
-        );
 
-        if (
-            closestCluster &&
-            closestClusterDist <= 20
-        ) {
-            const Tmapv2 =
-                window.Tmapv2;
+            const marker =
+                new Tmapv2.Marker(
+                    {
+                        position:
+                            new Tmapv2.LatLng(
+                                coord.latitude,
+                                coord.longitude
+                            ),
+
+                        icon:
+                            'data:image/svg+xml;charset=UTF-8,' +
+                            encodeURIComponent(
+                                '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="32" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#FF5A5F"/><circle cx="8" cy="7" r="2.4" fill="white"/></svg>'
+                            ),
+
+                        iconSize:
+                            new Tmapv2.Size(
+                                28,
+                                32
+                            ),
+
+                        map,
+                    }
+                );
+
+            arrivalMarkerRef.current =
+                marker;
 
             map.setCenter(
                 new Tmapv2.LatLng(
-                    closestCluster.latitude,
-                    closestCluster.longitude
+                    coord.latitude,
+                    coord.longitude
                 )
             );
+        };
 
-            map.setZoom(
-                (map.getZoom() || 15) + 2
+    const handleContainerClick =
+        (domEvent) => {
+            const map =
+                mapRef.current;
+
+            const container =
+                mapContainerRef.current;
+
+            if (
+                !map ||
+                !container
+            ) {
+                return;
+            }
+
+            const zoom =
+                map.getZoom();
+
+            const center =
+                map.getCenter();
+
+            const centerLat =
+                typeof center.lat ===
+                'function'
+                    ? center.lat()
+                    : center.lat;
+
+            const centerLng =
+                typeof center.lng ===
+                'function'
+                    ? center.lng()
+                    : center.lng;
+
+            const centerPixel =
+                latLngToWorldPixel(
+                    centerLat,
+                    centerLng,
+                    zoom
+                );
+
+            const rect =
+                container.getBoundingClientRect();
+
+            const clickX =
+                domEvent.clientX -
+                rect.left;
+
+            const clickY =
+                domEvent.clientY -
+                rect.top;
+
+            const clickWorldX =
+                centerPixel.x +
+                (clickX -
+                    container.clientWidth /
+                        2);
+
+            const clickWorldY =
+                centerPixel.y +
+                (clickY -
+                    container.clientHeight /
+                        2);
+
+            let closestFacility =
+                null;
+
+            let closestFacilityDist =
+                Infinity;
+
+            facilitiesDataRef.current.forEach(
+                (
+                    facility
+                ) => {
+                    const point =
+                        latLngToWorldPixel(
+                            facility.latitude,
+                            facility.longitude,
+                            zoom
+                        );
+
+                    const distance =
+                        Math.hypot(
+                            point.x -
+                                clickWorldX,
+
+                            point.y -
+                                clickWorldY
+                        );
+
+                    if (
+                        distance <
+                        closestFacilityDist
+                    ) {
+                        closestFacilityDist =
+                            distance;
+
+                        closestFacility =
+                            facility;
+                    }
+                }
             );
-        }
-    };
+
+            if (
+                closestFacility &&
+                closestFacilityDist <=
+                    16
+            ) {
+                const Tmapv2 =
+                    window.Tmapv2;
+
+                const coord = {
+                    latitude:
+                        closestFacility.latitude,
+
+                    longitude:
+                        closestFacility.longitude,
+                };
+
+                setSelectedFacility(
+                    closestFacility
+                );
+
+                setArrival(
+                    closestFacility.name
+                );
+
+                setArrivalCoord(
+                    coord
+                );
+
+                clearRoute();
+
+                showArrivalMarker(
+                    Tmapv2,
+                    map,
+                    coord
+                );
+
+                return;
+            }
+
+            let closestCluster =
+                null;
+
+            let closestClusterDist =
+                Infinity;
+
+            clustersDataRef.current.forEach(
+                (
+                    cluster
+                ) => {
+                    const point =
+                        latLngToWorldPixel(
+                            cluster.latitude,
+                            cluster.longitude,
+                            zoom
+                        );
+
+                    const distance =
+                        Math.hypot(
+                            point.x -
+                                clickWorldX,
+
+                            point.y -
+                                clickWorldY
+                        );
+
+                    if (
+                        distance <
+                        closestClusterDist
+                    ) {
+                        closestClusterDist =
+                            distance;
+
+                        closestCluster =
+                            cluster;
+                    }
+                }
+            );
+
+            if (
+                closestCluster &&
+                closestClusterDist <=
+                    20
+            ) {
+                const Tmapv2 =
+                    window.Tmapv2;
+
+                map.setCenter(
+                    new Tmapv2.LatLng(
+                        closestCluster.latitude,
+                        closestCluster.longitude
+                    )
+                );
+
+                map.setZoom(
+                    (
+                        map.getZoom() ||
+                        15
+                    ) + 2
+                );
+            }
+        };
 
     const moveToCurrentLocation =
         async () => {
@@ -463,16 +583,25 @@ export function useFacilityMap() {
             const Tmapv2 =
                 window.Tmapv2;
 
-            if (!map || !Tmapv2) return;
+            if (
+                !map ||
+                !Tmapv2
+            ) {
+                return;
+            }
 
             setLocating(true);
-            setDeparture('현재 위치');
+            setDeparture(
+                '현재 위치'
+            );
 
             try {
                 const coords =
                     await getCurrentCoords();
 
-                setDepartureCoord(coords);
+                setDepartureCoord(
+                    coords
+                );
 
                 clearRoute();
 
@@ -501,14 +630,26 @@ export function useFacilityMap() {
         };
 
     useEffect(() => {
-        let cancelled = false;
-        let initTimer = null;
+        let cancelled =
+            false;
+
+        let initTimer =
+            null;
 
         async function tryInitMap() {
-            if (cancelled) return;
-            if (mapRef.current) return;
+            if (cancelled) {
+                return;
+            }
 
-            if (!window.Tmapv2) {
+            if (
+                mapRef.current
+            ) {
+                return;
+            }
+
+            if (
+                !window.Tmapv2
+            ) {
                 initTimer =
                     setTimeout(
                         tryInitMap,
@@ -518,11 +659,17 @@ export function useFacilityMap() {
                 return;
             }
 
-            if (!mapContainerRef.current) {
+            if (
+                !mapContainerRef.current
+            ) {
                 return;
             }
 
-            if (mapRef.current) return;
+            if (
+                mapRef.current
+            ) {
+                return;
+            }
 
             try {
                 const Tmapv2 =
@@ -536,8 +683,12 @@ export function useFacilityMap() {
                     regionCoord ||
                     (await getCurrentCoords());
 
-                if (cancelled) return;
-                if (mapRef.current) return;
+                if (
+                    cancelled ||
+                    mapRef.current
+                ) {
+                    return;
+                }
 
                 const map =
                     new Tmapv2.Map(
@@ -549,16 +700,27 @@ export function useFacilityMap() {
                                     initialCoord.longitude
                                 ),
 
-                            width: '100%',
-                            height: '100%',
+                            width:
+                                '100%',
 
-                            zoom: regionCoord
-                                ? 14
-                                : 15,
+                            height:
+                                '100%',
+
+                            zoom:
+                                regionCoord
+                                    ? 14
+                                    : 15,
+
+                            zoomControl:
+                                true,
+
+                            scrollwheel:
+                                false,
                         }
                     );
 
-                mapRef.current = map;
+                mapRef.current =
+                    map;
 
                 mapContainerRef.current.addEventListener(
                     'click',
@@ -568,7 +730,9 @@ export function useFacilityMap() {
                 const myCoords =
                     await getCurrentCoords();
 
-                if (!cancelled) {
+                if (
+                    !cancelled
+                ) {
                     setDepartureCoord(
                         myCoords
                     );
@@ -587,6 +751,7 @@ export function useFacilityMap() {
                     showArrivalMarker(
                         Tmapv2,
                         map,
+
                         location.state
                             .arrivalCoord
                     );
@@ -609,8 +774,12 @@ export function useFacilityMap() {
         return () => {
             cancelled = true;
 
-            if (initTimer) {
-                clearTimeout(initTimer);
+            if (
+                initTimer
+            ) {
+                clearTimeout(
+                    initTimer
+                );
             }
 
             if (
@@ -630,7 +799,9 @@ export function useFacilityMap() {
     }, []);
 
     useEffect(() => {
-        if (mapLoaded) {
+        if (
+            mapLoaded
+        ) {
             loadFacilityMarkers();
         }
 
@@ -669,12 +840,22 @@ export function useFacilityMap() {
 
         clearRoute();
 
-        const map = mapRef.current;
-        const Tmapv2 = window.Tmapv2;
+        const map =
+            mapRef.current;
 
-        if (!map || !Tmapv2) return;
+        const Tmapv2 =
+            window.Tmapv2;
 
-        if (previousArrival) {
+        if (
+            !map ||
+            !Tmapv2
+        ) {
+            return;
+        }
+
+        if (
+            previousArrival
+        ) {
             showCurrentLocationMarker(
                 Tmapv2,
                 map,
@@ -682,7 +863,9 @@ export function useFacilityMap() {
             );
         }
 
-        if (previousDeparture) {
+        if (
+            previousDeparture
+        ) {
             showArrivalMarker(
                 Tmapv2,
                 map,
@@ -691,13 +874,23 @@ export function useFacilityMap() {
         }
     };
 
-    const goArrivalSearch = (routeMode = location.state?.routeMode || 'WALK') => {
-        navigate('/departure-search', {
-            state: {
-                mode: 'arrival',
-                routeMode,
-            },
-        });
+    const goArrivalSearch = (
+        routeMode =
+            location.state
+                ?.routeMode ||
+            'WALK'
+    ) => {
+        navigate(
+            '/departure-search',
+            {
+                state: {
+                    mode:
+                        'arrival',
+
+                    routeMode,
+                },
+            }
+        );
     };
 
     const goSearchRoute = (
@@ -707,12 +900,16 @@ export function useFacilityMap() {
             !arrival ||
             !arrivalCoord
         ) {
-            goArrivalSearch(routeMode);
+            goArrivalSearch(
+                routeMode
+            );
+
             return;
         }
 
         if (
-            routeMode === 'TRANSIT'
+            routeMode ===
+            'TRANSIT'
         ) {
             drawTransitRoute();
             return;
@@ -725,34 +922,37 @@ export function useFacilityMap() {
         );
     };
 
-    const toggleAvoidStairs = () => {
-        setAvoidStairs((prev) => {
-            const next = !prev;
+    const toggleAvoidStairs =
+        () => {
+            setAvoidStairs(
+                (prev) => {
+                    const next =
+                        !prev;
 
-            if (arrivalCoord) {
-                drawRoute(
-                    next
-                        ? 'AVOID_STAIRS'
-                        : 'NORMAL'
-                );
-            }
+                    if (
+                        arrivalCoord
+                    ) {
+                        drawRoute(
+                            next
+                                ? 'AVOID_STAIRS'
+                                : 'NORMAL'
+                        );
+                    }
 
-            return next;
-        });
-    };
-
-    const toggleSheet = () => {
-        setSheetExpanded(
-            (prev) => !prev
-        );
-    };
+                    return next;
+                }
+            );
+        };
 
     const closeSheet = () => {
-        setSelectedFacility(null);
-        setSheetExpanded(false);
+        setSelectedFacility(
+            null
+        );
 
         setArrival('');
-        setArrivalCoord(null);
+        setArrivalCoord(
+            null
+        );
 
         if (
             arrivalMarkerRef.current
@@ -770,7 +970,9 @@ export function useFacilityMap() {
 
     const goSelectedFacilityDetail =
         () => {
-            if (!selectedFacility) {
+            if (
+                !selectedFacility
+            ) {
                 return;
             }
 
@@ -795,6 +997,9 @@ export function useFacilityMap() {
         routeLoading,
         routeMessage,
 
+        walkRouteData,
+        transitRouteData,
+
         avoidStairs,
 
         handleSwap,
@@ -806,12 +1011,9 @@ export function useFacilityMap() {
 
         toggleAvoidStairs,
 
-        transitRouteData,
-
         selectedFacility,
-        sheetExpanded,
-        toggleSheet,
         closeSheet,
+
         goSelectedFacilityDetail,
     };
 }

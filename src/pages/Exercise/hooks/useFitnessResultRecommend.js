@@ -1,4 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
+
+import {
+    SPORT_ID,
+} from "../data/sportRecommendData";
+
 import { useLocation } from "react-router-dom";
 
 import {
@@ -9,7 +18,8 @@ import {
 const API_TO_RESULT = (data) => ({
     근력: data.muscleStrengthGrade,
     근지구력: data.muscleEnduranceGrade,
-    심폐지구력: data.cardioEnduranceGrade,
+    심폐지구력:
+        data.cardioEnduranceGrade,
     유연성: data.flexibilityGrade,
     민첩성: data.agilityGrade,
     순발력: data.powerGrade,
@@ -18,15 +28,24 @@ const API_TO_RESULT = (data) => ({
 function useFitnessResultRecommend() {
     const location = useLocation();
 
-    const [results, setResults] = useState(
-        location.state?.results || null
-    );
+    const [results, setResults] =
+        useState(
+            location.state?.results ??
+            null
+        );
 
-    const [recommendations, setRecommendations] =
-        useState([]);
+    const [
+        recommendations,
+        setRecommendations,
+    ] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(true);
+
+    const [error, setError] =
+        useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,37 +53,48 @@ function useFitnessResultRecommend() {
                 setIsLoading(true);
                 setError("");
 
-                // 체력 결과
-                if (location.state?.results) {
-                    setResults(location.state.results);
+                if (
+                    location.state
+                        ?.results
+                ) {
+                    setResults(
+                        location.state
+                            .results
+                    );
                 } else {
                     const fitnessResponse =
                         await getFitnessResult();
 
-                    console.log(
-                        "체력 결과 응답:",
-                        fitnessResponse
-                    );
-
                     setResults(
                         API_TO_RESULT(
-                            fitnessResponse.data
+                            fitnessResponse
+                                .data
                         )
                     );
                 }
 
-                // 추천 운동
                 const recommendationResponse =
                     await getFitnessRecommendations();
 
-                console.log(
-                    "운동 추천 응답:",
+                const recommendationList =
                     recommendationResponse
-                );
+                        ?.data
+                        ?.recommendations ??
+                    [];
 
                 setRecommendations(
-                    recommendationResponse.data
-                        ?.recommendations ?? []
+                    recommendationList.map(
+                        (recommendation) => ({
+                            ...recommendation,
+                            sportId:
+                                SPORT_ID[
+                                recommendation.sportCode
+                                ] ?? null,
+                            exerciseCharacteristics:
+                                recommendation.exerciseCharacteristics ??
+                                [],
+                        })
+                    )
                 );
             } catch (error) {
                 console.error(
@@ -74,15 +104,19 @@ function useFitnessResultRecommend() {
 
                 console.error(
                     "서버 응답:",
-                    error.response?.data
+                    error.response
+                        ?.data
                 );
 
                 setError(
-                    error.response?.data?.message ||
-                        "추천 운동을 불러오지 못했습니다."
+                    error.response?.data
+                        ?.message ||
+                    "추천 운동을 불러오지 못했습니다."
                 );
 
-                setRecommendations([]);
+                setRecommendations(
+                    []
+                );
             } finally {
                 setIsLoading(false);
             }
@@ -91,18 +125,25 @@ function useFitnessResultRecommend() {
         fetchData();
     }, [location.state]);
 
-    const weakestCategory = useMemo(() => {
-        if (!results) {
-            return null;
-        }
+    const weakestCategory =
+        useMemo(() => {
+            if (!results) {
+                return null;
+            }
 
-        return Object.entries(results).reduce(
-            (currentWeakest, current) =>
-                current[1] > currentWeakest[1]
-                    ? current
-                    : currentWeakest
-        )[0];
-    }, [results]);
+            return Object.entries(
+                results
+            ).reduce(
+                (
+                    currentWeakest,
+                    current
+                ) =>
+                    current[1] >
+                        currentWeakest[1]
+                        ? current
+                        : currentWeakest
+            )[0];
+        }, [results]);
 
     return {
         results,

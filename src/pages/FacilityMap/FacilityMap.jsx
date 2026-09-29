@@ -1,10 +1,18 @@
+// FacilityMap.jsx
+
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import {
+    useLocation,
+    useNavigate,
+} from 'react-router-dom';
 
 import Header from '../../components/common/Header';
 import BottomNav from '../../components/BottomNav';
 
-import { useFacilityMap } from './hooks/useFacilityMap';
+import {
+    useFacilityMap,
+} from './hooks/useFacilityMap';
 
 import RouteSearchCard from './components/RouteSearchCard';
 import TransitRouteCard from './components/TransitRouteCard';
@@ -17,10 +25,22 @@ import {
 } from './FacilityMap.styled';
 
 function FacilityMap() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [routeMode, setRouteMode] =
-        useState(location.state?.routeMode === 'TRANSIT' ? 'TRANSIT' : 'WALK');
+    const location =
+        useLocation();
+
+    const navigate =
+        useNavigate();
+
+    const [
+        routeMode,
+        setRouteMode,
+    ] = useState(
+        location.state
+            ?.routeMode ===
+            'TRANSIT'
+            ? 'TRANSIT'
+            : 'WALK'
+    );
 
     const {
         mapContainerRef,
@@ -37,6 +57,9 @@ function FacilityMap() {
         routeLoading,
         routeMessage,
 
+        walkRouteData,
+        transitRouteData,
+
         avoidStairs,
 
         handleSwap,
@@ -48,71 +71,134 @@ function FacilityMap() {
 
         toggleAvoidStairs,
 
-        transitRouteData,
-
         selectedFacility,
-        sheetExpanded,
-        toggleSheet,
+
         closeSheet,
+
         goSelectedFacilityDetail,
     } = useFacilityMap();
 
-    const handleRouteModeChange = (mode) => {
-        if (routeMode === mode) return;
+    const handleRouteModeChange =
+        (mode) => {
+            if (
+                routeMode === mode
+            ) {
+                return;
+            }
 
-        setRouteMode(mode);
-        clearRoute();
-        navigate(location.pathname, {
-            replace: true,
-            state: { ...location.state, routeMode: mode },
-        });
-    };
+            setRouteMode(mode);
+
+            clearRoute();
+
+            navigate(
+                location.pathname,
+                {
+                    replace: true,
+
+                    state: {
+                        ...location.state,
+                        routeMode:
+                            mode,
+                    },
+                }
+            );
+        };
 
     return (
         <Container>
             <Header title="지도" />
 
             <RouteSearchCard
-                departure={departure}
-                arrival={arrival}
-                locating={locating}
-                routeLoading={routeLoading}
-                routeMode={routeMode}
-                avoidStairs={avoidStairs}
-                onSwap={handleSwap}
-                onArrivalSearch={() => goArrivalSearch(routeMode)}
-                onCurrentLocation={moveToCurrentLocation}
-                onRouteModeChange={handleRouteModeChange}
-                onToggleAvoidStairs={toggleAvoidStairs}
+                departure={
+                    departure
+                }
+                arrival={
+                    arrival
+                }
+                locating={
+                    locating
+                }
+                routeLoading={
+                    routeLoading
+                }
+                routeMode={
+                    routeMode
+                }
+                avoidStairs={
+                    avoidStairs
+                }
+                walkRouteData={
+                    walkRouteData
+                }
+                onSwap={
+                    handleSwap
+                }
+                onArrivalSearch={() =>
+                    goArrivalSearch(
+                        routeMode
+                    )
+                }
+                onCurrentLocation={
+                    moveToCurrentLocation
+                }
+                onRouteModeChange={
+                    handleRouteModeChange
+                }
+                onToggleAvoidStairs={
+                    toggleAvoidStairs
+                }
                 onSearchRoute={() =>
-                    goSearchRoute(routeMode)
+                    goSearchRoute(
+                        routeMode
+                    )
                 }
             />
 
             {routeMessage && (
-                <TransitNotice role="status">{routeMessage}</TransitNotice>
+                <TransitNotice
+                    role="status"
+                >
+                    {
+                        routeMessage
+                    }
+                </TransitNotice>
             )}
 
-            {routeMode === 'TRANSIT' && (
-                <TransitRouteCard
-                    data={transitRouteData}
-                />
-            )}
+            {routeMode ===
+                'TRANSIT' && (
+                    <TransitRouteCard
+                        data={
+                            transitRouteData
+                        }
+                    />
+                )}
 
             <MapArea
-                mapContainerRef={mapContainerRef}
-                mapLoaded={mapLoaded}
-                mapError={mapError}
-                markersLoading={markersLoading}
-                locating={locating}
-                onReloadMarkers={loadFacilityMarkers}
-                onCurrentLocation={moveToCurrentLocation}
+                mapContainerRef={
+                    mapContainerRef
+                }
+                mapLoaded={
+                    mapLoaded
+                }
+                mapError={
+                    mapError
+                }
+                markersLoading={
+                    markersLoading
+                }
+                locating={
+                    locating
+                }
+                onReloadMarkers={
+                    loadFacilityMarkers
+                }
+                onCurrentLocation={
+                    moveToCurrentLocation
+                }
             />
 
             <FacilityPreviewSheet
                 facility={selectedFacility}
-                expanded={sheetExpanded}
-                onToggle={toggleSheet}
                 onClose={closeSheet}
                 onDetail={goSelectedFacilityDetail}
             />
