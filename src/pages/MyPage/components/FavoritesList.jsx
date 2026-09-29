@@ -1,3 +1,5 @@
+import Pagination, { PAGE_SIZE } from '../../../components/common/Pagination';
+import { getCurrentCoords } from '../../../utils/geolocation';
 import {
     useEffect,
     useState,
@@ -82,65 +84,36 @@ export default function FavoritesList() {
     const [totalCount, setTotalCount] =
         useState(0);
 
-    const fetchFavorites = async (
-        latitude,
-        longitude
-    ) => {
-        try {
-            const response =
-                await getFavoriteFacilities({
-                    latitude,
-                    longitude,
-                    page: 0,
-                    size: 20,
-                });
-
-            const facilities =
-                response.data?.facilities ?? [];
-
-            setFavorites(
-                facilities.map(
-                    normalizeFacility
-                )
-            );
-
-            setTotalCount(
-                response.data?.totalCount ?? 0
-            );
-        } catch (error) {
-            console.error(
-                "즐겨찾기 목록 조회 실패",
-                error
-            );
-        }
-    };
+    const [page, setPage] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(false);
+    const [revision, setRevision] = useState(0);
+    const [removing, setRemoving] = useState(false);
 
     useEffect(() => {
-        if (!navigator.geolocation) {
-            fetchFavorites();
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const {
-                    latitude,
-                    longitude,
-                } = position.coords;
-
-                fetchFavorites(
-                    latitude,
-                    longitude
-                );
-            },
-
-            () => {
-                // 위치 권한을 허용하지 않아도
-                // 즐겨찾기 목록 자체는 조회
-                fetchFavorites();
+        let cancelled = false;
+        async function load() {
+            setLoading(true);
+            setLoadError(false);
+            try {
+                const coords = await getCurrentCoords();
+                const response = await getFavoriteFacilities({ ...coords, page, size: PAGE_SIZE });
+                if (cancelled) return;
+                if (!response.success) throw new Error('Favorites request failed');
+                const total = response.data?.totalCount ?? 0;
+                setTotalCount(total);
+                const lastPage = Math.max(0, Math.ceil(total / PAGE_SIZE) - 1);
+                if (page > lastPage) { setPage(lastPage); return; }
+                setFavorites((response.data?.facilities ?? []).map(normalizeFacility));
+            } catch (error) {
+                if (!cancelled) { setLoadError(true); console.error(error); }
+            } finally {
+                if (!cancelled) setLoading(false);
             }
-        );
-    }, []);
+        }
+        load();
+        return () => { cancelled = true; };
+    }, [page, revision]);
 
     const handleFacilityClick = (id) => {
         navigate(`/facility-detail/${id}`);
@@ -149,27 +122,22 @@ export default function FavoritesList() {
     const handleFavoriteRemove = async (
         id
     ) => {
+        if (removing) return;
+        setRemoving(true);
         try {
             const response =
                 await removeFavoriteFacility(id);
 
             if (!response.success) return;
 
-            setFavorites((prev) =>
-                prev.filter(
-                    (facility) =>
-                        facility.id !== id
-                )
-            );
-
-            setTotalCount((prev) =>
-                Math.max(prev - 1, 0)
-            );
+            setRevision(value => value + 1);
         } catch (error) {
             console.error(
                 "즐겨찾기 해제 실패",
                 error
             );
+        } finally {
+            setRemoving(false);
         }
     };
 
@@ -186,7 +154,7 @@ export default function FavoritesList() {
                 </S.Description>
             </S.InfoSection>
 
-            {favorites.length > 0 ? (
+            {loading ? <S.Description>목록을 불러오는 중이에요.</S.Description> : loadError ? <S.Description>목록을 불러오지 못했어요.</S.Description> : favorites.length > 0 ? (
                 <S.List>
                     {favorites.map(
                         (facility) => (
@@ -224,6 +192,7 @@ export default function FavoritesList() {
                     </S.EmptyDescription>
                 </S.EmptyState>
             )}
+            {!loadError && <Pagination page={page} totalCount={totalCount} onPageChange={setPage} disabled={loading || removing} />}
         </>
     );
 }

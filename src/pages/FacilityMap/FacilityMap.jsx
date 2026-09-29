@@ -80,6 +80,7 @@ function FacilityMap() {
         avoidStairs,
 
         handleSwap,
+        goDepartureSearch,
         goArrivalSearch,
         moveToCurrentLocation,
 
@@ -149,6 +150,11 @@ function FacilityMap() {
                 }
                 onSwap={
                     handleSwap
+                }
+                onDepartureSearch={() =>
+                    goDepartureSearch(
+                        routeMode
+                    )
                 }
                 onArrivalSearch={() =>
                     goArrivalSearch(

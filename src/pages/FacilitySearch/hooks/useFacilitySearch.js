@@ -235,12 +235,23 @@ export function useFacilitySearch() {
       );
     };
 
-  // 시설명 검색 → 목록
+  /*
+   * 시설명 검색 → 목록
+   *
+   * 앞뒤 공백 제거
+   * + 중간 공백도 모두 제거
+   *
+   * ex)
+   * "  오성 체육관  "
+   * → "오성체육관"
+   */
   const goKeywordSearch = () => {
-    const trimmedKeyword =
-      keyword.trim();
+    const normalizedKeyword =
+      keyword
+        .trim()
+        .replace(/\s+/g, '');
 
-    if (!trimmedKeyword) {
+    if (!normalizedKeyword) {
       return;
     }
 
@@ -249,7 +260,7 @@ export function useFacilitySearch() {
       {
         state: {
           keyword:
-            trimmedKeyword,
+            normalizedKeyword,
 
           searchMode:
             'KEYWORD',

@@ -1,3 +1,6 @@
+import fetchAllFacilities from '../../../utils/fetchAllFacilities';
+import Pagination from '../../../components/common/Pagination';
+import useListPagination from '../../../utils/useListPagination';
 import {
     useEffect,
     useMemo,
@@ -229,6 +232,8 @@ export default function ProgramResultList() {
         setIsError,
     ] = useState(false);
 
+    const { page, setPage, pageItems } = useListPagination(programs);
+
     useEffect(() => {
         if (
             sportIds.length === 0
@@ -356,7 +361,7 @@ export default function ProgramResultList() {
                         "CURRENT_LOCATION"
                     ) {
                         const data =
-                            await searchProgramFacilities({
+                            await fetchAllFacilities(searchProgramFacilities, {
                                 searchMode:
                                     "CURRENT_LOCATION",
 
@@ -394,7 +399,7 @@ export default function ProgramResultList() {
                      */
                     if (regionCode) {
                         const data =
-                            await searchProgramFacilities({
+                            await fetchAllFacilities(searchProgramFacilities, {
                                 searchMode:
                                     "REGION",
 
@@ -476,7 +481,7 @@ export default function ProgramResultList() {
                                 (
                                     code
                                 ) =>
-                                    searchProgramFacilities({
+                                    fetchAllFacilities(searchProgramFacilities, {
                                         searchMode:
                                             "REGION",
 
@@ -506,6 +511,9 @@ export default function ProgramResultList() {
                     ) {
                         return;
                     }
+
+                    const failed = results.find(result => result.status === 'rejected');
+                    if (failed) throw failed.reason;
 
                     const facilities =
                         results.flatMap(
@@ -635,7 +643,7 @@ export default function ProgramResultList() {
                     </S.StatusText>
                 ) : (
                     <S.ProgramList>
-                        {programs.map(
+                        {pageItems.map(
                             (
                                 program
                             ) => (
@@ -651,6 +659,7 @@ export default function ProgramResultList() {
                         )}
                     </S.ProgramList>
                 )}
+                {!isLoading && !isError && <Pagination page={page} totalCount={programs.length} onPageChange={setPage} />}
             </S.Content>
 
             <BottomNav />

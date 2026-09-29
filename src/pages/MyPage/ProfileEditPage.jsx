@@ -139,24 +139,10 @@ export default function ProfileEditPage() {
             label: "현재 비밀번호",
             type: "password",
             value: currentPassword,
-            onChange: handleCurrentPasswordChange,
-            placeholder: "현재 비밀번호",
-            buttonText: "확인",
-            onButtonClick: handleCurrentPasswordCheck,
-
-            message:
-                currentPasswordStatus === "ready"
-                    ? "현재 비밀번호가 입력되었습니다."
-                    : currentPasswordStatus === "error"
-                        ? "현재 비밀번호를 확인해 주세요."
-                        : null,
-
-            messageType:
-                currentPasswordStatus === "ready"
-                    ? "success"
-                    : currentPasswordStatus === "error"
-                        ? "error"
-                        : null,
+            onChange:
+                handleCurrentPasswordChange,
+            placeholder:
+                "현재 비밀번호",
         },
 
         {

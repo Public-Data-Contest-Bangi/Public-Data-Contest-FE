@@ -11,7 +11,7 @@ import {
 
 import Button from "../../../components/common/Button";
 
-import mascotSearchImg from "../../../assets/images/mascot-region.svg";
+import mascotSearchImg from "../../../assets/images/mascot-region-clear.png";
 import locationIcon from "../../../assets/icons/location-icon.png";
 
 import RegionSelectDropdown from "./RegionSelectDropdown";

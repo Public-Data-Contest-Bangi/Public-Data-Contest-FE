@@ -38,13 +38,13 @@ export const CardHeader = styled.div`
     cursor: pointer;
 `;
 
-export const ProgramIcon = styled.svg`
+export const ProgramIcon = styled.img`
     width: 32px;
     height: 32px;
 
     flex-shrink: 0;
 
-    color: #20cc91;
+    object-fit: contain;
 `;
 
 export const ProgramTitleArea = styled.div`

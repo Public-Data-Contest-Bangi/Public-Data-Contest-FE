@@ -39,4 +39,4 @@ export const ACCESSIBILITY_ITEMS = [
   { id: 'parking', label: '장애인 주차장', code: 'ACCESSIBLE_PARKING' },
 ];
 
-export const ACCESS_ICON_SIZE = 50;
+export const ACCESS_ICON_SIZE = 24;

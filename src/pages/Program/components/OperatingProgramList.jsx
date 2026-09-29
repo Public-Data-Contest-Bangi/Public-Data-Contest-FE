@@ -1,3 +1,5 @@
+import Pagination from '../../../components/common/Pagination';
+import useListPagination from '../../../utils/useListPagination';
 import {
     useEffect,
     useState,
@@ -69,6 +71,8 @@ export default function OperatingProgramList() {
         setIsError,
     ] = useState(false);
 
+    const { page, setPage, pageItems } = useListPagination(programs);
+
     useEffect(() => {
         if (!facilityId) {
             setIsLoading(false);
@@ -117,6 +121,8 @@ export default function OperatingProgramList() {
                                 id:
                                     `${facilityId}-${index}`,
 
+                                sportId: program.sportId,
+                                sportCode: program.sportCode,
                                 title:
                                     program.programName ||
                                     "강좌 정보 없음",
@@ -246,7 +252,7 @@ export default function OperatingProgramList() {
                         </S.StatusText>
                     ) : (
                         <S.ProgramList>
-                            {programs.map(
+                            {pageItems.map(
                                 (program) => (
                                     <OperatingProgramCard
                                         key={
@@ -260,6 +266,7 @@ export default function OperatingProgramList() {
                             )}
                         </S.ProgramList>
                     )}
+                    {!isLoading && !isError && <Pagination page={page} totalCount={programs.length} onPageChange={setPage} />}
                 </S.Section>
             </S.Content>
 

@@ -7,7 +7,7 @@ export const Form = styled.div`
     gap: 20px;
 
     margin-top: 24px;
-    padding-bottom: 180px;
+    padding-bottom: 24px;
 `;
 export const Field = styled.div`
     width: 100%;

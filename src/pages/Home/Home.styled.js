@@ -51,7 +51,7 @@ export const Logo = styled.img`
     margin-left: -20px;
     margin-top: -5px;
 
-    width: 80px;
+    width: 95px;
     height: auto;
 
     display: block;
