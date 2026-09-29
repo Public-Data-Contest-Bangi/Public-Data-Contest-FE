@@ -17,28 +17,6 @@ export const Card = styled.article`
     box-sizing: border-box;
 `;
 
-export const Thumbnail = styled.img`
-    width: 82px;
-    height: 108px;
-
-    flex-shrink: 0;
-
-    border-radius: 8px;
-
-    object-fit: cover;
-`;
-
-export const ThumbnailPlaceholder = styled.div`
-    width: 82px;
-    height: 108px;
-
-    flex-shrink: 0;
-
-    border-radius: 8px;
-
-    background: #eeeeee;
-`;
-
 export const Info = styled.div`
     flex: 1;
     min-width: 0;
