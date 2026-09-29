@@ -2,6 +2,7 @@ import firstExerciseImg from "../../assets/images/first-exercise.png";
 import fitnessExerciseImg from "../../assets/images/fitness-exercise.png";
 
 import BottomNav from "../../components/BottomNav";
+import Header from "../../components/common/Header";
 
 import ExerciseRecommendCard from "./components/ExerciseRecommendCard";
 import FitnessResultGuideModal from "./components/FitnessResultGuideModal";
@@ -24,18 +25,10 @@ function ExerciseRecommend() {
     return (
         <S.Page>
             <S.Container>
-                <S.Header>
-                    <S.BackButton
-                        type="button"
-                        onClick={handleBack}
-                    >
-                        ‹
-                    </S.BackButton>
-
-                    <S.Title>
-                        운동 추천
-                    </S.Title>
-                </S.Header>
+                <Header
+                    title="운동 추천"
+                    onBack={handleBack}
+                />
 
                 <S.Content>
                     <ExerciseRecommendCard

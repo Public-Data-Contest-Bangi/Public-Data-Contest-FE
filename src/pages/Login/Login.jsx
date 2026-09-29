@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./Login.styled";
 
 import logo from "../../assets/images/login.png";
+import brandLogo from "../../assets/images/디딤핏.png";
+
 import profileIcon from "../../assets/icons/profile.png";
 import lockIcon from "../../assets/icons/lock.png";
 import eyeIcon from "../../assets/icons/eye.png";
@@ -33,12 +35,10 @@ function Login() {
                     alt="디딤핏 캐릭터"
                 />
 
-                <S.BrandName>
-                    디딤
-                    <S.BrandAccent>
-                        핏
-                    </S.BrandAccent>
-                </S.BrandName>
+                <S.BrandLogo
+                    src={brandLogo}
+                    alt="디딤핏"
+                />
 
                 <S.InputSection>
                     <S.InputWrapper>

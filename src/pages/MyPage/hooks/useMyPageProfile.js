@@ -1,3 +1,5 @@
+// useMyPageProfile.js
+
 import {
     useEffect,
     useState,
@@ -7,48 +9,93 @@ import {
     getMyProfile,
 } from "../../../api/member";
 
+import profileCharacter from "../../../assets/images/profile-character.png";
+
+const AVATAR_IMAGE_STORAGE_KEY =
+    "profileAvatarImage";
+
 export default function useMyPageProfile() {
-    const [nickname, setNickname] =
-        useState("");
+    const [
+        nickname,
+        setNickname,
+    ] = useState("");
 
-    const [email, setEmail] =
-        useState("");
+    const [
+        email,
+        setEmail,
+    ] = useState("");
 
-    const [isLoading, setIsLoading] =
-        useState(true);
+    const [
+        profileAvatar,
+        setProfileAvatar,
+    ] = useState(() => {
+        return (
+            localStorage.getItem(
+                AVATAR_IMAGE_STORAGE_KEY
+            ) ||
+            profileCharacter
+        );
+    });
+
+    const [
+        isLoading,
+        setIsLoading,
+    ] = useState(true);
 
     useEffect(() => {
-        const fetchMyProfile = async () => {
-            try {
-                const response =
-                    await getMyProfile();
+        const fetchMyProfile =
+            async () => {
+                try {
+                    setIsLoading(true);
 
-                const {
-                    nickname,
-                    email,
-                } = response.data;
+                    const response =
+                        await getMyProfile();
 
-                setNickname(
-                    nickname ?? ""
-                );
+                    const {
+                        nickname,
+                        email,
+                    } =
+                        response.data;
 
-                setEmail(
-                    email ?? ""
-                );
+                    setNickname(
+                        nickname ??
+                            ""
+                    );
 
-                console.log(
-                    "마이페이지 회원정보 조회 성공:",
-                    response.data
-                );
-            } catch (error) {
-                console.error(
-                    "마이페이지 회원정보 조회 실패:",
-                    error.response?.data
-                );
-            } finally {
-                setIsLoading(false);
-            }
-        };
+                    setEmail(
+                        email ?? ""
+                    );
+
+                    setProfileAvatar(
+                        localStorage.getItem(
+                            AVATAR_IMAGE_STORAGE_KEY
+                        ) ||
+                            profileCharacter
+                    );
+
+                    console.log(
+                        "마이페이지 회원정보 조회 성공:",
+                        response.data
+                    );
+                } catch (error) {
+                    console.error(
+                        "마이페이지 회원정보 조회 실패:",
+                        error.response
+                            ?.data
+                    );
+
+                    setProfileAvatar(
+                        localStorage.getItem(
+                            AVATAR_IMAGE_STORAGE_KEY
+                        ) ||
+                            profileCharacter
+                    );
+                } finally {
+                    setIsLoading(
+                        false
+                    );
+                }
+            };
 
         fetchMyProfile();
     }, []);
@@ -56,6 +103,7 @@ export default function useMyPageProfile() {
     return {
         nickname,
         email,
+        profileAvatar,
         isLoading,
     };
 }

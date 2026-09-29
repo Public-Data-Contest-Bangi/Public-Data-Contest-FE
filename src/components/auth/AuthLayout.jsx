@@ -1,22 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import Header from "../common/Header";
+
 import * as S from "./AuthLayout.styled";
 
-function AuthLayout({ title, children }) {
-    const navigate = useNavigate();
-
+function AuthLayout({
+    title,
+    children,
+}) {
     return (
         <S.Page>
             <S.Container>
-                <S.Header>
-                    <S.BackButton
-                        type="button"
-                        onClick={() => navigate(-1)}
-                    >
-                        ‹
-                    </S.BackButton>
-
-                    <S.Title>{title}</S.Title>
-                </S.Header>
+                <Header title={title} />
 
                 {children}
             </S.Container>

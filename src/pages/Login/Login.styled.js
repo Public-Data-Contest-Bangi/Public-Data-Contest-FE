@@ -32,25 +32,14 @@ export const Logo = styled.img`
     margin: 0;
 `;
 
-export const BrandName = styled.h1`
-    margin: -20px 0 28px;
+export const BrandLogo = styled.img`
+    width: 400px;
+    height: auto;
 
-    font-size: 40px;
-    font-weight: 900;
-    line-height: 1;
+    display: block;
+    object-fit: contain;
 
-    color: #111111;
-
-    font-family:
-        "Arial Rounded MT Bold",
-        "Pretendard",
-        sans-serif;
-
-    letter-spacing: -1px;
-`;
-
-export const BrandAccent = styled.span`
-    color: #42dba0;
+    margin: -70px 0 10px;
 `;
 
 export const InputSection = styled.div`

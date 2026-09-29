@@ -1,39 +1,107 @@
-import { useState } from "react";
+// useProfileAvatar.js
 
-import { PROFILE_AVATARS } from "../data/profileAvatars";
+import {
+    useEffect,
+    useState,
+} from "react";
 
-const STORAGE_KEY = "profileAvatar";
+import {
+    PROFILE_AVATARS,
+} from "../data/profileAvatars";
+
+const STORAGE_KEY =
+    "profileAvatar";
+
+const STORAGE_IMAGE_KEY =
+    "profileAvatarImage";
 
 function useProfileAvatar() {
-    const [selectedAvatarId, setSelectedAvatarId] = useState(() => {
-        return (
-            localStorage.getItem(STORAGE_KEY) ??
-            PROFILE_AVATARS[0].id
-        );
+    const [
+        selectedAvatarId,
+        setSelectedAvatarId,
+    ] = useState(() => {
+        const savedAvatarId =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        const exists =
+            PROFILE_AVATARS.some(
+                (avatar) =>
+                    avatar.id ===
+                    savedAvatarId
+            );
+
+        return exists
+            ? savedAvatarId
+            : PROFILE_AVATARS[0].id;
     });
 
-    const [isAvatarPickerOpen, setIsAvatarPickerOpen] =
-        useState(false);
+    const [
+        isAvatarPickerOpen,
+        setIsAvatarPickerOpen,
+    ] = useState(false);
 
     const selectedAvatar =
         PROFILE_AVATARS.find(
-            (avatar) => avatar.id === selectedAvatarId
-        ) ?? PROFILE_AVATARS[0];
+            (avatar) =>
+                avatar.id ===
+                selectedAvatarId
+        ) ??
+        PROFILE_AVATARS[0];
 
-    const openAvatarPicker = () => {
-        setIsAvatarPickerOpen(true);
-    };
+    useEffect(() => {
+        localStorage.setItem(
+            STORAGE_KEY,
+            selectedAvatar.id
+        );
 
-    const closeAvatarPicker = () => {
-        setIsAvatarPickerOpen(false);
-    };
+        localStorage.setItem(
+            STORAGE_IMAGE_KEY,
+            selectedAvatar.image
+        );
+    }, [selectedAvatar]);
 
-    const handleAvatarSelect = (avatarId) => {
-        setSelectedAvatarId(avatarId);
+    const openAvatarPicker =
+        () => {
+            setIsAvatarPickerOpen(
+                true
+            );
+        };
+
+    const closeAvatarPicker =
+        () => {
+            setIsAvatarPickerOpen(
+                false
+            );
+        };
+
+    const handleAvatarSelect = (
+        avatarId
+    ) => {
+        const avatar =
+            PROFILE_AVATARS.find(
+                (item) =>
+                    item.id ===
+                    avatarId
+            );
+
+        if (!avatar) {
+            return;
+        }
+
+        setSelectedAvatarId(
+            avatar.id
+        );
 
         localStorage.setItem(
             STORAGE_KEY,
-            avatarId
+            avatar.id
+        );
+
+        localStorage.setItem(
+            STORAGE_IMAGE_KEY,
+            avatar.image
         );
 
         closeAvatarPicker();

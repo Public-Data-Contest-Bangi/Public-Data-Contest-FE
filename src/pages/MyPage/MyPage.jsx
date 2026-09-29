@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// MyPage.jsx
+
+import {
+    useState,
+} from "react";
+
+import {
+    useNavigate,
+} from "react-router-dom";
 
 import * as S from "./MyPage.styled";
 
@@ -9,8 +16,6 @@ import Header from "../../components/common/Header";
 import useLogout from "./hooks/useLogout";
 import useWithdraw from "./hooks/useWithdraw";
 import useMyPageProfile from "./hooks/useMyPageProfile";
-
-import profileCharacter from "../../assets/images/profile-character.png";
 
 import backIcon from "../../assets/icons/back.png";
 import reportIcon from "../../assets/icons/reportIcon.png";
@@ -58,19 +63,22 @@ const menuItems = [
 ];
 
 export default function MyPage() {
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
     const {
         handleLogout,
     } = useLogout();
 
     const {
-        handleWithdraw: withdrawMember,
+        handleWithdraw:
+            withdrawMember,
     } = useWithdraw();
 
     const {
         nickname,
         email,
+        profileAvatar,
         isLoading,
     } = useMyPageProfile();
 
@@ -79,32 +87,48 @@ export default function MyPage() {
         setIsWithdrawModalOpen,
     ] = useState(false);
 
-    const handleMenuClick = async (item) => {
-        if (item.path) {
-            navigate(item.path);
-            return;
-        }
+    const handleMenuClick =
+        async (item) => {
+            if (item.path) {
+                navigate(
+                    item.path
+                );
 
-        if (item.action === "logout") {
-            await handleLogout();
-            return;
-        }
+                return;
+            }
 
-        if (item.action === "withdraw") {
-            setIsWithdrawModalOpen(true);
-        }
-    };
+            if (
+                item.action ===
+                "logout"
+            ) {
+                await handleLogout();
 
-    const handleWithdrawConfirm = async () => {
-        const success =
-            await withdrawMember();
+                return;
+            }
 
-        if (!success) {
-            return;
-        }
+            if (
+                item.action ===
+                "withdraw"
+            ) {
+                setIsWithdrawModalOpen(
+                    true
+                );
+            }
+        };
 
-        setIsWithdrawModalOpen(false);
-    };
+    const handleWithdrawConfirm =
+        async () => {
+            const success =
+                await withdrawMember();
+
+            if (!success) {
+                return;
+            }
+
+            setIsWithdrawModalOpen(
+                false
+            );
+        };
 
     return (
         <S.Page>
@@ -114,7 +138,9 @@ export default function MyPage() {
 
                     <S.ProfileSection>
                         <S.ProfileImage
-                            src={profileCharacter}
+                            src={
+                                profileAvatar
+                            }
                             alt="프로필 캐릭터"
                         />
 

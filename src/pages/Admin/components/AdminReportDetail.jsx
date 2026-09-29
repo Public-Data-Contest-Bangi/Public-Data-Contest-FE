@@ -1,8 +1,12 @@
+import Header from "../../../components/common/Header";
+
 import {
     REPORT_TYPE_LABEL,
 } from "../constants/adminReportConstants";
 
-import { formatAdminReportDate } from "../utils/adminReportUtils";
+import {
+    formatAdminReportDate,
+} from "../utils/adminReportUtils";
 
 import * as S from "../AdminPage.styled";
 
@@ -40,19 +44,10 @@ export default function AdminReportDetail({
 
     return (
         <>
-            <S.DetailHeader>
-                <S.BackButton
-                    type="button"
-                    onClick={onBack}
-                    aria-label="뒤로가기"
-                >
-                    ‹
-                </S.BackButton>
-
-                <S.DetailHeaderTitle>
-                    신고 상세
-                </S.DetailHeaderTitle>
-            </S.DetailHeader>
+            <Header
+                title="신고 상세"
+                onBack={onBack}
+            />
 
             <S.DetailContent>
                 <S.StatusRow>
@@ -162,8 +157,7 @@ export default function AdminReportDetail({
                         }
                         onChange={(e) =>
                             setAnswer(
-                                e.target
-                                    .value
+                                e.target.value
                             )
                         }
                     />
