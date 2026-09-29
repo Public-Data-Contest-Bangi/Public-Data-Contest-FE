@@ -209,6 +209,45 @@ export const HoursValue = styled.span`
   color: #666666;
 `;
 
+/* ── 이용 가능 종목 (아이콘 + 이름, 가로 나열) ───────────────── */
+
+export const SportsWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+`;
+
+export const SportItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 999px;
+  background: #fafafa;
+`;
+
+export const SportIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+`;
+
+export const SportLabel = styled.span`
+  font-size: 13px;
+  color: #8c8c8c;
+  white-space: nowrap;
+`;
+
+/* ── 정보 없음 안내 문구 (접근성/종목 공용) ───────────────── */
+
+export const EmptyStateText = styled.p`
+  margin: 0;
+  font-size: 13px;
+  color: #b3b3b3;
+`;
+
 /* ── 바우처 / 프로그램 ───────────────── */
 
 export const VoucherCard = styled.div`
@@ -233,7 +272,6 @@ export const VoucherTitle = styled.span`
   font-size: 15px;
   font-weight: 700;
   color: #000000;
-  text-decoration: underline;
 `;
 
 export const VoucherSubtitle = styled.span`

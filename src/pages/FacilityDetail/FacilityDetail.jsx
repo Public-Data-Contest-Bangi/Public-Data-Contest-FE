@@ -1,11 +1,13 @@
 import BottomNav from '../../components/BottomNav';
 import wheelchairIcon from '../../assets/icons/wheelchair-icon.png';
+import voucherIcon from '../../assets/icons/voucher-icon.png';
 import rampIcon from '../../assets/icons/ramp-icon.png';
 import elevatorIcon from '../../assets/icons/elevator-icon.png';
 import restroomIcon from '../../assets/icons/restroom-icon.png';
 import parkingIcon from '../../assets/icons/parking-icon.png';
 import { useFacilityDetail } from './hooks/useFacilityDetail';
 import { ACCESS_ICON_SIZE } from './utils/facilityDetailData';
+import { getSportIcon, getSportDisplayName } from './utils/sportIcons';
 import ImagePlaceholderIcon from './components/ImagePlaceholderIcon';
 import CheckIcon from './components/CheckIcon';
 import {
@@ -30,6 +32,11 @@ import {
   CardTitle,
   CardBody,
   AccessRow,
+  SportsWrap,
+  SportItem,
+  SportIcon,
+  SportLabel,
+  EmptyStateText,
   VoucherCard,
   VoucherText,
   VoucherTitle,
@@ -40,14 +47,6 @@ import {
   ProgramLink,
   RouteButton,
 } from './FacilityDetail.styled';
-
-const ACCESS_ICON_MAP = {
-  wheelchair: wheelchairIcon,
-  ramp: rampIcon,
-  elevator: elevatorIcon,
-  restroom: restroomIcon,
-  parking: parkingIcon,
-};
 
 function matchAccessIcon(name) {
   if (name?.includes('휠체어')) return wheelchairIcon;
@@ -122,6 +121,11 @@ function FacilityDetail() {
     );
   }
 
+  const availableAccessibilities = (facility.accessibilities || []).filter(
+    (a) => a.availability === 'AVAILABLE'
+  );
+  const sports = facility.sports || [];
+
   return (
     <Container>
       <Header>
@@ -189,10 +193,11 @@ function FacilityDetail() {
           <CardTitle>접근성 정보</CardTitle>
         </CardTitleRow>
         <CardBody>
-          <AccessRow>
-            {(facility.accessibilities || [])
-              .filter((a) => a.availability === 'AVAILABLE')
-              .map((a) => {
+          {availableAccessibilities.length === 0 ? (
+            <EmptyStateText>아직 등록된 접근성 정보가 없어요</EmptyStateText>
+          ) : (
+            <AccessRow>
+              {availableAccessibilities.map((a) => {
                 const icon = matchAccessIcon(a.name);
                 if (!icon) return null;
                 return (
@@ -205,7 +210,8 @@ function FacilityDetail() {
                   />
                 );
               })}
-          </AccessRow>
+            </AccessRow>
+          )}
         </CardBody>
       </Card>
 
@@ -215,22 +221,28 @@ function FacilityDetail() {
           <CardTitle>이용 가능 종목</CardTitle>
         </CardTitleRow>
         <CardBody>
-          <AccessRow>
-            {(facility.sports || []).map((s) => (
-              <span key={s.sportId} style={{ fontSize: 14, color: '#1a1a1a' }}>
-                {s.name}
-              </span>
-            ))}
-          </AccessRow>
+          {sports.length === 0 ? (
+            <EmptyStateText>아직 등록된 이용 가능 종목이 없어요</EmptyStateText>
+          ) : (
+            <SportsWrap>
+              {sports.map((s) => {
+                const icon = getSportIcon(s.name);
+                const label = getSportDisplayName(s.name);
+                return (
+                  <SportItem key={s.sportId}>
+                    {icon && <SportIcon src={icon} alt="" />}
+                    <SportLabel>{label}</SportLabel>
+                  </SportItem>
+                );
+              })}
+            </SportsWrap>
+          )}
         </CardBody>
       </Card>
 
-      {facility.voucherStatus === 'AVAILABLE' && (
+            {facility.voucherStatus === 'AVAILABLE' && (
         <VoucherCard>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="8" width="22" height="12" rx="2" stroke="var(--color-primary)" strokeWidth="1.8" />
-            <path d="M3 14h4M21 14h4" stroke="var(--color-primary)" strokeWidth="1.8" strokeDasharray="2 2" />
-          </svg>
+          <img src={voucherIcon} alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
           <VoucherText>
             <VoucherTitle>스포츠 바우처</VoucherTitle>
             <VoucherSubtitle>이용 가능 시설입니다.</VoucherSubtitle>

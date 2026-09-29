@@ -150,13 +150,13 @@ export function useFacilityMap() {
                             icon:
                                 'data:image/svg+xml;charset=UTF-8,' +
                                 encodeURIComponent(
-                                    '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="13" cy="13" r="9" fill="#FFFFFF" stroke="#40D293" stroke-width="3"/></svg>'
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20"><path d="M8 19S14 12 14 7A6 6 0 1 0 2 7C2 12 8 19 8 19Z" fill="#40D293" stroke="#40D293" stroke-width="1.5"/><circle cx="8" cy="7" r="3" fill="#FFFFFF"/></svg>'
                                 ),
 
                             iconSize:
                                 new Tmapv2.Size(
-                                    26,
-                                    26
+                                    22,
+                                    27
                                 ),
 
                             map,
