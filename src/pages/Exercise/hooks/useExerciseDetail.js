@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from '../../../components/common/Pagination';
 // src/pages/Exercise/hooks/useExerciseDetail.js
 
 import {
@@ -38,6 +39,11 @@ function formatDistance(meters) {
 function useExerciseDetail() {
     const location = useLocation();
     const { exerciseId } = useParams();
+
+    const [selection, setSelection] = useState({ key: location.key, page: 0 });
+    const page = selection.key === location.key ? selection.page : 0;
+    const setPage = page => setSelection({ key: location.key, page });
+    const [totalCount, setTotalCount] = useState(0);
 
     const exercise =
         location.state ?? null;
@@ -91,6 +97,7 @@ function useExerciseDetail() {
 
         navigator.geolocation.getCurrentPosition(
             async (position) => {
+                if (controller.signal.aborted) return;
                 try {
                     setIsLoading(true);
                     setError("");
@@ -116,13 +123,15 @@ function useExerciseDetail() {
                             voucherStatus:
                                 "ALL",
 
-                            page: 0,
-                            size: 10,
+                            page,
+                            size: PAGE_SIZE,
 
                             signal:
                                 controller.signal,
                         });
 
+                    if (controller.signal.aborted) return;
+                    setTotalCount(result?.totalCount ?? 0);
                     const facilityList =
                         result?.facilities ??
                         [];
@@ -202,6 +211,7 @@ function useExerciseDetail() {
                         return;
                     }
 
+                    if (controller.signal.aborted) return;
                     setFacilities(
                         mappedFacilities.filter(
                             Boolean
@@ -260,6 +270,7 @@ function useExerciseDetail() {
             controller.abort();
         };
     }, [
+        page,
         exercise?.sportId,
         exerciseId,
         location.state,
@@ -274,6 +285,7 @@ function useExerciseDetail() {
             ) ?? [];
 
     return {
+        page, setPage, totalCount,
         exercise,
         tags,
         facilities,

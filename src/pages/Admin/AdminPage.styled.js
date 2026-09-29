@@ -568,3 +568,39 @@ export const ModalConfirmButton = styled.button`
         background: #35c990;
     }
 `;
+
+export const LogoutArea = styled.div`
+    width: 100%;
+
+    padding: 14px 18px 0;
+
+    display: flex;
+    justify-content: flex-end;
+
+    box-sizing: border-box;
+`;
+
+export const LogoutButton = styled.button`
+    padding: 7px 12px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #f3f3f3;
+
+    color: #777777;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    &:hover {
+        background: #ebebeb;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+`;

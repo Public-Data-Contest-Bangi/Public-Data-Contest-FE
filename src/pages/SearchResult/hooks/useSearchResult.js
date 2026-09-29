@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from '../../../components/common/Pagination';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { searchFacilities } from '../../../api/facilities';
@@ -6,6 +7,10 @@ import { getCurrentCoords } from '../../../utils/geolocation';
 export function useSearchResult() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [selection, setSelection] = useState({ key: location.key, page: 0 });
+  const page = selection.key === location.key ? selection.page : 0;
+  const setPage = page => setSelection({ key: location.key, page });
 
   const keyword = location.state?.keyword || '';
   const searchMode = location.state?.searchMode || 'KEYWORD';
@@ -38,8 +43,8 @@ export function useSearchResult() {
           accessibilityCodes,
           sportIds,
           voucherStatus,
-          page: 0,
-          size: 20,
+          page,
+          size: PAGE_SIZE,
         });
 
         if (!cancelled) {
@@ -64,7 +69,7 @@ export function useSearchResult() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchMode, regionCode, keyword, JSON.stringify(accessibilityCodes), JSON.stringify(sportIds), voucherStatus]);
+  }, [page, searchMode, regionCode, keyword, JSON.stringify(accessibilityCodes), JSON.stringify(sportIds), voucherStatus]);
 
   const goBack = () => navigate(-1);
 
@@ -77,6 +82,8 @@ export function useSearchResult() {
   };
 
   return {
+    page,
+    setPage,
     keyword,
     accessibilityCodes,
     sportIds,
