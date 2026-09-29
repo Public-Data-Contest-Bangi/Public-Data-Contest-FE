@@ -150,10 +150,25 @@ export const CardDistance = styled.span`
 export const CardSports = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
   margin-bottom: 12px;
+`;
+
+export const SportChip = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 13px;
   color: #8c8c8c;
+`;
+
+export const SportChipIcon = styled.img`
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
 `;
 
 export const CardAccessRow = styled.div`
