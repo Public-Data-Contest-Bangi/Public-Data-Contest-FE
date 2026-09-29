@@ -1,5 +1,8 @@
+// src/api/facilities.js
+
 import client from './client';
 
+// 지도 시설 마커 조회
 export async function fetchFacilityMarkers({
   south,
   north,
@@ -43,8 +46,7 @@ export async function searchFacilities({
     longitude,
     page,
     size,
-    voucherStatus:
-      voucherStatus || 'ALL',
+    voucherStatus: voucherStatus || 'ALL',
   };
 
   if (keyword) {
@@ -108,8 +110,7 @@ export async function searchProgramFacilities({
     searchMode === 'REGION' &&
     regionCode
   ) {
-    params.regionCode =
-      regionCode;
+    params.regionCode = regionCode;
   }
 
   const response = await client.get(

@@ -166,29 +166,29 @@ export default function useRegions() {
         ]
     );
 
-    // 최종 검색에 사용할 regionCode
-    const regionCode = useMemo(
-        () => {
-            if (!province || !city) {
-                return undefined;
-            }
+// 최종 검색에 사용할 regionCode
+const regionCode = useMemo(
+    () => {
+        if (!province) {
+            return undefined;
+        }
 
-            // 하위 구까지 선택한 경우
-            if (subDistrict) {
-                const fullName =
-                    `${city} ${subDistrict}`;
+        // 1. 하위 구까지 선택한 경우
+        if (city && subDistrict) {
+            const fullName =
+                `${city} ${subDistrict}`;
 
-                return regions.find(
-                    (region) =>
-                        region.provinceName ===
-                            province &&
-                        region.districtName ===
-                            fullName
-                )?.regionCode;
-            }
+            return regions.find(
+                (region) =>
+                    region.provinceName ===
+                        province &&
+                    region.districtName ===
+                        fullName
+            )?.regionCode;
+        }
 
-            // 서울특별시 → 마포구처럼
-            // 2단계에서 끝나는 지역
+        // 2. 시/군/구까지 선택한 경우
+        if (city) {
             return regions.find(
                 (region) =>
                     region.provinceName ===
@@ -196,14 +196,24 @@ export default function useRegions() {
                     region.districtName ===
                         city
             )?.regionCode;
-        },
-        [
-            regions,
-            province,
-            city,
-            subDistrict,
-        ]
-    );
+        }
+
+        // 3. 도/시만 선택한 경우
+        // districtName이 비어 있는 시/도 단위 데이터 사용
+        return regions.find(
+            (region) =>
+                region.provinceName ===
+                    province &&
+                !region.districtName?.trim()
+        )?.regionCode;
+    },
+    [
+        regions,
+        province,
+        city,
+        subDistrict,
+    ]
+);
 
     const selectProvince = (
         value

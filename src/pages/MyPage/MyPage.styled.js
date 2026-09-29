@@ -259,7 +259,7 @@ export const ModalTitle = styled.h2`
 
     font-size: 24px;
     font-weight: 600;
-    font-family: Pretendard;
+    font-family: inherit;
 
     color: #000;
 `;
@@ -293,7 +293,7 @@ export const WithdrawButton = styled.button`
 
     font-size: 14px;
     color: #000;
-    font-family: Pretendard;
+    font-family: inherit;
     font-weight: 500;
     line-height: 15px;
 
@@ -311,7 +311,7 @@ export const CancelButton = styled.button`
 
     font-size: 14px;
     color: #ffffff;
-    font-family: Pretendard;
+    font-family: inherit;
     font-weight: 500;
     line-height: 15px;
 

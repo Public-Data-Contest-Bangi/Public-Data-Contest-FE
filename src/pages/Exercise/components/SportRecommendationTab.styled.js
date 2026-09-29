@@ -82,7 +82,7 @@ export const RankNumber = styled.span`
 
     color: #20b980;
 
-    font-family: Arial, sans-serif;
+    font-family: inherit;
     font-size: 10px;
     font-weight: 600;
     font-variant-numeric: tabular-nums;

@@ -26,92 +26,99 @@ export const Hero = styled.section`
     position: relative;
 
     width: 100%;
-    height: 235px;
+    height: 190px;
 
-    padding: 18px;
+    padding: 18px 18px 20px;
 
     box-sizing: border-box;
 
-    background: #ffffff;
-
     overflow: hidden;
 
-    &::after {
-        content: "";
+    border-radius: 0 0 26px 26px;
 
-        position: absolute;
-
-        top: 18px;
-        right: -12px;
-
-        width: 190px;
-        height: 170px;
-
-        border-radius: 50%;
-
-        background: radial-gradient(
-            circle,
-            rgba(64, 210, 147, 0.11) 0%,
-            rgba(64, 210, 147, 0.05) 48%,
-            rgba(64, 210, 147, 0) 72%
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #f8fffb 55%,
+            #effcf6 100%
         );
-
-        filter: blur(4px);
-
-        pointer-events: none;
-    }
 `;
 
-export const LogoArea = styled.div`
+export const Logo = styled.img`
     position: relative;
-    z-index: 2;
+    z-index: 3;
 
-    display: flex;
-    align-items: center;
-
-    width: fit-content;
-`;
-
-export const LogoImage = styled.img`
-    width: 117px;
+    width: 62px;
     height: auto;
 
     display: block;
-
-    object-fit: contain;
-    margin-left: -20px;
-    margin-top: -10px;
 `;
 
-export const Greeting = styled.h1`
+export const HeroText = styled.div`
     position: absolute;
-    z-index: 2;
 
-    left: 10px;
-    bottom: 23px;
+    left: 18px;
+    bottom: 22px;
 
+    z-index: 3;
+`;
+
+export const Greeting = styled.p`
     margin: 0;
 
-    color: #111111;
+    color: #161616;
 
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 750;
     line-height: 1.35;
-
     letter-spacing: -0.6px;
+`;
+
+export const HeroSubText = styled.p`
+    margin: 7px 0 0;
+
+    color: #7b8b84;
+
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.45;
+`;
+
+export const MascotGlow = styled.div`
+    position: absolute;
+
+    right: 6px;
+    bottom: 12px;
+
+    width: 145px;
+    height: 145px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(64, 210, 147, 0.20) 0%,
+            rgba(64, 210, 147, 0.10) 55%,
+            rgba(64, 210, 147, 0) 72%
+        );
+
+    z-index: 1;
 `;
 
 export const Mascot = styled.img`
     position: absolute;
-    z-index: 1;
 
-    top: -2px;
-    right: 0;
+    right: -3px;
+    bottom: 4px;
 
-    width: 190px;
-    height: 190px;
+    width: 165px;
+    height: 165px;
 
     object-fit: contain;
+
+    z-index: 2;
 
     pointer-events: none;
 `;

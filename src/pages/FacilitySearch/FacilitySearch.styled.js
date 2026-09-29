@@ -6,7 +6,7 @@ export const Container = styled.div`
   min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
-  font-family: 'Pretendard', sans-serif;
+  font-family: inherit;
   box-sizing: border-box;
   padding: 0 20px 40px;
   display: flex;
@@ -212,7 +212,7 @@ export const SelectWrapper = styled.div`
   border-radius: 10px;
   background: #ffffff;
   box-sizing: border-box;
-  opacity: ${(props) => (props.$disabled ? 0.5 : 1)};
+  opacity: 1;
   cursor: ${(props) => (props.$disabled ? 'default' : 'pointer')};
 `;
 
@@ -238,7 +238,7 @@ export const SelectButton = styled.button`
   padding: 0;
   border: none;
   background: none;
-  color: ${(props) => (props.$placeholder ? '#b3b3b3' : '#202020')};
+  color: #202020;
   font-size: 15px;
   font-weight: 500;
   text-align: left;

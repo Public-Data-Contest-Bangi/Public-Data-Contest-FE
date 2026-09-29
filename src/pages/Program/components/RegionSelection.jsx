@@ -206,57 +206,29 @@ export default function RegionSelection() {
             return;
         }
 
-        if (
-            !navigator.geolocation
-        ) {
-            console.error(
-                "현재 위치 기능을 지원하지 않습니다."
-            );
+        navigate(
+            "/program-browse/results",
+            {
+                state: {
+                    ...location.state,
 
-            return;
-        }
+                    sportIds:
+                        selectedSportIds,
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const {
-                    latitude,
-                    longitude,
-                } = position.coords;
+                    province,
+                    city,
+                    subDistrict,
 
-                navigate(
-                    "/program-browse/results",
-                    {
-                        state: {
-                            ...location.state,
+                    district:
+                        subDistrict
+                            ? `${city} ${subDistrict}`
+                            : city,
 
-                            sportIds:
-                                selectedSportIds,
+                    regionCode,
 
-                            province,
-                            city,
-                            subDistrict,
-
-                            district:
-                                subDistrict
-                                    ? `${city} ${subDistrict}`
-                                    : city,
-
-                            regionCode,
-
-                            latitude,
-                            longitude,
-
-                            searchMode:
-                                "REGION",
-                        },
-                    }
-                );
-            },
-            (error) => {
-                console.error(
-                    "위치 정보를 가져오지 못했습니다.",
-                    error
-                );
+                    searchMode:
+                        "REGION",
+                },
             }
         );
     };
