@@ -10,7 +10,7 @@ export const Container = styled.div`
 
     background: #ffffff;
 
-    font-family: 'Pretendard', sans-serif;
+    font-family: inherit;
 
     box-sizing: border-box;
 

@@ -74,7 +74,7 @@ export function useSearchFilter() {
     const voucherStatus = voucher === '이용 가능' ? 'AVAILABLE' : 'ALL';
 
     navigate('/search-result', {
-      state: { keyword: incomingKeyword, accessibilityCodes, sportIds, voucherStatus },
+      state: { ...location.state, keyword: incomingKeyword, accessibilityCodes, sportIds, voucherStatus },
       replace: true,
     });
   };
@@ -82,6 +82,7 @@ export function useSearchFilter() {
   const closeFilter = () => {
     navigate('/search-result', {
       state: {
+        ...location.state,
         keyword: incomingKeyword,
         accessibilityCodes: incomingCodes,
         sportIds: incomingSportIds,

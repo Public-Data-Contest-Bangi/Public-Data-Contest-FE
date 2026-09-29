@@ -1,4 +1,4 @@
-﻿const iconFiles = import.meta.glob("../../../assets/images/exercisename/*.png", {
+const iconFiles = import.meta.glob("../../../assets/images/exercisename/*.png", {
     eager: true,
     query: "?url",
     import: "default",
@@ -37,7 +37,7 @@ export const SPORTS_OPTIONS = [
     { id: 25, code: "PILATES", name: "필라테스", icon: getSportIcon("pilates") },
     { id: 26, code: "HAPKIDO", name: "합기도", icon: getSportIcon("hapkido") },
     { id: 27, code: "FITNESS", name: "헬스", icon: getSportIcon("fitness") },
-    { id: 28, code: "CROQUET", name: "크로스핏", icon: getSportIcon("crossfit") },
+    { id: 28, code: "CROSSFIT", name: "크로스핏", icon: getSportIcon("crossfit") },
     { id: 29, code: "JIU_JITSU", name: "주짓수", icon: getSportIcon("jiu-jitsu") },
     { id: 30, code: "CLIMBING", name: "클라이밍", icon: getSportIcon("climbing") },
     { id: 31, code: "BILLIARDS", name: "당구", icon: getSportIcon("billiards") },

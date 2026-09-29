@@ -1,5 +1,3 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
-
 :root {
   --color-primary: #40D293;
   --color-text: #000000;
@@ -20,11 +18,11 @@ html, body, #root {
 
 body {
   background: #f2f2f2;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+
   -webkit-font-smoothing: antialiased;
   font-family: "SUIT", sans-serif;
 }
 
-button {
+button, input, textarea, select, optgroup, option {
   font-family: inherit;
 }

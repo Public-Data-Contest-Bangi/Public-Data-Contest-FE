@@ -1,3 +1,5 @@
+// src/pages/Exercise/hooks/useExerciseDetail.js
+
 import {
     useEffect,
     useState,
@@ -11,6 +13,10 @@ import {
 import {
     searchFacilities,
 } from "../../../api/facilities";
+
+import {
+    fetchFacilityDetail,
+} from "../../../api/facilityDetail";
 
 function formatDistance(meters) {
     if (
@@ -117,37 +123,89 @@ function useExerciseDetail() {
                                 controller.signal,
                         });
 
+                    const facilityList =
+                        result?.facilities ??
+                        [];
+
                     const mappedFacilities =
-                        (
-                            result?.facilities ??
-                            []
-                        ).map(
-                            (facility) => ({
-                                id:
-                                    facility.facilityId,
+                        await Promise.all(
+                            facilityList.map(
+                                async (
+                                    facility
+                                ) => {
+                                    let image =
+                                        facility
+                                            .representativeImageUrl ??
+                                        null;
 
-                                name:
-                                    facility.name,
+                                    try {
+                                        const detail =
+                                            await fetchFacilityDetail(
+                                                facility.facilityId,
+                                                {
+                                                    latitude,
+                                                    longitude,
+                                                }
+                                            );
 
-                                image:
-                                    facility.representativeImageUrl,
+                                        image =
+                                            detail
+                                                ?.imageUrls?.[0] ??
+                                            image;
+                                    } catch (
+                                        detailError
+                                    ) {
+                                        if (
+                                            controller
+                                                .signal
+                                                .aborted
+                                        ) {
+                                            return null;
+                                        }
 
-                                address:
-                                    facility.address,
+                                        console.warn(
+                                            "시설 상세 이미지 조회 실패:",
+                                            facility.facilityId,
+                                            detailError
+                                        );
+                                    }
 
-                                distance:
-                                    formatDistance(
-                                        facility.distanceMeters
-                                    ),
+                                    return {
+                                        id:
+                                            facility.facilityId,
 
-                                sports:
-                                    facility.sports ??
-                                    [],
-                            })
+                                        name:
+                                            facility.name,
+
+                                        image,
+
+                                        address:
+                                            facility.address,
+
+                                        distance:
+                                            formatDistance(
+                                                facility.distanceMeters
+                                            ),
+
+                                        sports:
+                                            facility.sports ??
+                                            [],
+                                    };
+                                }
+                            )
                         );
 
+                    if (
+                        controller.signal
+                            .aborted
+                    ) {
+                        return;
+                    }
+
                     setFacilities(
-                        mappedFacilities
+                        mappedFacilities.filter(
+                            Boolean
+                        )
                     );
                 } catch (error) {
                     if (
@@ -182,6 +240,13 @@ function useExerciseDetail() {
                     "위치 조회 실패:",
                     error
                 );
+
+                if (
+                    controller.signal
+                        .aborted
+                ) {
+                    return;
+                }
 
                 setIsLoading(false);
 
