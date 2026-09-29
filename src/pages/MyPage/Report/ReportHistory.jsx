@@ -7,6 +7,25 @@ import useReportHistory from "./hooks/useReportHistory";
 
 import * as S from "./ReportHistory.styled";
 
+function isCompletedStatus(status) {
+    const normalizedStatus =
+        String(status ?? "")
+            .trim()
+            .toUpperCase();
+
+    return (
+        normalizedStatus === "ANSWERED" ||
+        normalizedStatus === "COMPLETED" ||
+        status === "답변 완료"
+    );
+}
+
+function getStatusLabel(status) {
+    return isCompletedStatus(status)
+        ? "답변 완료"
+        : "답변 대기";
+}
+
 function ReportHistory() {
     const {
         reports,
@@ -29,40 +48,48 @@ function ReportHistory() {
                         </S.EmptyState>
                     ) : (
                         <S.ReportList>
-                            {reports.map((report) => (
-                                <S.ReportItem
-                                    key={report.id}
-                                    type="button"
-                                    onClick={() =>
-                                        handleReportClick(
-                                            report.id
-                                        )
-                                    }
-                                >
-                                    <S.ReportInfo>
-                                        <S.TopArea>
-                                            <S.Date>
-                                                {report.date}
-                                            </S.Date>
+                            {reports.map((report) => {
+                                const isCompleted =
+                                    isCompletedStatus(
+                                        report.status
+                                    );
 
-                                            <S.StatusBadge
-                                                $isCompleted={
-                                                    report.status ===
-                                                    "답변 완료"
-                                                }
-                                            >
-                                                {report.status}
-                                            </S.StatusBadge>
-                                        </S.TopArea>
+                                return (
+                                    <S.ReportItem
+                                        key={report.id}
+                                        type="button"
+                                        onClick={() =>
+                                            handleReportClick(
+                                                report.id
+                                            )
+                                        }
+                                    >
+                                        <S.ReportInfo>
+                                            <S.TopArea>
+                                                <S.Date>
+                                                    {report.date}
+                                                </S.Date>
 
-                                        <S.ReportTitle>
-                                            {report.title}
-                                        </S.ReportTitle>
-                                    </S.ReportInfo>
+                                                <S.StatusBadge
+                                                    $isCompleted={
+                                                        isCompleted
+                                                    }
+                                                >
+                                                    {getStatusLabel(
+                                                        report.status
+                                                    )}
+                                                </S.StatusBadge>
+                                            </S.TopArea>
 
-                                    <S.Arrow />
-                                </S.ReportItem>
-                            ))}
+                                            <S.ReportTitle>
+                                                {report.title}
+                                            </S.ReportTitle>
+                                        </S.ReportInfo>
+
+                                        <S.Arrow />
+                                    </S.ReportItem>
+                                );
+                            })}
                         </S.ReportList>
                     )}
 
@@ -70,7 +97,9 @@ function ReportHistory() {
                         <Button
                             height="52px"
                             radius="10px"
-                            onClick={handleNewReport}
+                            onClick={
+                                handleNewReport
+                            }
                         >
                             새 신고
                         </Button>

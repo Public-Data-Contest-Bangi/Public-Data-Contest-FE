@@ -183,9 +183,9 @@ export const FavoriteSection = styled.section`
 /* 찜 목록 한 줄 가로 스크롤 */
 export const FavoriteScroller = styled.div`
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
 
-    gap: 12px;
+    gap: 10px;
 
     margin: 0 -18px;
     padding: 0 18px 4px;
@@ -204,120 +204,156 @@ export const FavoriteScroller = styled.div`
 `;
 
 export const FavoriteItem = styled.button`
-    width: 76px;
+    min-width: 142px;
+    height: 58px;
 
-    padding: 0;
+    padding: 0 14px;
 
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 7px;
+    gap: 10px;
 
     flex-shrink: 0;
-
-    border: none;
-
-    background: transparent;
-
-    font-family: inherit;
-
-    cursor: pointer;
-`;
-
-export const FavoriteMoreItem = styled.button`
-    width: 76px;
-
-    padding: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 7px;
-
-    flex-shrink: 0;
-
-    border: none;
-
-    background: transparent;
-
-    font-family: inherit;
-
-    cursor: pointer;
-`;
-
-export const FavoriteMoreCircle = styled.div`
-    width: 72px;
-    height: 72px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     box-sizing: border-box;
 
-    border: 1px dashed #bcebd8;
+    border: 1px solid #e5f2ec;
     border-radius: 16px;
 
-    background: #f5fcf9;
+    background: #ffffff;
 
-    color: #2cc98e;
+    font-family: inherit;
+    text-align: left;
 
-    font-size: 14px;
-    font-weight: 700;
+    cursor: pointer;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0, 0, 0, 0.035);
+
+    &:active {
+        transform: scale(0.98);
+    }
 `;
 
-export const FavoriteMoreText = styled.span`
-    color: #777777;
+export const FavoriteInfo = styled.div`
+    min-width: 0;
 
-    font-size: 10.5px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+`;
+
+export const FavoriteTopRow = styled.div`
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+`;
+
+export const FavoriteDot = styled.span`
+    width: 6px;
+    height: 6px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #40d293;
+`;
+
+export const FavoriteLabel = styled.span`
+    color: #8fa39a;
+
+    font-size: 9px;
     font-weight: 500;
 `;
 
-export const FavoriteImage = styled.img`
-    width: 72px;
-    height: 72px;
+export const FavoriteName = styled.span`
+    max-width: 105px;
 
-    border-radius: 16px;
+    overflow: hidden;
 
-    object-fit: cover;
+    color: #222222;
 
-    background: #f2f2f2;
-    border: 1px solid #e1f4eb;
+    font-size: 12px;
+    font-weight: 600;
+
+    line-height: 1.35;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 `;
 
-export const FavoritePlaceholder = styled.div`
-    width: 72px;
-    height: 72px;
+export const FavoriteBadge = styled.span`
+    width: fit-content;
+
+    padding: 2px 6px;
+
+    border-radius: 999px;
+
+    background: #eaf9f2;
+
+    color: #35bf89;
+
+    font-size: 8px;
+    font-weight: 700;
+`;
+
+export const FavoriteArrow = styled.span`
+    flex-shrink: 0;
+
+    color: #b7c7c0;
+
+    font-size: 18px;
+`;
+
+export const FavoriteMoreItem = styled.button`
+    min-width: 104px;
+    height: 58px;
+
+    padding: 0 14px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
+    box-sizing: border-box;
+
+    border: 1px dashed #bfe8d6;
     border-radius: 16px;
 
-    background: #eefbf5;
+    background: #f7fcf9;
 
-    color: #40d293;
+    color: #35bf89;
 
-    font-size: 24px;
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 700;
+
+    cursor: pointer;
 `;
 
-export const FavoriteName = styled.span`
-    width: 76px;
 
-    overflow: hidden;
+export const FavoriteFacilityIcon = styled.div`
+    width: 58px;
+    height: 58px;
 
-    color: #444444;
+    background-image: ${({ $image }) =>
+        `url("${$image}")`};
 
-    font-size: 10.5px;
-    font-weight: 500;
+    background-repeat: no-repeat;
 
-    text-align: center;
+    /* sprite 왼쪽 시설 아이콘 사용 */
+    background-size: 200% 100%;
+    background-position: left center;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    opacity: 0.95;
 `;
 
 /* 로딩 / 에러 */

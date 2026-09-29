@@ -39,7 +39,7 @@ export const BrandLogo = styled.img`
     display: block;
     object-fit: contain;
 
-    margin: -70px 0 10px;
+    margin: -60px 0 0;
 `;
 
 export const InputSection = styled.div`

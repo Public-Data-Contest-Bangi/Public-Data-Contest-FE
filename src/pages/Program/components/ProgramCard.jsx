@@ -15,15 +15,6 @@ export default function ProgramCard({
 
     return (
         <S.Card>
-            {program.image ? (
-                <S.Thumbnail
-                    src={program.image}
-                    alt={program.name}
-                />
-            ) : (
-                <S.ThumbnailPlaceholder />
-            )}
-
             <S.Info>
                 <S.TopRow>
                     <S.Name>

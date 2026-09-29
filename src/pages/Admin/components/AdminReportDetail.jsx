@@ -35,8 +35,15 @@ export default function AdminReportDetail({
         );
     }
 
+    const normalizedStatus =
+        String(
+            report?.status ?? ""
+        )
+            .trim()
+            .toUpperCase();
+
     const isAnswered =
-        report.status === "ANSWERED";
+        normalizedStatus === "ANSWERED";
 
     const isReadOnly =
         isAnswered &&
@@ -99,8 +106,7 @@ export default function AdminReportDetail({
                     </S.ReportContent>
                 </S.DetailBlock>
 
-                {report.photos?.length >
-                    0 && (
+                {report.photos?.length > 0 && (
                     <S.DetailBlock>
                         <S.DetailLabel>
                             첨부 사진
@@ -108,20 +114,36 @@ export default function AdminReportDetail({
 
                         <S.PhotoGrid>
                             {report.photos.map(
-                                (
-                                    photo
-                                ) => (
-                                    <S.PhotoImage
-                                        key={
-                                            photo.photoId
-                                        }
-                                        src={
-                                            photo.displayUrl ??
-                                            photo.url
-                                        }
-                                        alt="신고 첨부 사진"
-                                    />
-                                )
+                                (photo) => {
+                                    const imageUrl =
+                                        photo.displayUrl ??
+                                        photo.url;
+
+                                    if (!imageUrl) {
+                                        return null;
+                                    }
+
+                                    return (
+                                        <S.PhotoImage
+                                            key={
+                                                photo.photoId
+                                            }
+                                            src={
+                                                imageUrl
+                                            }
+                                            alt="신고 첨부 사진"
+                                            onError={(e) => {
+                                                console.error(
+                                                    "이미지 로드 실패:",
+                                                    imageUrl
+                                                );
+
+                                                e.currentTarget.style.display =
+                                                    "none";
+                                            }}
+                                        />
+                                    );
+                                }
                             )}
                         </S.PhotoGrid>
                     </S.DetailBlock>

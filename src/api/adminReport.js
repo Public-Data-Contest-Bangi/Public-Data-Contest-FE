@@ -35,10 +35,15 @@ export const getAdminReportPhoto = async (
     photoId
 ) => {
     const response = await client.get(
-        `/api/admin/reports/${reportId}/photos/${photoId}`
+        `/api/admin/reports/${reportId}/photos/${photoId}`,
+        {
+            responseType: "blob",
+        }
     );
 
-    return response.data;
+    return URL.createObjectURL(
+        response.data
+    );
 };
 
 // 답변 등록
