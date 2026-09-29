@@ -1,29 +1,60 @@
-import { useRef, useState } from "react";
+// useProfileImage.js
 
-export default function useProfileImage(defaultImage) {
-    const fileInputRef = useRef(null);
+import {
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 
-    const [profileImage, setProfileImage] =
-        useState(defaultImage);
+export default function useProfileImage(
+    defaultImage
+) {
+    const fileInputRef =
+        useRef(null);
 
-    const [profileImageFile, setProfileImageFile] =
-        useState(null);
+    const [
+        profileImage,
+        setProfileImage,
+    ] = useState(defaultImage);
 
-    const handleProfileImageClick = () => {
-        fileInputRef.current?.click();
-    };
+    const [
+        profileImageFile,
+        setProfileImageFile,
+    ] = useState(null);
 
-    const handleProfileImageChange = (e) => {
-        const file = e.target.files?.[0];
+    useEffect(() => {
+        setProfileImage(
+            defaultImage
+        );
+    }, [defaultImage]);
 
-        if (!file) return;
+    const handleProfileImageClick =
+        () => {
+            fileInputRef.current?.click();
+        };
 
-        const imageUrl =
-            URL.createObjectURL(file);
+    const handleProfileImageChange =
+        (e) => {
+            const file =
+                e.target.files?.[0];
 
-        setProfileImage(imageUrl);
-        setProfileImageFile(file);
-    };
+            if (!file) {
+                return;
+            }
+
+            const imageUrl =
+                URL.createObjectURL(
+                    file
+                );
+
+            setProfileImage(
+                imageUrl
+            );
+
+            setProfileImageFile(
+                file
+            );
+        };
 
     return {
         fileInputRef,

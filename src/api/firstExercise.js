@@ -1,12 +1,30 @@
 import client from "./client";
 
 // 최근 저장된 첫 운동 입력값 조회
-export const getFirstExercisePreferences = ({ signal } = {}) =>
-    client.get("/api/first-exercise/preferences", {
-        signal,
-    });
+export const getFirstExercisePreferences = (
+    { signal } = {}
+) =>
+    client.get(
+        "/api/first-exercise/preferences",
+        {
+            signal,
+        }
+    );
 
-// 첫 운동 입력값 저장 / 수정
+// 첫 운동 입력값 최초 저장
+export const createFirstExercisePreferences = (
+    data,
+    { signal } = {}
+) =>
+    client.post(
+        "/api/first-exercise/preferences",
+        data,
+        {
+            signal,
+        }
+    );
+
+// 첫 운동 입력값 수정
 export const updateFirstExercisePreferences = (
     data,
     { signal } = {}

@@ -5,6 +5,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import {
+    createFirstExercisePreferences,
     getFirstExercisePreferences,
     updateFirstExercisePreferences,
 } from "../../../api/firstExercise";
@@ -52,6 +53,12 @@ function useFirstExercise() {
         setShowValidation,
     ] = useState(false);
 
+    // 기존에 저장된 첫 운동 설정이 있는지 여부
+    const [
+        hasSavedPreference,
+        setHasSavedPreference,
+    ] = useState(false);
+
     useEffect(() => {
         const controller =
             new AbortController();
@@ -76,27 +83,36 @@ function useFirstExercise() {
 
                     const savedData =
                         responseBody &&
-                            Object.prototype.hasOwnProperty.call(
-                                responseBody,
-                                "success"
-                            )
+                        Object.prototype.hasOwnProperty.call(
+                            responseBody,
+                            "success"
+                        )
                             ? responseBody.data
                             : responseBody;
 
+                    // 저장된 값이 없는 최초 사용자
                     if (!savedData) {
+                        setHasSavedPreference(
+                            false
+                        );
                         return;
                     }
 
+                    // 기존 저장값 있음
+                    setHasSavedPreference(
+                        true
+                    );
+
                     setAssistiveDevice(
                         ASSISTIVE_DEVICE_FROM_API[
-                        savedData
-                            .assistiveDeviceType
+                            savedData
+                                .assistiveDeviceType
                         ] ?? ""
                     );
 
                     setBodyPart(
                         BODY_PART_FROM_API[
-                        savedData.bodyFocus
+                            savedData.bodyFocus
                         ] ?? ""
                     );
 
@@ -109,28 +125,45 @@ function useFirstExercise() {
                             .map(
                                 (type) =>
                                     EXERCISE_TYPE_FROM_API[
-                                    type
+                                        type
                                     ]
                             )
                             .filter(Boolean)
                     );
                 } catch (error) {
                     if (
-                        error?.name === "CanceledError"
+                        error?.name ===
+                            "CanceledError" ||
+                        controller.signal
+                            .aborted
                     ) {
                         return;
                     }
 
-                    // 처음 사용하는 사용자라 저장된 선호가 없는 경우
+                    const message =
+                        error.response?.data
+                            ?.message;
+
+                    /*
+                     * 처음 사용하는 사용자라
+                     * 저장된 선호가 없는 경우
+                     */
                     if (
-                        error.response?.status === 404
+                        error.response
+                            ?.status === 404 ||
+                        message ===
+                            "저장된 첫 운동 선호 설정이 없습니다."
                     ) {
+                        setHasSavedPreference(
+                            false
+                        );
                         return;
                     }
 
                     console.error(
                         "첫 운동 입력값 조회 실패:",
-                        error.response?.data || error
+                        error.response?.data ||
+                            error
                     );
                 } finally {
                     setIsLoading(false);
@@ -150,9 +183,9 @@ function useFirstExercise() {
         setExerciseTypes((prev) =>
             prev.includes(value)
                 ? prev.filter(
-                    (item) =>
-                        item !== value
-                )
+                      (item) =>
+                          item !== value
+                  )
                 : [...prev, value]
         );
     };
@@ -195,19 +228,19 @@ function useFirstExercise() {
         const requestData = {
             assistiveDeviceType:
                 ASSISTIVE_DEVICE_TO_API[
-                assistiveDevice
+                    assistiveDevice
                 ],
 
             bodyFocus:
                 BODY_PART_TO_API[
-                bodyPart
+                    bodyPart
                 ],
 
             preferredExerciseTypes:
                 exerciseTypes.map(
                     (type) =>
                         EXERCISE_TYPE_TO_API[
-                        type
+                            type
                         ]
                 ),
         };
@@ -215,9 +248,21 @@ function useFirstExercise() {
         try {
             setIsSubmitting(true);
 
-            await updateFirstExercisePreferences(
-                requestData
-            );
+            if (hasSavedPreference) {
+                // 기존 데이터가 있으면 수정
+                await updateFirstExercisePreferences(
+                    requestData
+                );
+            } else {
+                // 처음 저장하는 경우
+                await createFirstExercisePreferences(
+                    requestData
+                );
+
+                setHasSavedPreference(
+                    true
+                );
+            }
 
             navigate(
                 "/exercise-result",
@@ -233,13 +278,13 @@ function useFirstExercise() {
             console.error(
                 "첫 운동 입력값 저장 실패:",
                 error.response?.data ||
-                error
+                    error
             );
 
             alert(
                 error.response?.data
                     ?.message ||
-                "첫 운동 정보를 저장하지 못했습니다."
+                    "첫 운동 정보를 저장하지 못했습니다."
             );
         } finally {
             setIsSubmitting(false);
