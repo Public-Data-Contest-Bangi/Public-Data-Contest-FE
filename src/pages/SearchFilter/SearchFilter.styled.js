@@ -6,7 +6,7 @@ export const Container = styled.div`
   min-height: 816px;
   margin: 0 auto;
   background: #ffffff;
-  font-family: 'Pretendard', sans-serif;
+  font-family: inherit;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

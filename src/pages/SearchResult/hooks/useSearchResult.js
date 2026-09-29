@@ -8,6 +8,8 @@ export function useSearchResult() {
   const location = useLocation();
 
   const keyword = location.state?.keyword || '';
+  const searchMode = location.state?.searchMode || 'KEYWORD';
+  const regionCode = location.state?.regionCode;
   const accessibilityCodes = location.state?.accessibilityCodes || [];
   const sportIds = location.state?.sportIds || [];
   const voucherStatus = location.state?.voucherStatus || 'ALL';
@@ -28,8 +30,9 @@ export function useSearchResult() {
         const coords = await getCurrentCoords();
 
         const data = await searchFacilities({
-          searchMode: 'KEYWORD',
-          keyword,
+          searchMode,
+          keyword: searchMode === 'KEYWORD' ? keyword : undefined,
+          regionCode: searchMode === 'REGION' ? regionCode : undefined,
           latitude: coords.latitude,
           longitude: coords.longitude,
           accessibilityCodes,
@@ -61,12 +64,12 @@ export function useSearchResult() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keyword, JSON.stringify(accessibilityCodes), JSON.stringify(sportIds), voucherStatus]);
+  }, [searchMode, regionCode, keyword, JSON.stringify(accessibilityCodes), JSON.stringify(sportIds), voucherStatus]);
 
   const goBack = () => navigate(-1);
 
   const goFilter = () => {
-    navigate('/search-filter', { state: { keyword, accessibilityCodes, sportIds, voucherStatus } });
+    navigate('/search-filter', { state: { ...location.state, searchMode, regionCode, keyword, accessibilityCodes, sportIds, voucherStatus } });
   };
 
   const goDetail = (facilityId) => {

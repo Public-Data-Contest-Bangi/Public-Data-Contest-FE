@@ -6,7 +6,7 @@ export const Container = styled.div`
   min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
-  font-family: 'Pretendard', sans-serif;
+  font-family: inherit;
   box-sizing: border-box;
   padding-bottom: 96px;
 

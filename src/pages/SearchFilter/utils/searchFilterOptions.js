@@ -26,7 +26,7 @@ export const SPORT_OPTIONS = [
   { id: 25, name: '필라테스' },
   { id: 26, name: '합기도' },
   { id: 27, name: '헬스' },
-  { id: 28, name: '크로스핏' }, // 서버 종목명은 '크로켓'이지만 화면 표기는 '크로스핏'으로 유지
+  { id: 28, name: '크로스핏' },
   { id: 29, name: '주짓수' },
   { id: 30, name: '클라이밍' },
   { id: 31, name: '당구' },

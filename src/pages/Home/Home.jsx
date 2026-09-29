@@ -105,20 +105,27 @@ function Home() {
     <S.Page>
       <S.Content>
         <S.Hero>
-          <S.LogoArea>
-            <S.LogoImage
-              src={dfitLogo}
-              alt="DFit"
-            />
-          </S.LogoArea>
+          <S.Logo
+            src={dfitLogo}
+            alt="3Fit"
+          />
 
-          <S.Greeting>
-            {profileLoading
-              ? "오늘도"
-              : `${nickname}님,`}
-            <br />
-            오늘도 움직여볼까요?
-          </S.Greeting>
+          <S.HeroText>
+            <S.Greeting>
+              {profileLoading
+                ? "안녕하세요,"
+                : `${nickname || "회원"}님,`}
+              <br />
+              오늘도 움직여볼까요?
+            </S.Greeting>
+
+            <S.HeroSubText>
+              나에게 맞는 운동을
+              찾아보세요
+            </S.HeroSubText>
+          </S.HeroText>
+
+          <S.MascotGlow />
 
           <S.Mascot
             src={mascotImg}
@@ -282,7 +289,7 @@ function Home() {
 
                   <S.SmallDescription>
                     가까운
-                    < br />
+                    <br />
                     체육시설
                   </S.SmallDescription>
                 </S.CardText>

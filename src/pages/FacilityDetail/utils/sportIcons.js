@@ -31,7 +31,6 @@ import climbing from '../../../assets/images/exercisename/climbing.png';
 import billiards from '../../../assets/images/exercisename/billiards.png';
 
 // 서버가 내려주는 종목명(facility.sports[].name) 기준 매핑
-// 서버는 '크로켓'으로 내려주지만, 화면엔 '크로스핏'으로 표시하기로 한 기존 결정과 동일하게 유지
 export const SPORT_ICON_MAP = {
   검도: kendo,
   골프: golf,
@@ -60,14 +59,14 @@ export const SPORT_ICON_MAP = {
   필라테스: pilates,
   합기도: hapkido,
   헬스: fitness,
-  크로켓: crossfit,
+  크로스핏: crossfit,
   주짓수: jiuJitsu,
   클라이밍: climbing,
   당구: billiards,
 };
 
 export const SPORT_DISPLAY_NAME_MAP = {
-  크로켓: '크로스핏',
+  크로스핏: '크로스핏',
 };
 
 export function getSportIcon(name) {
