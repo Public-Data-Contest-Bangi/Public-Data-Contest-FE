@@ -1,13 +1,11 @@
 import {
     FacilitySheet,
     SheetCloseButton,
-    Thumbnail,
     SheetInfo,
     FacilityName,
     FacilityAddress,
     DetailButton,
 } from '../FacilityMap.styled';
-
 function FacilityPreviewSheet({
     facility,
     onClose,
@@ -40,7 +38,7 @@ function FacilityPreviewSheet({
                 </svg>
             </SheetCloseButton>
 
-            <div
+                     <div
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -48,8 +46,6 @@ function FacilityPreviewSheet({
                     padding: '18px 18px 22px',
                 }}
             >
-                <Thumbnail />
-
                 <SheetInfo>
                     <FacilityName>
                         {facility.name}

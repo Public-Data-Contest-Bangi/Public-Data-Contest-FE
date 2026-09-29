@@ -1,6 +1,6 @@
 // FacilityMap.jsx
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
     useLocation,
@@ -18,11 +18,14 @@ import RouteSearchCard from './components/RouteSearchCard';
 import TransitRouteCard from './components/TransitRouteCard';
 import MapArea from './components/MapArea';
 import FacilityPreviewSheet from './components/FacilityPreviewSheet';
+import PinLegendModal from './components/PinLegendModal';
 
 import {
     Container,
     TransitNotice,
 } from './FacilityMap.styled';
+
+const PIN_LEGEND_SEEN_KEY = 'didimfit_pin_legend_seen';
 
 function FacilityMap() {
     const location =
@@ -41,6 +44,20 @@ function FacilityMap() {
             ? 'TRANSIT'
             : 'WALK'
     );
+
+    const [showPinLegend, setShowPinLegend] = useState(false);
+
+    useEffect(() => {
+        const seen = localStorage.getItem(PIN_LEGEND_SEEN_KEY);
+        if (!seen) {
+            setShowPinLegend(true);
+        }
+    }, []);
+
+    const closePinLegend = () => {
+        localStorage.setItem(PIN_LEGEND_SEEN_KEY, 'true');
+        setShowPinLegend(false);
+    };
 
     const {
         mapContainerRef,
@@ -202,6 +219,8 @@ function FacilityMap() {
                 onClose={closeSheet}
                 onDetail={goSelectedFacilityDetail}
             />
+
+            {showPinLegend && <PinLegendModal onClose={closePinLegend} />}
 
             <BottomNav />
         </Container>
