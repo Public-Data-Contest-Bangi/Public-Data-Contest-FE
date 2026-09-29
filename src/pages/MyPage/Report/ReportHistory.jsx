@@ -4,6 +4,10 @@ import Button from "../../../components/common/Button";
 import BottomNav from "../../../components/BottomNav";
 
 import useReportHistory from "./hooks/useReportHistory";
+import {
+    getReportStatusLabel,
+    isReportAnswered,
+} from "./utils/reportLabels";
 
 import * as S from "./ReportHistory.styled";
 

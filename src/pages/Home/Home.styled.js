@@ -48,8 +48,10 @@ export const Hero = styled.section`
 export const Logo = styled.img`
     position: relative;
     z-index: 3;
+    margin-left: -20px;
+    margin-top: -5px;
 
-    width: 48px;
+    width: 80px;
     height: auto;
 
     display: block;

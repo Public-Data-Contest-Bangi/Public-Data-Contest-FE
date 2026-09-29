@@ -33,42 +33,6 @@ export const Card = styled.button`
     }
 `;
 
-export const CardImageArea = styled.div`
-    width: 92px;
-    height: 102px;
-
-    flex-shrink: 0;
-`;
-
-export const CardImage = styled.img`
-    width: 100%;
-    height: 100%;
-
-    border-radius: 14px;
-
-    object-fit: cover;
-
-    background: #f2f4f3;
-`;
-
-export const ImagePlaceholder = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 14px;
-
-    background: #eef9f4;
-
-    color: #40d293;
-
-    font-size: 29px;
-    font-weight: 300;
-`;
-
 export const CardBody = styled.div`
     flex: 1;
     min-width: 0;

@@ -120,26 +120,39 @@ export const InfoSection = styled.div`
   padding: 16px 20px 20px;
 `;
 
+
 export const NameRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 6px;
 `;
 
 export const Name = styled.h2`
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: 19px;
   font-weight: 700;
   color: #000000;
+  line-height: 26px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 export const Distance = styled.span`
+  flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
+  line-height: 26px;
+  white-space: nowrap;
 `;
-
 export const AddressText = styled.p`
   margin: 0 0 4px;
   font-size: 13px;

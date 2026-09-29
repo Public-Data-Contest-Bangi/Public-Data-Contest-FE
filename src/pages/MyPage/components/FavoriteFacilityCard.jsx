@@ -52,18 +52,6 @@ export default function FavoriteFacilityCard({
             type="button"
             onClick={onClick}
         >
-            <S.CardImageArea>
-                {imageUrl ? (
-                    <S.CardImage
-                        src={imageUrl}
-                        alt={name}
-                    />
-                ) : (
-                    <S.ImagePlaceholder>
-                        ♡
-                    </S.ImagePlaceholder>
-                )}
-            </S.CardImageArea>
 
             <S.CardBody>
                 <S.TopRow>

@@ -77,11 +77,10 @@ export const HeroSubtitle = styled.p`
   font-size: 14px;
   font-weight: 600;
 `;
-
 export const Mascot = styled.img`
   position: absolute;
   right: 2px;
-  top: -4px;
+  top: -16px;
   width: 150px;
   height: 150px;
   object-fit: contain;
