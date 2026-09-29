@@ -4,6 +4,11 @@ import Button from "../../../components/common/Button";
 import ConfirmModal from "../../../components/common/ConfirmModal";
 
 import useReportDetail from "./hooks/useReportDetail";
+import {
+    getReportTypeLabel,
+    getReportStatusLabel,
+    isReportAnswered,
+} from "./utils/reportLabels";
 
 import * as S from "./ReportDetail.styled";
 
@@ -32,15 +37,13 @@ function ReportDetail() {
                 <S.Content>
                     <S.BadgeArea>
                         <S.CategoryBadge>
-                            {report.category}
+                            {getReportTypeLabel(report.category)}
                         </S.CategoryBadge>
 
                         <S.StatusBadge
-                            $isCompleted={
-                                report.status === "답변 완료"
-                            }
+                            $isCompleted={isReportAnswered(report.status)}
                         >
-                            {report.status}
+                            {getReportStatusLabel(report.status)}
                         </S.StatusBadge>
                     </S.BadgeArea>
 

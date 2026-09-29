@@ -1,6 +1,6 @@
 import Button from '../../components/common/Button';
 import Header from '../../components/common/Header';
-import mascotSearchImg from '../../assets/images/mascot-search.png';
+  import mascotSearchImg from "../../assets/images/mascot-region.svg";
 import locationIcon from '../../assets/icons/location-icon.png';
 import { useFacilitySearch } from './hooks/useFacilitySearch';
 import RegionSelectDropdown from './components/RegionSelectDropdown';

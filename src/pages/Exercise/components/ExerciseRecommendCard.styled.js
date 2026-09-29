@@ -12,22 +12,19 @@ export const Card = styled.button`
 
     box-sizing: border-box;
 
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    border-radius: 13px;
+    border: 1px solid #d6f2e4;
+    border-radius: 20px;
 
-    background: #ffffff;
+    background: #eefaf4;
 
     text-align: left;
 
     cursor: pointer;
 
-    transition:
-        border-color 0.15s,
-        background 0.15s;
+    transition: background 0.15s;
 
     &:active {
-        border-color: #40d293;
-        background: #f4fff9;
+        background: #dff5eb;
     }
 `;
 

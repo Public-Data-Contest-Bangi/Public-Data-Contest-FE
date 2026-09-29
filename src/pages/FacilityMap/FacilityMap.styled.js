@@ -665,10 +665,13 @@ export const Thumbnail = styled.div`
   background: #eef2f2;
 `;
 
+
 export const SheetInfo = styled.div`
   flex: 1;
 
   min-width: 0;
+
+  padding-right: 28px;
 `;
 
 export const FacilityName = styled.p`
@@ -678,8 +681,17 @@ export const FacilityName = styled.p`
   font-weight: 700;
 
   color: #1a1a1a;
-`;
 
+  line-height: 22px;
+
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
 export const FacilityAddress = styled.p`
   margin: 4px 0 0;
 

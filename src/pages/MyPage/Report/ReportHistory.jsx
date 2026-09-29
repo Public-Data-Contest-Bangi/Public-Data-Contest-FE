@@ -4,6 +4,10 @@ import Button from "../../../components/common/Button";
 import BottomNav from "../../../components/BottomNav";
 
 import useReportHistory from "./hooks/useReportHistory";
+import {
+    getReportStatusLabel,
+    isReportAnswered,
+} from "./utils/reportLabels";
 
 import * as S from "./ReportHistory.styled";
 
@@ -46,12 +50,13 @@ function ReportHistory() {
                                             </S.Date>
 
                                             <S.StatusBadge
-                                                $isCompleted={
-                                                    report.status ===
-                                                    "답변 완료"
-                                                }
+                                                $isCompleted={isReportAnswered(
+                                                    report.status
+                                                )}
                                             >
-                                                {report.status}
+                                                {getReportStatusLabel(
+                                                    report.status
+                                                )}
                                             </S.StatusBadge>
                                         </S.TopArea>
 

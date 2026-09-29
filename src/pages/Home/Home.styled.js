@@ -73,7 +73,7 @@ export const LogoArea = styled.div`
 `;
 
 export const LogoImage = styled.img`
-    width: 90px;
+    width: 117px;
     height: auto;
 
     display: block;
