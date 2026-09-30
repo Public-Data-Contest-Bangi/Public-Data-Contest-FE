@@ -19,31 +19,8 @@ export const Container = styled.div`
 
 /* ── 헤더 ───────────────── */
 
-export const Header = styled.header`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 56px;
-  padding: 0 20px;
-  flex-shrink: 0;
-`;
+export { HeaderWrap as Header, BackButton } from "../../components/common/Header";
 
-export const BackButton = styled.button`
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
 
 export const Title = styled.h1`
   margin: 0;

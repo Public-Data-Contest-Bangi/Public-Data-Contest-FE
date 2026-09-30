@@ -15,7 +15,7 @@ function FitnessResultIntro() {
     return (
         <MobileLayout>
             <S.Inner>
-                <Header title="체력 결과로 추천" />
+                <Header inset={16} title="체력 결과로 추천" />
 
                 <S.Content>
                     <S.Mascot

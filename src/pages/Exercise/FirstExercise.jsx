@@ -14,7 +14,7 @@ function FirstExercise() {
     return (
         <S.Page>
             <S.Container>
-                <Header title="첫 운동 발견하기" />
+                <Header inset={16} title="첫 운동 발견하기" />
 
                 <FirstExerciseBanner />
 

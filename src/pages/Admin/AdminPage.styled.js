@@ -4,7 +4,7 @@ export const Container = styled.main`
     width: 100%;
     min-height: 100vh;
 
-    padding: 32px 20px 40px;
+    padding: ${({ $detail }) => $detail ? "0 20px 40px" : "32px 20px 40px"};
 
     box-sizing: border-box;
 

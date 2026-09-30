@@ -103,7 +103,7 @@ export default function AdminPage() {
 
     return (
         <MobileLayout>
-            <S.Container>
+            <S.Container $detail={Boolean(selectedReport)}>
                 {!selectedReport && (
                     <S.LogoutArea>
                         <S.LogoutButton

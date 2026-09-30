@@ -259,7 +259,7 @@ export default function FavoritesList() {
                         0,
                         Math.ceil(
                             total /
-                                PAGE_SIZE
+                            PAGE_SIZE
                         ) - 1
                     );
 
@@ -382,7 +382,7 @@ export default function FavoritesList() {
             </S.InfoSection>
 
             {loading ? (
-                <S.Description>
+                <S.Description style={{ padding: "0 20px" }}>
                     목록을 불러오는 중이에요.
                 </S.Description>
             ) : loadError ? (
@@ -390,7 +390,7 @@ export default function FavoritesList() {
                     목록을 불러오지 못했어요.
                 </S.Description>
             ) : favorites.length >
-              0 ? (
+                0 ? (
                 <S.List>
                     {favorites.map(
                         (

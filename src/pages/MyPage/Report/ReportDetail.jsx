@@ -32,7 +32,7 @@ function ReportDetail() {
     return (
         <MobileLayout>
             <S.Inner>
-                <Header title="신고 상세" />
+                <Header inset={16} title="신고 상세" />
 
                 <S.Content>
                     <S.BadgeArea>
