@@ -40,48 +40,6 @@ export const Container = styled.div`
     background: #ffffff;
 `;
 
-export const Header = styled.header`
-    position: relative;
-
-    width: 100%;
-    height: 72px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-export const BackButton = styled(BaseButton)`
-    position: absolute;
-    left: 0;
-
-    width: 28px;
-    height: 28px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    background: transparent;
-
-    img {
-        width: 22px;
-        height: 22px;
-
-        object-fit: contain;
-    }
-`;
-
-export const HeaderTitle = styled.h1`
-    margin: 0;
-
-    font-size: 20px;
-    font-weight: 500;
-
-    color: ${TEXT};
-`;
 
 export const ProfileSection = styled.section`
     display: flex;

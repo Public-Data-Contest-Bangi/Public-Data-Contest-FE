@@ -183,3 +183,19 @@ export const withdraw = async () => {
 
     return response.data;
 };
+
+// 아이디 찾기
+export const findLoginId = async ({
+    name,
+    email,
+}) => {
+    const response = await client.post(
+        "/api/auth/find-id",
+        {
+            name,
+            email,
+        }
+    );
+
+    return response.data;
+};

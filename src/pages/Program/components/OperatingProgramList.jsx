@@ -141,7 +141,7 @@ export default function OperatingProgramList() {
 
                                 operatingPeriod:
                                     program.operatingStartDate &&
-                                    program.operatingEndDate
+                                        program.operatingEndDate
                                         ? `${program.operatingStartDate} ~ ${program.operatingEndDate}`
                                         : "운영기간 정보 없음",
 
@@ -245,7 +245,7 @@ export default function OperatingProgramList() {
                             불러오지 못했어요.
                         </S.StatusText>
                     ) : programs.length ===
-                      0 ? (
+                        0 ? (
                         <S.StatusText>
                             현재 운영 중인
                             프로그램이 없어요.
