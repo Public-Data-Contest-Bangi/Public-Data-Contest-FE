@@ -186,6 +186,23 @@ export const CancelButton = styled.button`
     cursor: pointer;
 `;
 
+export const ResetButton = styled.button`
+    width: 112px;
+    height: 38px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #42dba0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+`;
+
 export const ButtonArea = styled.div`
     width: 100%;
 

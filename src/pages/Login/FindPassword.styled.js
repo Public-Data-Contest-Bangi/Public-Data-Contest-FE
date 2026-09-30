@@ -87,7 +87,7 @@ export const CheckButton = styled.button`
 export const ErrorMessage = styled.p`
     margin: 0;
 
-    color: #ff4141;
+    color: #42dba0;
 
     font-size: 12px;
 `;
