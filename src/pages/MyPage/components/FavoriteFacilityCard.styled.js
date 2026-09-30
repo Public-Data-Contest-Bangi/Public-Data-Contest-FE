@@ -33,42 +33,6 @@ export const Card = styled.button`
     }
 `;
 
-export const CardImageArea = styled.div`
-    width: 92px;
-    height: 102px;
-
-    flex-shrink: 0;
-`;
-
-export const CardImage = styled.img`
-    width: 100%;
-    height: 100%;
-
-    border-radius: 14px;
-
-    object-fit: cover;
-
-    background: #f2f4f3;
-`;
-
-export const ImagePlaceholder = styled.div`
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 14px;
-
-    background: #eef9f4;
-
-    color: #40d293;
-
-    font-size: 29px;
-    font-weight: 300;
-`;
-
 export const CardBody = styled.div`
     flex: 1;
     min-width: 0;
@@ -76,7 +40,7 @@ export const CardBody = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 7px;
+    gap: 8px;
 `;
 
 export const TopRow = styled.div`
@@ -171,8 +135,8 @@ export const SportRow = styled.div`
 `;
 
 export const SportIcon = styled.img`
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
 
     object-fit: contain;
 `;
@@ -189,12 +153,12 @@ export const AccessList = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 5px;
+    gap: 8px;
 `;
 
 export const AccessBadge = styled.div`
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
 
     display: flex;
     align-items: center;
@@ -206,8 +170,8 @@ export const AccessBadge = styled.div`
 `;
 
 export const AccessIcon = styled.img`
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
 
     object-fit: contain;
 `;

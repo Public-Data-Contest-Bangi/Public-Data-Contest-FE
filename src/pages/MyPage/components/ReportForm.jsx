@@ -109,24 +109,6 @@ function ReportForm({
                     </S.ImageError>
                 )}
             </S.ImageUploadSection>
-
-            <S.Field>
-                <S.Label>
-                    답변받을 이메일
-                </S.Label>
-
-                <S.Input
-                    type="email"
-                    value={form.email}
-                    placeholder="이메일을 입력해주세요"
-                    onChange={(e) =>
-                        onChange(
-                            "email",
-                            e.target.value
-                        )
-                    }
-                />
-            </S.Field>
         </>
     );
 }

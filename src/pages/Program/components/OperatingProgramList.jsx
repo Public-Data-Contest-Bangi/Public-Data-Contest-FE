@@ -1,3 +1,5 @@
+import Pagination from '../../../components/common/Pagination';
+import useListPagination from '../../../utils/useListPagination';
 import {
     useEffect,
     useState,
@@ -69,6 +71,8 @@ export default function OperatingProgramList() {
         setIsError,
     ] = useState(false);
 
+    const { page, setPage, pageItems } = useListPagination(programs);
+
     useEffect(() => {
         if (!facilityId) {
             setIsLoading(false);
@@ -117,6 +121,8 @@ export default function OperatingProgramList() {
                                 id:
                                     `${facilityId}-${index}`,
 
+                                sportId: program.sportId,
+                                sportCode: program.sportCode,
                                 title:
                                     program.programName ||
                                     "강좌 정보 없음",
@@ -135,7 +141,7 @@ export default function OperatingProgramList() {
 
                                 operatingPeriod:
                                     program.operatingStartDate &&
-                                    program.operatingEndDate
+                                        program.operatingEndDate
                                         ? `${program.operatingStartDate} ~ ${program.operatingEndDate}`
                                         : "운영기간 정보 없음",
 
@@ -239,14 +245,14 @@ export default function OperatingProgramList() {
                             불러오지 못했어요.
                         </S.StatusText>
                     ) : programs.length ===
-                      0 ? (
+                        0 ? (
                         <S.StatusText>
                             현재 운영 중인
                             프로그램이 없어요.
                         </S.StatusText>
                     ) : (
                         <S.ProgramList>
-                            {programs.map(
+                            {pageItems.map(
                                 (program) => (
                                     <OperatingProgramCard
                                         key={
@@ -260,6 +266,7 @@ export default function OperatingProgramList() {
                             )}
                         </S.ProgramList>
                     )}
+                    {!isLoading && !isError && <Pagination page={page} totalCount={programs.length} onPageChange={setPage} />}
                 </S.Section>
             </S.Content>
 

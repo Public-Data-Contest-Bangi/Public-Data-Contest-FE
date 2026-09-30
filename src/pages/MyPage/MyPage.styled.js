@@ -10,12 +10,11 @@ export const Page = styled.div`
     background: #ffffff;
 `;
 
-// 후
 export const Container = styled.div`
     position: relative;
 
     width: 100%;
-    max-width: 375px;
+    max-width: 480px;
     min-height: 100vh;
     min-height: 100dvh;
 
@@ -32,7 +31,6 @@ export const Content = styled.main`
 
     flex: 1;
 
-    // 후
     padding: 0 20px calc(100px + env(safe-area-inset-bottom));
 
     box-sizing: border-box;
@@ -162,9 +160,8 @@ export const MenuList = styled.div`
     display: flex;
     flex-direction: column;
 
-   // 후 (MenuList)
     padding-top: 12px;
-    gap: 4px; 
+    gap: 4px;
 `;
 
 export const MenuItem = styled.button`

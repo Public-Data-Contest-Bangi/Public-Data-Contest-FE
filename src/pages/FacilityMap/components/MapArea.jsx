@@ -1,4 +1,4 @@
-import locationIcon from '../../../assets/icons/location-icon.png';
+import CurrentLocationIcon from '../../../components/common/CurrentLocationIcon';
 
 import {
     MapPlaceholder,
@@ -49,15 +49,7 @@ function MapArea({
                 onClick={onCurrentLocation}
                 disabled={locating}
             >
-                <img
-                    src={locationIcon}
-                    alt=""
-                    style={{
-                        width: 18,
-                        height: 18,
-                        objectFit: 'contain',
-                    }}
-                />
+                <CurrentLocationIcon />
             </MapLocateButton>
         </MapPlaceholder>
     );

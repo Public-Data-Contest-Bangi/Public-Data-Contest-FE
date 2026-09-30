@@ -11,7 +11,7 @@ import {
 
 import Button from "../../../components/common/Button";
 
-import mascotSearchImg from "../../../assets/images/mascot-region.svg";
+import mascotSearchImg from "../../../assets/images/mascot-region-clear.png";
 import locationIcon from "../../../assets/icons/location-icon.png";
 
 import RegionSelectDropdown from "./RegionSelectDropdown";
@@ -56,7 +56,6 @@ export default function RegionSelection() {
     const subDistrictRef =
         useRef(null);
 
-    // 드롭다운 바깥 클릭 시 닫기
     useEffect(() => {
         const handleClickOutside = (
             event
@@ -119,74 +118,76 @@ export default function RegionSelection() {
         setOpenMenu(null);
     };
 
-    // 현재 위치로 검색
-    const handleCurrentLocation =
-        () => {
-            if (
-                selectedSportIds.length === 0
-            ) {
-                console.error(
-                    "선택한 종목 ID가 없습니다."
-                );
-
-                return;
-            }
-
-            if (
-                !navigator.geolocation
-            ) {
-                console.error(
-                    "현재 위치 기능을 지원하지 않습니다."
-                );
-
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const {
-                        latitude,
-                        longitude,
-                    } = position.coords;
-
-                    navigate(
-                        "/program-browse/results",
-                        {
-                            state: {
-                                ...location.state,
-
-                                sportIds:
-                                    selectedSportIds,
-
-                                latitude,
-                                longitude,
-
-                                searchMode:
-                                    "CURRENT_LOCATION",
-                            },
-                        }
-                    );
-                },
-                (error) => {
-                    console.error(
-                        "위치 정보를 가져오지 못했습니다.",
-                        error
-                    );
-                }
+    /*
+     * 현재 위치 검색
+     * 현재 위치 버튼을 눌렀을 때만
+     * 위치 권한 사용
+     */
+    const handleCurrentLocation = () => {
+        if (
+            selectedSportIds.length === 0
+        ) {
+            console.error(
+                "선택한 종목 ID가 없습니다."
             );
-        };
 
-    // 하위 구가 존재하는 지역이면
-    // 구까지 선택해야 검색 가능
+            return;
+        }
+
+        if (!navigator.geolocation) {
+            console.error(
+                "현재 위치 기능을 지원하지 않습니다."
+            );
+
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const {
+                    latitude,
+                    longitude,
+                } = position.coords;
+
+                navigate(
+                    "/program-browse/results",
+                    {
+                        state: {
+                            ...location.state,
+
+                            sportIds:
+                                selectedSportIds,
+
+                            latitude,
+                            longitude,
+
+                            searchMode:
+                                "CURRENT_LOCATION",
+                        },
+                    }
+                );
+            },
+            (error) => {
+                console.error(
+                    "위치 정보를 가져오지 못했습니다.",
+                    error
+                );
+            }
+        );
+    };
+
+    /*
+     * 도/시만 선택해도
+     * 프로그램 검색 버튼 활성화
+     */
     const canSearch =
         selectedSportIds.length > 0 &&
-        Boolean(regionCode) &&
-        (
-            subDistricts.length === 0 ||
-            Boolean(subDistrict)
-        );
+        Boolean(province);
 
-    // 지역 선택으로 검색
+    /*
+     * 지역 검색
+     * 현재 위치 권한 필요 없음
+     */
     const handleSearch = () => {
         if (
             selectedSportIds.length === 0
@@ -198,13 +199,21 @@ export default function RegionSelection() {
             return;
         }
 
-        if (!canSearch) {
+        if (!province) {
             console.error(
-                "지역을 모두 선택해 주세요."
+                "도/시를 선택해 주세요."
             );
 
             return;
         }
+
+        const regionName = [
+            province,
+            city,
+            subDistrict,
+        ]
+            .filter(Boolean)
+            .join(" ");
 
         navigate(
             "/program-browse/results",
@@ -216,15 +225,22 @@ export default function RegionSelection() {
                         selectedSportIds,
 
                     province,
-                    city,
-                    subDistrict,
+
+                    city:
+                        city || null,
+
+                    subDistrict:
+                        subDistrict || null,
 
                     district:
                         subDistrict
                             ? `${city} ${subDistrict}`
-                            : city,
+                            : city || null,
 
-                    regionCode,
+                    regionCode:
+                        regionCode || null,
+
+                    regionName,
 
                     searchMode:
                         "REGION",

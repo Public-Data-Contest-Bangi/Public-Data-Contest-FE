@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import MobileLayout from "../../components/layout/MobileLayout";
 
 import AdminModal from "./components/AdminModal";
@@ -9,6 +11,9 @@ import useAdminReports from "./hooks/useAdminReports";
 import * as S from "./AdminPage.styled";
 
 export default function AdminPage() {
+    const navigate =
+        useNavigate();
+
     const {
         filteredReports,
 
@@ -43,6 +48,35 @@ export default function AdminPage() {
         handleModalConfirm,
     } = useAdminReports();
 
+    const handleLogout = () => {
+        localStorage.removeItem(
+            "accessToken"
+        );
+
+        localStorage.removeItem(
+            "refreshToken"
+        );
+
+        localStorage.removeItem(
+            "tokenType"
+        );
+
+        localStorage.removeItem(
+            "expiresIn"
+        );
+
+        localStorage.removeItem(
+            "memberDetails"
+        );
+
+        navigate(
+            "/login",
+            {
+                replace: true,
+            }
+        );
+    };
+
     if (isLoading) {
         return (
             <MobileLayout>
@@ -70,6 +104,19 @@ export default function AdminPage() {
     return (
         <MobileLayout>
             <S.Container>
+                {!selectedReport && (
+                    <S.LogoutArea>
+                        <S.LogoutButton
+                            type="button"
+                            onClick={
+                                handleLogout
+                            }
+                        >
+                            로그아웃
+                        </S.LogoutButton>
+                    </S.LogoutArea>
+                )}
+
                 {selectedReport ? (
                     <AdminReportDetail
                         report={

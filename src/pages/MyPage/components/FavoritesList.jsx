@@ -1,8 +1,19 @@
+import Pagination, {
+    PAGE_SIZE,
+} from "../../../components/common/Pagination";
+
+import {
+    getCurrentCoords,
+} from "../../../utils/geolocation";
+
 import {
     useEffect,
     useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+
+import {
+    useNavigate,
+} from "react-router-dom";
 
 import {
     getFavoriteFacilities,
@@ -13,7 +24,9 @@ import FavoriteFacilityCard from "./FavoriteFacilityCard";
 
 import * as S from "../FavoritesPage.styled";
 
-const formatDistance = (distanceMeters) => {
+const formatDistance = (
+    distanceMeters
+) => {
     if (
         distanceMeters === null ||
         distanceMeters === undefined
@@ -21,8 +34,12 @@ const formatDistance = (distanceMeters) => {
         return "";
     }
 
-    if (distanceMeters < 1000) {
-        return `${Math.round(distanceMeters)}m`;
+    if (
+        distanceMeters < 1000
+    ) {
+        return `${Math.round(
+            distanceMeters
+        )}m`;
     }
 
     return `${(
@@ -30,43 +47,127 @@ const formatDistance = (distanceMeters) => {
     ).toFixed(1)}km`;
 };
 
-const normalizeAccessibilityCode = (code) => {
-    if (!code) return null;
+const normalizeAccessibility = (
+    item
+) => {
+    if (!item) {
+        return null;
+    }
 
-    return code.toLowerCase();
+    const value = `
+        ${item.code ?? ""}
+        ${item.name ?? ""}
+    `.toLowerCase();
+
+    if (
+        value.includes(
+            "wheelchair"
+        ) ||
+        value.includes(
+            "휠체어"
+        )
+    ) {
+        return "wheelchair";
+    }
+
+    if (
+        value.includes(
+            "ramp"
+        ) ||
+        value.includes(
+            "경사로"
+        )
+    ) {
+        return "ramp";
+    }
+
+    if (
+        value.includes(
+            "elevator"
+        ) ||
+        value.includes(
+            "엘리베이터"
+        )
+    ) {
+        return "elevator";
+    }
+
+    if (
+        value.includes(
+            "restroom"
+        ) ||
+        value.includes(
+            "toilet"
+        ) ||
+        value.includes(
+            "화장실"
+        )
+    ) {
+        return "restroom";
+    }
+
+    if (
+        value.includes(
+            "parking"
+        ) ||
+        value.includes(
+            "주차"
+        )
+    ) {
+        return "parking";
+    }
+
+    return null;
 };
 
-const normalizeFacility = (facility) => {
-    return {
-        id: facility.facilityId,
-        name: facility.name,
-
-        imageUrl:
-            facility.representativeImageUrl,
-
-        address: facility.address,
-
-        distance: formatDistance(
-            facility.distanceMeters
-        ),
-
-        sports: facility.sports
-            ?.map((sport) => sport.name)
-            .join(" · "),
-
-        accessibility:
-            facility.accessibilities
-                ?.filter(
+const normalizeFacility = (
+    facility
+) => {
+    const accessibility = [
+        ...new Set(
+            (
+                facility.accessibilities ??
+                []
+            )
+                .filter(
                     (item) =>
                         item.availability ===
                         "AVAILABLE"
                 )
-                .map((item) =>
-                    normalizeAccessibilityCode(
-                        item.code
-                    )
+                .map(
+                    normalizeAccessibility
                 )
-                .filter(Boolean) ?? [],
+                .filter(Boolean)
+        ),
+    ];
+
+    return {
+        id:
+            facility.facilityId,
+
+        name:
+            facility.name,
+
+        imageUrl:
+            facility.representativeImageUrl,
+
+        address:
+            facility.address,
+
+        distance:
+            formatDistance(
+                facility.distanceMeters
+            ),
+
+        sports:
+            facility.sports
+                ?.map(
+                    (sport) =>
+                        sport.name
+                )
+                .join(" · "),
+
+        accessibility,
 
         voucherStatus:
             facility.voucherStatus,
@@ -74,104 +175,198 @@ const normalizeFacility = (facility) => {
 };
 
 export default function FavoritesList() {
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
-    const [favorites, setFavorites] =
-        useState([]);
+    const [
+        favorites,
+        setFavorites,
+    ] = useState([]);
 
-    const [totalCount, setTotalCount] =
-        useState(0);
+    const [
+        totalCount,
+        setTotalCount,
+    ] = useState(0);
 
-    const fetchFavorites = async (
-        latitude,
-        longitude
-    ) => {
-        try {
-            const response =
-                await getFavoriteFacilities({
-                    latitude,
-                    longitude,
-                    page: 0,
-                    size: 20,
-                });
+    const [
+        page,
+        setPage,
+    ] = useState(0);
 
-            const facilities =
-                response.data?.facilities ?? [];
+    const [
+        loading,
+        setLoading,
+    ] = useState(true);
 
-            setFavorites(
-                facilities.map(
-                    normalizeFacility
-                )
-            );
+    const [
+        loadError,
+        setLoadError,
+    ] = useState(false);
 
-            setTotalCount(
-                response.data?.totalCount ?? 0
-            );
-        } catch (error) {
-            console.error(
-                "즐겨찾기 목록 조회 실패",
-                error
-            );
-        }
-    };
+    const [
+        revision,
+        setRevision,
+    ] = useState(0);
+
+    const [
+        removing,
+        setRemoving,
+    ] = useState(false);
 
     useEffect(() => {
-        if (!navigator.geolocation) {
-            fetchFavorites();
-            return;
-        }
+        let cancelled =
+            false;
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const {
-                    latitude,
-                    longitude,
-                } = position.coords;
+        async function load() {
+            setLoading(true);
+            setLoadError(false);
 
-                fetchFavorites(
-                    latitude,
-                    longitude
+            try {
+                const coords =
+                    await getCurrentCoords();
+
+                const response =
+                    await getFavoriteFacilities({
+                        ...coords,
+                        page,
+                        size:
+                            PAGE_SIZE,
+                    });
+
+                if (cancelled) {
+                    return;
+                }
+
+                if (
+                    !response.success
+                ) {
+                    throw new Error(
+                        "Favorites request failed"
+                    );
+                }
+
+                const total =
+                    response.data
+                        ?.totalCount ??
+                    0;
+
+                setTotalCount(
+                    total
                 );
-            },
 
-            () => {
-                // 위치 권한을 허용하지 않아도
-                // 즐겨찾기 목록 자체는 조회
-                fetchFavorites();
+                const lastPage =
+                    Math.max(
+                        0,
+                        Math.ceil(
+                            total /
+                                PAGE_SIZE
+                        ) - 1
+                    );
+
+                if (
+                    page > lastPage
+                ) {
+                    setPage(
+                        lastPage
+                    );
+
+                    return;
+                }
+
+                const facilities =
+                    response.data
+                        ?.facilities ??
+                    [];
+
+                console.log(
+                    "즐겨찾기 시설:",
+                    facilities
+                );
+
+                setFavorites(
+                    facilities.map(
+                        normalizeFacility
+                    )
+                );
+            } catch (error) {
+                if (
+                    !cancelled
+                ) {
+                    setLoadError(
+                        true
+                    );
+
+                    console.error(
+                        "즐겨찾기 목록 조회 실패:",
+                        error
+                    );
+                }
+            } finally {
+                if (
+                    !cancelled
+                ) {
+                    setLoading(
+                        false
+                    );
+                }
             }
-        );
-    }, []);
-
-    const handleFacilityClick = (id) => {
-        navigate(`/facility-detail/${id}`);
-    };
-
-    const handleFavoriteRemove = async (
-        id
-    ) => {
-        try {
-            const response =
-                await removeFavoriteFacility(id);
-
-            if (!response.success) return;
-
-            setFavorites((prev) =>
-                prev.filter(
-                    (facility) =>
-                        facility.id !== id
-                )
-            );
-
-            setTotalCount((prev) =>
-                Math.max(prev - 1, 0)
-            );
-        } catch (error) {
-            console.error(
-                "즐겨찾기 해제 실패",
-                error
-            );
         }
-    };
+
+        load();
+
+        return () => {
+            cancelled =
+                true;
+        };
+    }, [
+        page,
+        revision,
+    ]);
+
+    const handleFacilityClick =
+        (id) => {
+            navigate(
+                `/facility-detail/${id}`
+            );
+        };
+
+    const handleFavoriteRemove =
+        async (id) => {
+            if (removing) {
+                return;
+            }
+
+            setRemoving(
+                true
+            );
+
+            try {
+                const response =
+                    await removeFavoriteFacility(
+                        id
+                    );
+
+                if (
+                    !response.success
+                ) {
+                    return;
+                }
+
+                setRevision(
+                    (value) =>
+                        value + 1
+                );
+            } catch (error) {
+                console.error(
+                    "즐겨찾기 해제 실패",
+                    error
+                );
+            } finally {
+                setRemoving(
+                    false
+                );
+            }
+        };
 
     return (
         <>
@@ -186,10 +381,21 @@ export default function FavoritesList() {
                 </S.Description>
             </S.InfoSection>
 
-            {favorites.length > 0 ? (
+            {loading ? (
+                <S.Description>
+                    목록을 불러오는 중이에요.
+                </S.Description>
+            ) : loadError ? (
+                <S.Description>
+                    목록을 불러오지 못했어요.
+                </S.Description>
+            ) : favorites.length >
+              0 ? (
                 <S.List>
                     {favorites.map(
-                        (facility) => (
+                        (
+                            facility
+                        ) => (
                             <FavoriteFacilityCard
                                 key={
                                     facility.id
@@ -223,6 +429,22 @@ export default function FavoritesList() {
                         즐겨찾기에 추가해보세요!
                     </S.EmptyDescription>
                 </S.EmptyState>
+            )}
+
+            {!loadError && (
+                <Pagination
+                    page={page}
+                    totalCount={
+                        totalCount
+                    }
+                    onPageChange={
+                        setPage
+                    }
+                    disabled={
+                        loading ||
+                        removing
+                    }
+                />
             )}
         </>
     );

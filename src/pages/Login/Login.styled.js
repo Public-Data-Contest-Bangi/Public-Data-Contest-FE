@@ -11,8 +11,9 @@ export const Page = styled.div`
 `;
 
 export const LoginContainer = styled.div`
-    height: 815px;
-    max-width: 375px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
 
     padding: 40px 24px;
 
@@ -39,7 +40,7 @@ export const BrandLogo = styled.img`
     display: block;
     object-fit: contain;
 
-    margin: -70px 0 10px;
+    margin: -60px 0 0;
 `;
 
 export const InputSection = styled.div`

@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  width: 375px;
-  min-height: 816px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
   font-family: inherit;
@@ -77,8 +78,8 @@ export const Section = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-  margin: 0 0 18px;
-  font-size: 20px;
+  margin: 0 0 14px;
+  font-size: 18px;
   font-weight: 700;
   color: #000000;
 `;
@@ -86,14 +87,34 @@ export const SectionTitle = styled.h2`
 export const CheckList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 8px;
 `;
 
 export const CheckRow = styled.label`
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  min-height: 60px;
+  padding: 10px 14px;
+  border: 1px solid ${({ $checked }) => $checked ? '#40d293' : '#e8ecea'};
+  border-radius: 12px;
+  background: ${({ $checked }) => $checked ? '#effbf5' : '#ffffff'};
+  transition: background 150ms ease, border-color 150ms ease;
   cursor: pointer;
+
+  &:has(input:focus-visible) {
+    outline: 2px solid #16865e;
+    outline-offset: 3px;
+  }
+
+  > span:first-of-type {
+    order: 3;
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    border-radius: 6px;
+  }
 `;
 
 export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
@@ -122,15 +143,24 @@ export const CheckboxBox = styled.span`
 `;
 
 export const CheckIconWrap = styled.span`
+  order: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f4f7f5;
   flex-shrink: 0;
+
+  img { display: block; opacity: 0.8; }
 `;
 
 export const CheckLabel = styled.span`
-  font-size: 18px;
+  order: 2;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.4;
   font-weight: 600;
   color: #1a1a1a;
 `;
@@ -274,7 +304,7 @@ export const RadioLabel = styled.span`
 export const Footer = styled.div`
   display: flex;
   gap: 10px;
-  padding: 16px 20px 28px;
+  padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   flex-shrink: 0;
 `;
 

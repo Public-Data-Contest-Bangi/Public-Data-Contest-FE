@@ -1,3 +1,4 @@
+import Pagination from '../../components/common/Pagination';
 import {
     useLocation,
     useNavigate,
@@ -21,6 +22,7 @@ function ExerciseDetailPage() {
         exercise,
         tags,
         facilities,
+        page, setPage, totalCount,
         isLoading,
         error,
     } = useExerciseDetail();
@@ -131,7 +133,7 @@ function ExerciseDetailPage() {
                                 0 && (
                                     <S.FacilityCount>
                                         {
-                                            facilities.length
+                                            totalCount
                                         }
                                         곳
                                     </S.FacilityCount>
@@ -182,6 +184,7 @@ function ExerciseDetailPage() {
                                 )}
                             </S.FacilityList>
                         )}
+                        {!isLoading && !error && <Pagination page={page} totalCount={totalCount} onPageChange={setPage} />}
                     </S.FacilitySection>
                 </S.Content>
                 <BottomNav />

@@ -1,3 +1,4 @@
+import Pagination from '../../components/common/Pagination';
 import BottomNav from '../../components/BottomNav';
 import Header from '../../components/common/Header';
 import { useSearchResult } from './hooks/useSearchResult';
@@ -17,6 +18,7 @@ import {
   CardTitleRow,
   CardName,
   CardDistance,
+  CardAddress,
   CardSports,
   SportChip,
   SportChipIcon,
@@ -32,6 +34,8 @@ function SearchResult() {
     voucherStatus,
     facilities,
     totalCount,
+    page,
+    setPage,
     loading,
     error,
     goBack,
@@ -92,8 +96,9 @@ function SearchResult() {
                       <CardName>{facility.name}</CardName>
                       <CardDistance>{formatDistance(facility.distanceMeters)}</CardDistance>
                     </CardTitleRow>
-                    <CardSports>
-                      {(facility.sports || []).map((s) => {
+                    {facility.address?.trim() && <CardAddress>{facility.address}</CardAddress>}
+                    {facility.sports?.length > 0 && <CardSports>
+                      {(facility.sports || []).slice(0, 3).map((s) => {
                         const icon = getSportIcon(s.name);
                         const label = getSportDisplayName(s.name);
                         return (
@@ -103,13 +108,17 @@ function SearchResult() {
                           </SportChip>
                         );
                       })}
-                    </CardSports>
-                    <CardAccessRow>
+                      {facility.sports.length > 3 && (
+                        <SportChip aria-label={`외 ${facility.sports.length - 3}개 종목`}>+{facility.sports.length - 3}</SportChip>
+                      )}
+                    </CardSports>}
+                    {facility.accessibilities?.some(a => a.availability === 'AVAILABLE') && <CardAccessRow>
                       {(facility.accessibilities || [])
                         .filter((a) => a.availability === 'AVAILABLE')
                         .map((a) => (
                           <AccessIcon key={a.code} name={a.name} />
                         ))}
+                    </CardAccessRow>}
                       <CardChevron>
                         <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path
@@ -121,12 +130,12 @@ function SearchResult() {
                           />
                         </svg>
                       </CardChevron>
-                    </CardAccessRow>
                   </CardBody>
                 </Card>
               ))}
             </List>
           )}
+          <Pagination page={page} totalCount={totalCount} onPageChange={setPage} />
         </>
       )}
 

@@ -1,31 +1,35 @@
 // FacilityMap.jsx
 
-import { useEffect, useState } from 'react';
+import {
+    useEffect,
+    useState,
+} from "react";
 
 import {
     useLocation,
     useNavigate,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import Header from '../../components/common/Header';
-import BottomNav from '../../components/BottomNav';
+import Header from "../../components/common/Header";
+import BottomNav from "../../components/BottomNav";
 
 import {
     useFacilityMap,
-} from './hooks/useFacilityMap';
+} from "./hooks/useFacilityMap";
 
-import RouteSearchCard from './components/RouteSearchCard';
-import TransitRouteCard from './components/TransitRouteCard';
-import MapArea from './components/MapArea';
-import FacilityPreviewSheet from './components/FacilityPreviewSheet';
-import PinLegendModal from './components/PinLegendModal';
+import RouteSearchCard from "./components/RouteSearchCard";
+import TransitRouteCard from "./components/TransitRouteCard";
+import MapArea from "./components/MapArea";
+import FacilityPreviewSheet from "./components/FacilityPreviewSheet";
+import PinLegendModal from "./components/PinLegendModal";
 
 import {
     Container,
     TransitNotice,
-} from './FacilityMap.styled';
+} from "./FacilityMap.styled";
 
-const PIN_LEGEND_SEEN_KEY = 'didimfit_pin_legend_seen';
+const PIN_LEGEND_SEEN_KEY =
+    "didimfit_pin_legend_seen";
 
 function FacilityMap() {
     const location =
@@ -40,27 +44,43 @@ function FacilityMap() {
     ] = useState(
         location.state
             ?.routeMode ===
-            'TRANSIT'
-            ? 'TRANSIT'
-            : 'WALK'
+            "TRANSIT"
+            ? "TRANSIT"
+            : "WALK"
     );
 
-    const [showPinLegend, setShowPinLegend] = useState(false);
+    const [
+        showPinLegend,
+        setShowPinLegend,
+    ] = useState(false);
 
     useEffect(() => {
-        const seen = localStorage.getItem(PIN_LEGEND_SEEN_KEY);
+        const seen =
+            localStorage.getItem(
+                PIN_LEGEND_SEEN_KEY
+            );
+
         if (!seen) {
-            setShowPinLegend(true);
+            setShowPinLegend(
+                true
+            );
         }
     }, []);
 
     const closePinLegend = () => {
-        localStorage.setItem(PIN_LEGEND_SEEN_KEY, 'true');
-        setShowPinLegend(false);
+        localStorage.setItem(
+            PIN_LEGEND_SEEN_KEY,
+            "true"
+        );
+
+        setShowPinLegend(
+            false
+        );
     };
 
     const {
         mapContainerRef,
+
         mapLoaded,
         mapError,
 
@@ -80,7 +100,10 @@ function FacilityMap() {
         avoidStairs,
 
         handleSwap,
+
+        goDepartureSearch,
         goArrivalSearch,
+
         moveToCurrentLocation,
 
         goSearchRoute,
@@ -91,33 +114,44 @@ function FacilityMap() {
         selectedFacility,
 
         closeSheet,
-
         goSelectedFacilityDetail,
     } = useFacilityMap();
 
     const handleRouteModeChange =
         (mode) => {
             if (
-                routeMode === mode
+                routeMode ===
+                mode
             ) {
                 return;
             }
 
-            setRouteMode(mode);
+            setRouteMode(
+                mode
+            );
 
             clearRoute();
 
             navigate(
                 location.pathname,
                 {
-                    replace: true,
+                    replace:
+                        true,
 
                     state: {
                         ...location.state,
+
                         routeMode:
                             mode,
                     },
                 }
+            );
+        };
+
+    const handleSearchRoute =
+        () => {
+            goSearchRoute(
+                routeMode
             );
         };
 
@@ -150,6 +184,11 @@ function FacilityMap() {
                 onSwap={
                     handleSwap
                 }
+                onDepartureSearch={() =>
+                    goDepartureSearch(
+                        routeMode
+                    )
+                }
                 onArrivalSearch={() =>
                     goArrivalSearch(
                         routeMode
@@ -164,10 +203,8 @@ function FacilityMap() {
                 onToggleAvoidStairs={
                     toggleAvoidStairs
                 }
-                onSearchRoute={() =>
-                    goSearchRoute(
-                        routeMode
-                    )
+                onSearchRoute={
+                    handleSearchRoute
                 }
             />
 
@@ -182,7 +219,8 @@ function FacilityMap() {
             )}
 
             {routeMode ===
-                'TRANSIT' && (
+                "TRANSIT" &&
+                transitRouteData && (
                     <TransitRouteCard
                         data={
                             transitRouteData
@@ -214,13 +252,27 @@ function FacilityMap() {
                 }
             />
 
-            <FacilityPreviewSheet
-                facility={selectedFacility}
-                onClose={closeSheet}
-                onDetail={goSelectedFacilityDetail}
-            />
+            {selectedFacility && (
+                <FacilityPreviewSheet
+                    facility={
+                        selectedFacility
+                    }
+                    onClose={
+                        closeSheet
+                    }
+                    onDetail={
+                        goSelectedFacilityDetail
+                    }
+                />
+            )}
 
-            {showPinLegend && <PinLegendModal onClose={closePinLegend} />}
+            {showPinLegend && (
+                <PinLegendModal
+                    onClose={
+                        closePinLegend
+                    }
+                />
+            )}
 
             <BottomNav />
         </Container>

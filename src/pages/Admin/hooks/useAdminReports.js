@@ -143,13 +143,13 @@ export default function useAdminReports() {
             console.error(
                 "관리자 신고 목록 조회 실패:",
                 error.response?.data ??
-                    error
+                error
             );
 
             setError(
                 error.response?.data
                     ?.message ??
-                    "신고 목록을 불러오지 못했습니다."
+                "신고 목록을 불러오지 못했습니다."
             );
         } finally {
             setIsLoading(false);
@@ -202,15 +202,10 @@ export default function useAdminReports() {
 
                 const photos =
                     await Promise.all(
-                        (
-                            detail.photos ??
-                            []
-                        ).map(
-                            async (
-                                photo
-                            ) => {
+                        (detail.photos ?? []).map(
+                            async (photo) => {
                                 try {
-                                    const photoResponse =
+                                    const displayUrl =
                                         await getAdminReportPhoto(
                                             detail.reportId,
                                             photo.photoId
@@ -218,24 +213,18 @@ export default function useAdminReports() {
 
                                     return {
                                         ...photo,
-                                        displayUrl:
-                                            typeof photoResponse ===
-                                            "string"
-                                                ? photoResponse
-                                                : photo.url,
+                                        displayUrl,
                                     };
-                                } catch (
-                                    error
-                                ) {
+                                } catch (error) {
                                     console.error(
                                         "신고 사진 조회 실패:",
+                                        error.response?.data ??
                                         error
                                     );
 
                                     return {
                                         ...photo,
-                                        displayUrl:
-                                            photo.url,
+                                        displayUrl: null,
                                     };
                                 }
                             }
@@ -266,14 +255,14 @@ export default function useAdminReports() {
                 console.error(
                     "신고 상세 조회 실패:",
                     error.response?.data ??
-                        error
+                    error
                 );
 
                 openNoticeModal(
                     "신고 조회 실패",
                     error.response?.data
                         ?.message ??
-                        "신고 상세 정보를 불러오지 못했습니다."
+                    "신고 상세 정보를 불러오지 못했습니다."
                 );
             } finally {
                 setIsDetailLoading(
@@ -381,12 +370,12 @@ export default function useAdminReports() {
                     prev.map(
                         (report) =>
                             report.reportId ===
-                            selectedReport.reportId
+                                selectedReport.reportId
                                 ? {
-                                      ...report,
-                                      status:
-                                          "ANSWERED",
-                                  }
+                                    ...report,
+                                    status:
+                                        "ANSWERED",
+                                }
                                 : report
                     )
                 );
@@ -415,14 +404,14 @@ export default function useAdminReports() {
                 console.error(
                     "관리자 답변 처리 실패:",
                     error.response?.data ??
-                        error
+                    error
                 );
 
                 openNoticeModal(
                     "답변 처리 실패",
                     error.response?.data
                         ?.message ??
-                        "답변 처리 중 문제가 발생했습니다."
+                    "답변 처리 중 문제가 발생했습니다."
                 );
             }
         };
@@ -463,12 +452,12 @@ export default function useAdminReports() {
                                 report
                             ) =>
                                 report.reportId ===
-                                selectedReport.reportId
+                                    selectedReport.reportId
                                     ? {
-                                          ...report,
-                                          status:
-                                              "WAITING",
-                                      }
+                                        ...report,
+                                        status:
+                                            "WAITING",
+                                    }
                                     : report
                         )
                     );
@@ -489,7 +478,7 @@ export default function useAdminReports() {
                         "관리자 답변 삭제 실패:",
                         error.response
                             ?.data ??
-                            error
+                        error
                     );
 
                     openNoticeModal(
@@ -497,7 +486,7 @@ export default function useAdminReports() {
                         error.response
                             ?.data
                             ?.message ??
-                            "답변 삭제 중 문제가 발생했습니다."
+                        "답변 삭제 중 문제가 발생했습니다."
                     );
                 }
             }

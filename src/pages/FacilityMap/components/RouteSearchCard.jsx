@@ -3,7 +3,7 @@
 import Button from '../../../components/common/Button';
 
 import swapIcon from '../../../assets/icons/swap-icon.png';
-import locationIcon from '../../../assets/icons/location-icon.png';
+import CurrentLocationIcon from '../../../components/common/CurrentLocationIcon';
 
 import {
     RouteCard,
@@ -88,14 +88,20 @@ function formatWalkDistance(
 function RouteSearchCard({
     departure,
     arrival,
+
     locating,
     routeLoading,
     routeMode,
     avoidStairs,
     walkRouteData,
+
     onSwap,
+
+    onDepartureSearch,
     onArrivalSearch,
+
     onCurrentLocation,
+
     onRouteModeChange,
     onToggleAvoidStairs,
     onSearchRoute,
@@ -132,28 +138,23 @@ function RouteSearchCard({
                     <RowValue
                         as="button"
                         type="button"
-                        onClick={
-                            onCurrentLocation
-                        }
                         style={{
-                            textAlign:
-                                'left',
-
-                            background:
-                                'none',
-
-                            border:
-                                'none',
-
-                            cursor:
-                                'pointer',
-
+                            textAlign: 'left',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
                             padding: 0,
+
+                            color: departure
+                                ? '#1a1a1a'
+                                : '#b3b3b3',
                         }}
-                    >
-                        {
-                            departure
+                        onClick={
+                            onDepartureSearch
                         }
+                    >
+                        {departure ||
+                            '출발지를 검색해주세요'}
                     </RowValue>
 
                     <GpsButton
@@ -166,19 +167,7 @@ function RouteSearchCard({
                             locating
                         }
                     >
-                        <img
-                            src={
-                                locationIcon
-                            }
-                            alt=""
-                            style={{
-                                width: 24,
-                                height: 24,
-
-                                objectFit:
-                                    'contain',
-                            }}
-                        />
+                        <CurrentLocationIcon />
                     </GpsButton>
                 </Row>
 

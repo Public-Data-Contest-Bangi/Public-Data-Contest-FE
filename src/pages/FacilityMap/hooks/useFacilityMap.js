@@ -23,13 +23,7 @@ import {
 
 import {
     estimateDelta,
-    latLngToWorldPixel,
 } from '../utils/mapUtils';
-
-// 폰 터치를 '탭'으로 인정하는 기준
-const TAP_MOVE_LIMIT = 10; // px 이내로만 움직였을 때
-const TAP_TIME_LIMIT = 500; // ms 안에 손을 뗐을 때
-const CLICK_AFTER_TOUCH_IGNORE = 700; // 터치 직후 따라오는 click 무시 시간(ms)
 
 export function useFacilityMap() {
     const navigate =
@@ -43,6 +37,9 @@ export function useFacilityMap() {
 
     const mapRef =
         useRef(null);
+
+    const markerRequestRef = useRef(0);
+    const clusterRefreshTimerRef = useRef(null);
 
     const facilityMarkersRef =
         useRef([]);
@@ -58,13 +55,6 @@ export function useFacilityMap() {
 
     const clustersDataRef =
         useRef([]);
-
-    // 폰 터치 판정용
-    const touchStartRef =
-        useRef(null);
-
-    const lastTouchTimeRef =
-        useRef(0);
 
     const [
         mapLoaded,
@@ -95,6 +85,7 @@ export function useFacilityMap() {
         departure,
         setDeparture,
     ] = useState(
+        location.state?.departure ??
         '현재 위치'
     );
 
@@ -112,13 +103,16 @@ export function useFacilityMap() {
     ] = useState(
         location.state
             ?.arrivalCoord ||
-            null
+        null
     );
 
     const [
         departureCoord,
         setDepartureCoord,
-    ] = useState(null);
+    ] = useState(
+        location.state?.departureCoord ??
+        null
+    );
 
     const [
         selectedFacility,
@@ -144,6 +138,8 @@ export function useFacilityMap() {
     });
 
     const clearFacilityMarkers = () => {
+        markerListenersRef.current.forEach(remove => remove());
+        markerListenersRef.current = [];
         facilityMarkersRef.current.forEach((marker) => {
             marker.setMap(null);
         });
@@ -157,6 +153,7 @@ export function useFacilityMap() {
 
         if (!map || !Tmapv2) return;
 
+        const requestId = ++markerRequestRef.current;
         setMarkersLoading(true);
 
         let south;
@@ -205,6 +202,7 @@ export function useFacilityMap() {
                     zoom,
                 });
 
+            if (requestId !== markerRequestRef.current || map !== mapRef.current) return;
             clearFacilityMarkers();
 
             facilitiesDataRef.current =
@@ -240,6 +238,7 @@ export function useFacilityMap() {
                             map,
                         });
 
+                    bindMarkerInteraction(marker, () => selectFacility(facility));
                     newMarkers.push(marker);
                 }
             );
@@ -269,6 +268,7 @@ export function useFacilityMap() {
                             map,
                         });
 
+                    bindMarkerInteraction(marker, () => expandCluster(cluster));
                     newMarkers.push(marker);
                 }
             );
@@ -282,7 +282,7 @@ export function useFacilityMap() {
                 err.response?.data || err.message
             );
         } finally {
-            setMarkersLoading(false);
+            if (requestId === markerRequestRef.current) setMarkersLoading(false);
         }
     };
 
@@ -383,315 +383,127 @@ export function useFacilityMap() {
             );
         };
 
-    const handleContainerClick =
-        (domEvent) => {
-            const map =
-                mapRef.current;
+    const touchGestureRef = useRef(null);
+    const lastTouchTimeRef = useRef(0);
+    const lastMarkerActivationRef = useRef(0);
+    const markerListenersRef = useRef([]);
 
-            const container =
-                mapContainerRef.current;
+    const handleTouchStart = (event) => {
+        const touch = event.touches[0];
+        touchGestureRef.current = event.touches.length === 1
+            ? { x: touch.clientX, y: touch.clientY, moved: false, completed: false } : null;
+    };
+    const handleTouchMove = (event) => {
+        const gesture = touchGestureRef.current;
+        const touch = event.touches[0];
+        if (gesture && (event.touches.length !== 1 ||
+            Math.hypot(touch.clientX - gesture.x, touch.clientY - gesture.y) > 10)) {
+            gesture.moved = true;
+        }
+    };
+    const handleTouchEnd = (event) => {
+        lastTouchTimeRef.current = Date.now();
+        const gesture = touchGestureRef.current;
+        const touch = event.changedTouches[0];
+        if (gesture) gesture.completed = !gesture.moved && event.touches.length === 0 && !!touch &&
+            Math.hypot(touch.clientX - gesture.x, touch.clientY - gesture.y) <= 10;
+    };
+    const handleTouchCancel = () => {
+        lastTouchTimeRef.current = Date.now();
+        touchGestureRef.current = null;
+    };
 
-            if (
-                !map ||
-                !container
-            ) {
-                return;
-            }
+    const bindMarkerInteraction = (marker, onActivate) => {
+        const activate = () => {
+            const now = Date.now();
+            if (now - lastTouchTimeRef.current < 700 && !touchGestureRef.current?.completed) return;
+            if (now - lastMarkerActivationRef.current < 500) return;
+            lastMarkerActivationRef.current = now;
+            touchGestureRef.current = null;
+            onActivate();
+        };
+        marker.addListener('click', activate);
+        marker.addListener('touchend', activate);
+        markerListenersRef.current.push(() => {
+            marker.removeListener('click', activate);
+            marker.removeListener('touchend', activate);
+        });
+    };
 
-            const zoom =
-                map.getZoom();
+    const scheduleMarkerRefresh = () => {
+        markerRequestRef.current += 1;
+        clearTimeout(clusterRefreshTimerRef.current);
+        clusterRefreshTimerRef.current = setTimeout(() => loadFacilityMarkers(), 300);
+    };
 
-            const center =
-                map.getCenter();
+    const expandCluster = (cluster) => {
+        const map = mapRef.current;
+        if (!map) return;
+        setSelectedFacility(null);
+        map.setCenter(new window.Tmapv2.LatLng(cluster.latitude, cluster.longitude));
+        map.setZoom(Math.min((map.getZoom() || 15) + 2, 19));
+        scheduleMarkerRefresh();
+    };
 
-            const centerLat =
-                typeof center.lat ===
-                'function'
-                    ? center.lat()
-                    : center.lat;
+    const selectFacility = (
+        facility
+    ) => {
+        const map =
+            mapRef.current;
 
-            const centerLng =
-                typeof center.lng ===
-                'function'
-                    ? center.lng()
-                    : center.lng;
+        const Tmapv2 =
+            window.Tmapv2;
 
-            const centerPixel =
-                latLngToWorldPixel(
-                    centerLat,
-                    centerLng,
-                    zoom
-                );
+        if (
+            !map ||
+            !Tmapv2
+        ) {
+            return;
+        }
 
-            const rect =
-                container.getBoundingClientRect();
+        const coord = {
+            latitude:
+                facility.latitude,
 
-            const clickX =
-                domEvent.clientX -
-                rect.left;
-
-            const clickY =
-                domEvent.clientY -
-                rect.top;
-
-            const clickWorldX =
-                centerPixel.x +
-                (clickX -
-                    container.clientWidth /
-                        2);
-
-            const clickWorldY =
-                centerPixel.y +
-                (clickY -
-                    container.clientHeight /
-                        2);
-
-            let closestFacility =
-                null;
-
-            let closestFacilityDist =
-                Infinity;
-
-            facilitiesDataRef.current.forEach(
-                (
-                    facility
-                ) => {
-                    const point =
-                        latLngToWorldPixel(
-                            facility.latitude,
-                            facility.longitude,
-                            zoom
-                        );
-
-                    const distance =
-                        Math.hypot(
-                            point.x -
-                                clickWorldX,
-
-                            point.y -
-                                clickWorldY
-                        );
-
-                    if (
-                        distance <
-                        closestFacilityDist
-                    ) {
-                        closestFacilityDist =
-                            distance;
-
-                        closestFacility =
-                            facility;
-                    }
-                }
-            );
-
-            if (
-                closestFacility &&
-                closestFacilityDist <=
-                    26
-            ) {
-                const Tmapv2 =
-                    window.Tmapv2;
-
-                const coord = {
-                    latitude:
-                        closestFacility.latitude,
-
-                    longitude:
-                        closestFacility.longitude,
-                };
-
-                setSelectedFacility(
-                    closestFacility
-                );
-
-                setArrival(
-                    closestFacility.name
-                );
-
-                setArrivalCoord(
-                    coord
-                );
-
-                clearRoute();
-
-                showArrivalMarker(
-                    Tmapv2,
-                    map,
-                    coord
-                );
-
-                return;
-            }
-
-            let closestCluster =
-                null;
-
-            let closestClusterDist =
-                Infinity;
-
-            clustersDataRef.current.forEach(
-                (
-                    cluster
-                ) => {
-                    const point =
-                        latLngToWorldPixel(
-                            cluster.latitude,
-                            cluster.longitude,
-                            zoom
-                        );
-
-                    const distance =
-                        Math.hypot(
-                            point.x -
-                                clickWorldX,
-
-                            point.y -
-                                clickWorldY
-                        );
-
-                    if (
-                        distance <
-                        closestClusterDist
-                    ) {
-                        closestClusterDist =
-                            distance;
-
-                        closestCluster =
-                            cluster;
-                    }
-                }
-            );
-
-            if (
-                closestCluster &&
-                closestClusterDist <=
-                    20
-            ) {
-                const Tmapv2 =
-                    window.Tmapv2;
-
-                map.setCenter(
-                    new Tmapv2.LatLng(
-                        closestCluster.latitude,
-                        closestCluster.longitude
-                    )
-                );
-
-                map.setZoom(
-                    (
-                        map.getZoom() ||
-                        15
-                    ) + 2
-                );
-            }
+            longitude:
+                facility.longitude,
         };
 
-    // ── 폰: 손가락을 댈 때 위치/시간 기록 ─────────────
-    const handleContainerTouchStart =
-        (event) => {
-            // 두 손가락(핀치 줌)은 탭으로 안 봄
-            if (
-                event.touches &&
-                event.touches.length > 1
-            ) {
-                touchStartRef.current =
-                    null;
+        /*
+         * 선택한 시설 정보는
+         * 미리보기 시트 표시용
+         */
+        setSelectedFacility(
+            facility
+        );
 
-                return;
-            }
+        /*
+         * 핀을 누른 시설을
+         * 도착지로 설정
+         */
+        setArrival(
+            facility.name
+        );
 
-            const touch =
-                event.touches?.[0];
+        setArrivalCoord(
+            coord
+        );
 
-            if (!touch) {
-                return;
-            }
+        /*
+         * 이전 경로만 제거
+         * 도착지는 제거하지 않음
+         */
+        clearRoute();
 
-            touchStartRef.current = {
-                x: touch.clientX,
-                y: touch.clientY,
-                time: Date.now(),
-            };
-        };
-
-    // ── 폰: 손가락을 뗄 때 '탭'이면 기존 클릭 판정 실행 ──
-    const handleContainerTouchEnd =
-        (event) => {
-            const start =
-                touchStartRef.current;
-
-            touchStartRef.current =
-                null;
-
-            // 아직 다른 손가락이 화면에 남아있으면 무시
-            if (
-                event.touches &&
-                event.touches.length > 0
-            ) {
-                return;
-            }
-
-            const touch =
-                event.changedTouches?.[0];
-
-            if (
-                !start ||
-                !touch
-            ) {
-                return;
-            }
-
-            const moved =
-                Math.hypot(
-                    touch.clientX -
-                        start.x,
-
-                    touch.clientY -
-                        start.y
-                );
-
-            const duration =
-                Date.now() -
-                start.time;
-
-            // 드래그했거나 오래 누른 건 탭이 아님
-            if (
-                moved >
-                    TAP_MOVE_LIMIT ||
-                duration >
-                    TAP_TIME_LIMIT
-            ) {
-                return;
-            }
-
-            lastTouchTimeRef.current =
-                Date.now();
-
-            handleContainerClick({
-                clientX:
-                    touch.clientX,
-
-                clientY:
-                    touch.clientY,
-            });
-        };
-
-    // ── PC: 마우스 클릭 (폰에서 터치 직후 따라오는 click은 무시) ──
-    const handleContainerMouseClick =
-        (event) => {
-            if (
-                Date.now() -
-                    lastTouchTimeRef.current <
-                CLICK_AFTER_TOUCH_IGNORE
-            ) {
-                return;
-            }
-
-            handleContainerClick(
-                event
-            );
-        };
+        /*
+         * 빨간 도착지 핀 표시
+         */
+        showArrivalMarker(
+            Tmapv2,
+            map,
+            coord
+        );
+    };
 
     const moveToCurrentLocation =
         async () => {
@@ -748,11 +560,25 @@ export function useFacilityMap() {
         };
 
     useEffect(() => {
+        const mapContainer = mapContainerRef.current;
         let cancelled =
             false;
 
+        let removeZoomListener = () => { };
         let initTimer =
             null;
+
+        // 현재 위치는 한 번만 요청하고 결과를 재사용한다
+        let myCoordsPromise = null;
+
+        const getMyCoordsOnce = () => {
+            if (!myCoordsPromise) {
+                myCoordsPromise =
+                    getCurrentCoords();
+            }
+
+            return myCoordsPromise;
+        };
 
         async function tryInitMap() {
             if (cancelled) {
@@ -778,7 +604,7 @@ export function useFacilityMap() {
             }
 
             if (
-                !mapContainerRef.current
+                !mapContainer
             ) {
                 return;
             }
@@ -799,7 +625,7 @@ export function useFacilityMap() {
 
                 const initialCoord =
                     regionCoord ||
-                    (await getCurrentCoords());
+                    (await getMyCoordsOnce());
 
                 if (
                     cancelled ||
@@ -810,7 +636,7 @@ export function useFacilityMap() {
 
                 const map =
                     new Tmapv2.Map(
-                        mapContainerRef.current,
+                        mapContainer,
                         {
                             center:
                                 new Tmapv2.LatLng(
@@ -840,49 +666,48 @@ export function useFacilityMap() {
                 mapRef.current =
                     map;
 
-                const container =
-                    mapContainerRef.current;
+                loadFacilityMarkers();
+                map.addListener('zoom_changed', scheduleMarkerRefresh);
+                removeZoomListener = () => map.removeListener('zoom_changed', scheduleMarkerRefresh);
+                mapContainer.addEventListener('touchstart', handleTouchStart, { capture: true, passive: true });
+                mapContainer.addEventListener('touchmove', handleTouchMove, { capture: true, passive: true });
+                mapContainer.addEventListener('touchend', handleTouchEnd, { capture: true, passive: true });
+                mapContainer.addEventListener('touchcancel', handleTouchCancel, { capture: true, passive: true });
 
-                // 캡처 단계(true)로 등록 → TMAP이 이벤트를 가져가기 전에 먼저 받음
-                container.addEventListener(
-                    'click',
-                    handleContainerMouseClick,
-                    true
-                );
-
-                container.addEventListener(
-                    'touchstart',
-                    handleContainerTouchStart,
-                    {
-                        capture: true,
-                        passive: true,
-                    }
-                );
-
-                container.addEventListener(
-                    'touchend',
-                    handleContainerTouchEnd,
-                    {
-                        capture: true,
-                        passive: true,
-                    }
-                );
-
-                const myCoords =
-                    await getCurrentCoords();
+                const initialDepartureCoord =
+                    location.state?.departureCoord;
 
                 if (
-                    !cancelled
+                    initialDepartureCoord
                 ) {
                     setDepartureCoord(
-                        myCoords
+                        initialDepartureCoord
                     );
 
                     showCurrentLocationMarker(
                         Tmapv2,
                         map,
-                        myCoords
+                        initialDepartureCoord
                     );
+                } else {
+                    const myCoords =
+                        await getMyCoordsOnce();
+
+                    if (!cancelled) {
+                        setDeparture(
+                            '현재 위치'
+                        );
+
+                        setDepartureCoord(
+                            myCoords
+                        );
+
+                        showCurrentLocationMarker(
+                            Tmapv2,
+                            map,
+                            myCoords
+                        );
+                    }
                 }
 
                 if (
@@ -914,6 +739,9 @@ export function useFacilityMap() {
 
         return () => {
             cancelled = true;
+            removeZoomListener();
+            markerRequestRef.current += 1;
+            clearTimeout(clusterRefreshTimerRef.current);
 
             if (
                 initTimer
@@ -923,47 +751,28 @@ export function useFacilityMap() {
                 );
             }
 
-            const container =
-                mapContainerRef.current;
-
             if (
-                container
+                mapContainer
             ) {
-                container.removeEventListener(
-                    'click',
-                    handleContainerMouseClick,
-                    true
-                );
-
-                container.removeEventListener(
-                    'touchstart',
-                    handleContainerTouchStart,
-                    true
-                );
-
-                container.removeEventListener(
-                    'touchend',
-                    handleContainerTouchEnd,
-                    true
-                );
+                mapContainer.removeEventListener('touchstart', handleTouchStart, true);
+                mapContainer.removeEventListener('touchmove', handleTouchMove, true);
+                mapContainer.removeEventListener('touchend', handleTouchEnd, true);
+                mapContainer.removeEventListener('touchcancel', handleTouchCancel, true);
             }
 
             clearRouteLines();
             clearFacilityMarkers();
+            currentLocationMarkerRef.current?.setMap(null);
+            arrivalMarkerRef.current?.setMap(null);
+            currentLocationMarkerRef.current = null;
+            arrivalMarkerRef.current = null;
+            const oldMap = mapRef.current;
+            mapRef.current = null;
+            oldMap?.destroy();
         };
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    useEffect(() => {
-        if (
-            mapLoaded
-        ) {
-            loadFacilityMarkers();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mapLoaded]);
 
     const handleSwap = () => {
         const previousDeparture =
@@ -980,7 +789,7 @@ export function useFacilityMap() {
 
         setDeparture(
             previousArrivalName ||
-                '현재 위치'
+            '현재 위치'
         );
 
         setArrival(
@@ -1031,10 +840,33 @@ export function useFacilityMap() {
         }
     };
 
+    const goDepartureSearch = (
+        routeMode =
+            location.state?.routeMode ||
+            'WALK'
+    ) => {
+        navigate(
+            '/departure-search',
+            {
+                state: {
+                    mode:
+                        'departure',
+
+                    routeMode,
+
+                    departure,
+                    departureCoord,
+
+                    arrival,
+                    arrivalCoord,
+                },
+            }
+        );
+    };
+
     const goArrivalSearch = (
         routeMode =
-            location.state
-                ?.routeMode ||
+            location.state?.routeMode ||
             'WALK'
     ) => {
         navigate(
@@ -1045,6 +877,12 @@ export function useFacilityMap() {
                         'arrival',
 
                     routeMode,
+
+                    departure,
+                    departureCoord,
+
+                    arrival,
+                    arrivalCoord,
                 },
             }
         );
@@ -1102,27 +940,7 @@ export function useFacilityMap() {
         };
 
     const closeSheet = () => {
-        setSelectedFacility(
-            null
-        );
-
-        setArrival('');
-        setArrivalCoord(
-            null
-        );
-
-        if (
-            arrivalMarkerRef.current
-        ) {
-            arrivalMarkerRef.current.setMap(
-                null
-            );
-
-            arrivalMarkerRef.current =
-                null;
-        }
-
-        clearRoute();
+        setSelectedFacility(null);
     };
 
     const goSelectedFacilityDetail =
@@ -1161,6 +979,7 @@ export function useFacilityMap() {
 
         handleSwap,
         goArrivalSearch,
+        goDepartureSearch,
         moveToCurrentLocation,
 
         goSearchRoute,

@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  width: 375px;
-  min-height: 100dvh;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
   margin: 0 auto;
   background: #ffffff;
   font-family: inherit;
@@ -124,7 +125,8 @@ export const CardImage = styled.div`
 `;
 
 export const CardBody = styled.div`
-  padding: 14px 16px 16px;
+  position: relative;
+  padding: 14px 34px 16px 16px;
 `;
 
 export const CardTitleRow = styled.div`
@@ -159,13 +161,24 @@ export const CardDistance = styled.span`
   line-height: 23px;
   white-space: nowrap;
 `;
+export const CardAddress = styled.p`
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #777777;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
 export const CardSports = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 20px;
-  margin-bottom: 12px;
+  margin-top: 12px;
 `;
 
 export const SportChip = styled.span`
@@ -189,13 +202,16 @@ export const SportChipIcon = styled.img`
 `;
 
 export const CardAccessRow = styled.div`
+  margin-top: 12px;
   display: flex;
   align-items: center;
   gap: 12px;
 `;
 
 export const CardChevron = styled.span`
-  margin-left: auto;
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
   display: flex;
   align-items: center;
 `;

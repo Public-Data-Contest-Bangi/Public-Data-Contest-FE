@@ -6,14 +6,6 @@ function NearbyFacilityCard({ facility, onClick }) {
             type="button"
             onClick={() => onClick(facility)}
         >
-            {facility.image ? (
-                <S.FacilityImage
-                    src={facility.image}
-                    alt={facility.name}
-                />
-            ) : (
-                <S.FacilityImagePlaceholder />
-            )}
 
             <S.FacilityInfo>
                 <S.FacilityTop>

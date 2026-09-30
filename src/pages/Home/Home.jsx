@@ -202,41 +202,38 @@ function Home() {
                     )
                   }
                 >
-                  {facility.representativeImageUrl ? (
-                    <S.FavoriteImage
-                      src={
-                        facility.representativeImageUrl
-                      }
-                      alt={facility.name}
-                    />
-                  ) : (
-                    <S.FavoritePlaceholder>
-                      ♡
-                    </S.FavoritePlaceholder>
-                  )}
+                  <S.FavoriteInfo>
+                    <S.FavoriteTopRow>
+                      <S.FavoriteDot />
+                      <S.FavoriteLabel>
+                        MY PICK
+                      </S.FavoriteLabel>
+                    </S.FavoriteTopRow>
 
-                  <S.FavoriteName>
-                    {facility.name}
-                  </S.FavoriteName>
+                    <S.FavoriteName>
+                      {facility.name}
+                    </S.FavoriteName>
+                  </S.FavoriteInfo>
+
+                  <S.FavoriteArrow>
+                    ›
+                  </S.FavoriteArrow>
                 </S.FavoriteItem>
               ))}
 
-              {favoriteTotalCount > favorites.length && (
-                <S.FavoriteMoreItem
-                  type="button"
-                  onClick={() =>
-                    navigate("/favorites")
-                  }
-                >
-                  <S.FavoriteMoreCircle>
-                    +{favoriteTotalCount - favorites.length}
-                  </S.FavoriteMoreCircle>
-
-                  <S.FavoriteMoreText>
-                    더보기
-                  </S.FavoriteMoreText>
-                </S.FavoriteMoreItem>
-              )}
+              {favoriteTotalCount >
+                favorites.length && (
+                  <S.FavoriteMoreItem
+                    type="button"
+                    onClick={() =>
+                      navigate("/favorites")
+                    }
+                  >
+                    +{favoriteTotalCount -
+                      favorites.length}
+                    개 더보기
+                  </S.FavoriteMoreItem>
+                )}
             </S.FavoriteScroller>
           )}
         </S.FavoriteSection>

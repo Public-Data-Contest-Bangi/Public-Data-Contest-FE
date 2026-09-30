@@ -27,9 +27,9 @@ function FitnessResultInput() {
 
     return (
         <MobileLayout>
-            <S.Inner>
-                <Header title="체력 결과로 추천" />
+            <Header title="체력 결과로 추천" />
 
+            <S.Inner>
                 <S.Content>
                     <S.Title>
                         국민 체력 100 측정 결과를
@@ -73,8 +73,7 @@ function FitnessResultInput() {
                                                         )
                                                     }
                                                 >
-                                                    {grade}
-                                                    등급
+                                                    {grade}등급
                                                 </S.GradeButton>
                                             )
                                         )}

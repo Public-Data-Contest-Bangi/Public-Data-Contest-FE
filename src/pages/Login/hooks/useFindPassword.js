@@ -10,8 +10,12 @@ import {
 export default function useFindPassword() {
     const navigate = useNavigate();
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [name, setName] =
+        useState("");
+
+    const [email, setEmail] =
+        useState("");
+
     const [
         verificationCode,
         setVerificationCode,
@@ -38,9 +42,19 @@ export default function useFindPassword() {
     ] = useState("");
 
     const [
+        emailStatus,
+        setEmailStatus,
+    ] = useState(null);
+
+    const [
         verificationMessage,
         setVerificationMessage,
     ] = useState("");
+
+    const [
+        verificationStatus,
+        setVerificationStatus,
+    ] = useState(null);
 
     const [
         passwordMessage,
@@ -57,14 +71,18 @@ export default function useFindPassword() {
         setIsLoading,
     ] = useState(false);
 
-    const validatePassword = (password) => {
-        const hasLetter = /[A-Za-z]/.test(
-            password
-        );
+    const validatePassword = (
+        password
+    ) => {
+        const hasLetter =
+            /[A-Za-z]/.test(
+                password
+            );
 
-        const hasNumber = /\d/.test(
-            password
-        );
+        const hasNumber =
+            /\d/.test(
+                password
+            );
 
         const hasSpecial =
             /[!@#$%^&*(),.?":{}|<>]/.test(
@@ -80,80 +98,166 @@ export default function useFindPassword() {
     };
 
     // 인증번호 발송
-    const handleEmailCheck = async () => {
-        if (!name.trim()) {
-            setEmailMessage(
-                "이름을 입력해주세요."
-            );
-            return;
-        }
-
-        if (!email.trim()) {
-            setEmailMessage(
-                "이메일을 입력해주세요."
-            );
-            return;
-        }
-
-        try {
-            setIsLoading(true);
-
-            await sendPasswordResetCode({
-                name: name.trim(),
-                email: email.trim(),
-            });
-
-            setEmailMessage(
-                "인증번호가 발송되었습니다."
-            );
-
-            console.log(
-                "비밀번호 재설정 인증번호 발송 성공"
-            );
-        } catch (error) {
-            console.error(
-                "인증번호 발송 실패:",
-                error.response?.data
-            );
-
-            setEmailMessage(
-                error.response?.data?.message ??
-                    "이름 또는 이메일을 확인해주세요."
-            );
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // 인증번호 확인
-    const handleVerificationCheck =
+    const handleEmailCheck =
         async () => {
-            if (!verificationCode.trim()) {
-                setVerificationMessage(
-                    "인증번호를 입력해주세요."
+            if (!name.trim()) {
+                setEmailMessage(
+                    "이름을 입력해주세요."
                 );
+
+                setEmailStatus(
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!email.trim()) {
+                setEmailMessage(
+                    "이메일을 입력해주세요."
+                );
+
+                setEmailStatus(
+                    "error"
+                );
+
                 return;
             }
 
             try {
                 setIsLoading(true);
 
-                const response =
-                    await confirmPasswordResetCode({
-                        name: name.trim(),
-                        email: email.trim(),
-                        code: verificationCode.trim(),
-                    });
+                setEmailMessage(
+                    ""
+                );
 
-                setResetToken(
-                    response.data.resetToken
+                setEmailStatus(
+                    null
+                );
+
+                await sendPasswordResetCode({
+                    name:
+                        name.trim(),
+
+                    email:
+                        email.trim(),
+                });
+
+                setEmailMessage(
+                    "인증번호가 발송되었습니다."
+                );
+
+                setEmailStatus(
+                    "success"
+                );
+
+                // 새 인증번호를 발송했으므로
+                // 이전 인증 상태 초기화
+                setVerificationCode(
+                    ""
                 );
 
                 setVerificationMessage(
-                    "인증 되었습니다."
+                    ""
                 );
 
-                setIsVerified(true);
+                setVerificationStatus(
+                    null
+                );
+
+                setResetToken(
+                    ""
+                );
+
+                setIsVerified(
+                    false
+                );
+
+                console.log(
+                    "비밀번호 재설정 인증번호 발송 성공"
+                );
+            } catch (error) {
+                console.error(
+                    "인증번호 발송 실패:",
+                    error.response
+                        ?.data
+                );
+
+                setEmailMessage(
+                    error.response
+                        ?.data
+                        ?.message ??
+                        "이름 또는 이메일을 확인해주세요."
+                );
+
+                setEmailStatus(
+                    "error"
+                );
+            } finally {
+                setIsLoading(
+                    false
+                );
+            }
+        };
+
+    // 인증번호 확인
+    const handleVerificationCheck =
+        async () => {
+            if (
+                !verificationCode.trim()
+            ) {
+                setVerificationMessage(
+                    "인증번호를 입력해주세요."
+                );
+
+                setVerificationStatus(
+                    "error"
+                );
+
+                return;
+            }
+
+            try {
+                setIsLoading(
+                    true
+                );
+
+                setVerificationMessage(
+                    ""
+                );
+
+                setVerificationStatus(
+                    null
+                );
+
+                const response =
+                    await confirmPasswordResetCode({
+                        name:
+                            name.trim(),
+
+                        email:
+                            email.trim(),
+
+                        code:
+                            verificationCode.trim(),
+                    });
+
+                setResetToken(
+                    response.data
+                        .resetToken
+                );
+
+                setVerificationMessage(
+                    "인증되었습니다."
+                );
+
+                setVerificationStatus(
+                    "success"
+                );
+
+                setIsVerified(
+                    true
+                );
 
                 console.log(
                     "인증번호 확인 성공:",
@@ -162,17 +266,32 @@ export default function useFindPassword() {
             } catch (error) {
                 console.error(
                     "인증번호 확인 실패:",
-                    error.response?.data
+                    error.response
+                        ?.data
                 );
 
                 setVerificationMessage(
-                    error.response?.data?.message ??
+                    error.response
+                        ?.data
+                        ?.message ??
                         "인증번호를 확인해주세요."
                 );
 
-                setIsVerified(false);
+                setVerificationStatus(
+                    "error"
+                );
+
+                setResetToken(
+                    ""
+                );
+
+                setIsVerified(
+                    false
+                );
             } finally {
-                setIsLoading(false);
+                setIsLoading(
+                    false
+                );
             }
         };
 
@@ -183,6 +302,7 @@ export default function useFindPassword() {
                 setPasswordMessage(
                     "새 비밀번호를 입력해주세요."
                 );
+
                 return;
             }
 
@@ -194,6 +314,7 @@ export default function useFindPassword() {
                 setPasswordMessage(
                     "영문, 숫자, 특수문자를 포함해 8자 이상 입력해주세요."
                 );
+
                 return;
             }
 
@@ -204,6 +325,7 @@ export default function useFindPassword() {
                 setPasswordMessage(
                     "비밀번호가 일치하지 않습니다."
                 );
+
                 return;
             }
 
@@ -211,16 +333,28 @@ export default function useFindPassword() {
                 setPasswordMessage(
                     "인증번호 확인을 먼저 진행해주세요."
                 );
+
                 return;
             }
 
             try {
-                setIsLoading(true);
+                setIsLoading(
+                    true
+                );
+
+                setPasswordMessage(
+                    ""
+                );
 
                 await resetPassword({
-                    name: name.trim(),
-                    email: email.trim(),
+                    name:
+                        name.trim(),
+
+                    email:
+                        email.trim(),
+
                     resetToken,
+
                     newPassword,
                 });
 
@@ -228,39 +362,102 @@ export default function useFindPassword() {
                     "비밀번호 재설정 성공"
                 );
 
-                navigate("/login", {
-                    replace: true,
-                });
+                navigate(
+                    "/login",
+                    {
+                        replace:
+                            true,
+                    }
+                );
             } catch (error) {
                 console.error(
                     "비밀번호 재설정 실패:",
-                    error.response?.data
+                    error.response
+                        ?.data
                 );
 
                 setPasswordMessage(
-                    error.response?.data?.message ??
+                    error.response
+                        ?.data
+                        ?.message ??
                         "비밀번호 재설정에 실패했습니다."
                 );
             } finally {
-                setIsLoading(false);
+                setIsLoading(
+                    false
+                );
             }
         };
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
-        setEmailMessage("");
-    };
+    const handleNameChange =
+        (e) => {
+            setName(
+                e.target.value
+            );
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+            setEmailMessage(
+                ""
+            );
 
-        setEmailMessage("");
-        setVerificationMessage("");
-        setVerificationCode("");
+            setEmailStatus(
+                null
+            );
 
-        setResetToken("");
-        setIsVerified(false);
-    };
+            setVerificationMessage(
+                ""
+            );
+
+            setVerificationStatus(
+                null
+            );
+
+            setVerificationCode(
+                ""
+            );
+
+            setResetToken(
+                ""
+            );
+
+            setIsVerified(
+                false
+            );
+        };
+
+    const handleEmailChange =
+        (e) => {
+            setEmail(
+                e.target.value
+            );
+
+            setEmailMessage(
+                ""
+            );
+
+            setEmailStatus(
+                null
+            );
+
+            setVerificationMessage(
+                ""
+            );
+
+            setVerificationStatus(
+                null
+            );
+
+            setVerificationCode(
+                ""
+            );
+
+            setResetToken(
+                ""
+            );
+
+            setIsVerified(
+                false
+            );
+        };
 
     const handleVerificationCodeChange =
         (e) => {
@@ -268,9 +465,21 @@ export default function useFindPassword() {
                 e.target.value
             );
 
-            setVerificationMessage("");
-            setResetToken("");
-            setIsVerified(false);
+            setVerificationMessage(
+                ""
+            );
+
+            setVerificationStatus(
+                null
+            );
+
+            setResetToken(
+                ""
+            );
+
+            setIsVerified(
+                false
+            );
         };
 
     const handleNewPasswordChange =
@@ -279,7 +488,9 @@ export default function useFindPassword() {
                 e.target.value
             );
 
-            setPasswordMessage("");
+            setPasswordMessage(
+                ""
+            );
         };
 
     const handleConfirmPasswordChange =
@@ -288,7 +499,9 @@ export default function useFindPassword() {
                 e.target.value
             );
 
-            setPasswordMessage("");
+            setPasswordMessage(
+                ""
+            );
         };
 
     return {
@@ -299,7 +512,11 @@ export default function useFindPassword() {
         confirmPassword,
 
         emailMessage,
+        emailStatus,
+
         verificationMessage,
+        verificationStatus,
+
         passwordMessage,
 
         isVerified,

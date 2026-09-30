@@ -1,3 +1,4 @@
+import { getProgramIcon } from '../utils/programSportIcons';
 import * as S from "./OperatingProgramCard.styled";
 
 function normalizeHomepageUrl(url) {
@@ -93,32 +94,7 @@ export default function OperatingProgramCard({
             }
         >
             <S.CardHeader>
-                <S.ProgramIcon
-                    viewBox="0 0 32 32"
-                    aria-hidden="true"
-                >
-                    <path
-                        d="M6 23H26"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                    />
-
-                    <path
-                        d="M10 20L15 18L18 10"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-
-                    <circle
-                        cx="19"
-                        cy="7"
-                        r="2.5"
-                        fill="currentColor"
-                    />
-                </S.ProgramIcon>
+                <S.ProgramIcon src={getProgramIcon(program)} alt="" aria-hidden="true" />
 
                 <S.ProgramTitleArea>
                     <S.ProgramTitle>

@@ -14,7 +14,11 @@ function FindPassword() {
         confirmPassword,
 
         emailMessage,
+        emailStatus,
+
         verificationMessage,
+        verificationStatus,
+
         passwordMessage,
 
         isVerified,
@@ -78,9 +82,20 @@ function FindPassword() {
                     </S.Row>
 
                     {emailMessage && (
-                        <S.ErrorMessage>
-                            {emailMessage}
-                        </S.ErrorMessage>
+                        emailStatus ===
+                        "success" ? (
+                            <S.SuccessMessage>
+                                {
+                                    emailMessage
+                                }
+                            </S.SuccessMessage>
+                        ) : (
+                            <S.ErrorMessage>
+                                {
+                                    emailMessage
+                                }
+                            </S.ErrorMessage>
+                        )
                     )}
                 </S.Field>
 
@@ -115,11 +130,20 @@ function FindPassword() {
                     </S.Row>
 
                     {verificationMessage && (
-                        <S.SuccessMessage>
-                            {
-                                verificationMessage
-                            }
-                        </S.SuccessMessage>
+                        verificationStatus ===
+                        "success" ? (
+                            <S.SuccessMessage>
+                                {
+                                    verificationMessage
+                                }
+                            </S.SuccessMessage>
+                        ) : (
+                            <S.ErrorMessage>
+                                {
+                                    verificationMessage
+                                }
+                            </S.ErrorMessage>
+                        )
                     )}
                 </S.Field>
 
@@ -180,6 +204,7 @@ function FindPassword() {
             {isVerified && (
                 <S.ButtonArea>
                     <Button
+                        type="button"
                         onClick={
                             handlePasswordChange
                         }
@@ -190,7 +215,9 @@ function FindPassword() {
                         radius="11px"
                         fontSize="19px"
                     >
-                        비밀번호 재설정
+                        {isLoading
+                            ? "재설정 중..."
+                            : "비밀번호 재설정"}
                     </Button>
                 </S.ButtonArea>
             )}

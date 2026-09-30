@@ -69,7 +69,7 @@ function SearchFilter() {
           <SectionTitle>접근성 조건</SectionTitle>
           <CheckList>
             {ACCESSIBILITY_ITEMS.map((item) => (
-              <CheckRow key={item.id}>
+              <CheckRow key={item.id} $checked={Boolean(checked[item.id])}>
                 <HiddenCheckbox
                   checked={checked[item.id]}
                   onChange={() => toggleCheck(item.id)}

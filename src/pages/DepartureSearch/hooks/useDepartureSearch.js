@@ -1,17 +1,42 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { searchPlaces } from '../../../api/places';
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+
+import {
+  searchPlaces,
+} from '../../../api/places';
 
 export function useDepartureSearch() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate =
+    useNavigate();
 
-  // FacilityMap의 도착지 검색에서 왔으면 mode가 'arrival'로 넘어옴
-  const mode = location.state?.mode || 'departure';
+  const location =
+    useLocation();
 
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const mode =
+    location.state?.mode ||
+    'departure';
+
+  const [
+    query,
+    setQuery,
+  ] = useState('');
+
+  const [
+    results,
+    setResults,
+  ] = useState([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -20,25 +45,45 @@ export function useDepartureSearch() {
     }
 
     let cancelled = false;
+
     setLoading(true);
 
-    const timer = setTimeout(async () => {
-      try {
-        const data = await searchPlaces({ keyword: query.trim(), page: 1, size: 20 });
-        if (!cancelled) {
-          setResults(data.places || []);
-        }
-      } catch (err) {
-        console.error('장소 검색 실패:', err.response?.status, err.response?.data || err.message);
-        if (!cancelled) {
-          setResults([]);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }, 300); // 입력 멈춘 뒤 300ms 후 검색 (디바운스)
+    const timer =
+      setTimeout(
+        async () => {
+          try {
+            const data =
+              await searchPlaces({
+                keyword:
+                  query.trim(),
+                page: 1,
+                size: 20,
+              });
+
+            if (!cancelled) {
+              setResults(
+                data.places || []
+              );
+            }
+          } catch (err) {
+            console.error(
+              '장소 검색 실패:',
+              err.response?.status,
+              err.response?.data ||
+                err.message
+            );
+
+            if (!cancelled) {
+              setResults([]);
+            }
+          } finally {
+            if (!cancelled) {
+              setLoading(false);
+            }
+          }
+        },
+        300
+      );
 
     return () => {
       cancelled = true;
@@ -50,19 +95,55 @@ export function useDepartureSearch() {
     setQuery('');
   };
 
-  const handleSelect = (place) => {
-    if (mode === 'arrival') {
-      navigate('/facility-map', {
-        state: {
-          routeMode: location.state?.routeMode,
-          arrival: place.name,
-          arrivalCoord: { latitude: place.latitude, longitude: place.longitude },
-        },
-      });
+  const handleSelect = (
+    place
+  ) => {
+    const coord = {
+      latitude:
+        place.latitude,
+      longitude:
+        place.longitude,
+    };
+
+    if (
+      mode === 'departure'
+    ) {
+      navigate(
+        '/facility-map',
+        {
+          state: {
+            ...location.state,
+
+            mode: undefined,
+
+            departure:
+              place.name,
+
+            departureCoord:
+              coord,
+          },
+        }
+      );
+
       return;
     }
 
-    navigate('/accessible-route', { state: { departure: place.name } });
+    navigate(
+      '/facility-map',
+      {
+        state: {
+          ...location.state,
+
+          mode: undefined,
+
+          arrival:
+            place.name,
+
+          arrivalCoord:
+            coord,
+        },
+      }
+    );
   };
 
   const goBack = () => {
@@ -72,9 +153,12 @@ export function useDepartureSearch() {
   return {
     query,
     setQuery,
+
     results,
     loading,
+
     mode,
+
     handleClear,
     handleSelect,
     goBack,

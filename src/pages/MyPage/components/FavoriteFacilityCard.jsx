@@ -8,22 +8,59 @@ import wheelchairIcon from "../../../assets/icons/wheelchair-icon.png";
 import * as S from "./FavoriteFacilityCard.styled";
 
 const ACCESS_ICON_MAP = {
-    wheelchair: wheelchairIcon,
-    ramp: rampIcon,
-    elevator: elevatorIcon,
-    restroom: restroomIcon,
-    parking: parkingIcon,
+    wheelchair:
+        wheelchairIcon,
+
+    ramp:
+        rampIcon,
+
+    elevator:
+        elevatorIcon,
+
+    restroom:
+        restroomIcon,
+
+    parking:
+        parkingIcon,
 };
 
-function AccessIcon({ type }) {
-    const icon = ACCESS_ICON_MAP[type];
+const ACCESS_LABEL_MAP = {
+    wheelchair:
+        "휠체어 접근",
 
-    if (!icon) return null;
+    ramp:
+        "경사로",
+
+    elevator:
+        "엘리베이터",
+
+    restroom:
+        "장애인 화장실",
+
+    parking:
+        "장애인 주차",
+};
+
+function AccessIcon({
+    type,
+}) {
+    const icon =
+        ACCESS_ICON_MAP[
+            type
+        ];
+
+    if (!icon) {
+        return null;
+    }
 
     return (
         <S.AccessIcon
             src={icon}
-            alt=""
+            alt={
+                ACCESS_LABEL_MAP[
+                    type
+                ] ?? ""
+            }
         />
     );
 }
@@ -35,36 +72,24 @@ export default function FavoriteFacilityCard({
 }) {
     const {
         name,
-        imageUrl,
         address,
         distance,
         sports,
         accessibility = [],
     } = facility;
 
-    const handleHeartClick = (event) => {
-        event.stopPropagation();
-        onFavoriteRemove();
-    };
+    const handleHeartClick =
+        (event) => {
+            event.stopPropagation();
+
+            onFavoriteRemove();
+        };
 
     return (
         <S.Card
             type="button"
             onClick={onClick}
         >
-            <S.CardImageArea>
-                {imageUrl ? (
-                    <S.CardImage
-                        src={imageUrl}
-                        alt={name}
-                    />
-                ) : (
-                    <S.ImagePlaceholder>
-                        ♡
-                    </S.ImagePlaceholder>
-                )}
-            </S.CardImageArea>
-
             <S.CardBody>
                 <S.TopRow>
                     <S.CardName>
@@ -74,7 +99,9 @@ export default function FavoriteFacilityCard({
                     <S.HeartButton
                         type="button"
                         aria-label="즐겨찾기 취소"
-                        onClick={handleHeartClick}
+                        onClick={
+                            handleHeartClick
+                        }
                     >
                         ♥
                     </S.HeartButton>
@@ -83,13 +110,17 @@ export default function FavoriteFacilityCard({
                 <S.MetaRow>
                     {address && (
                         <S.Address>
-                            {address}
+                            {
+                                address
+                            }
                         </S.Address>
                     )}
 
                     {distance && (
                         <S.Distance>
-                            {distance}
+                            {
+                                distance
+                            }
                         </S.Distance>
                     )}
                 </S.MetaRow>
@@ -97,10 +128,17 @@ export default function FavoriteFacilityCard({
                 {sports && (
                     <S.SportRow>
                         <S.SportIcon
-                            src={sportTagIcon}
+                            src={
+                                sportTagIcon
+                            }
                             alt=""
                         />
-                        <span>{sports}</span>
+
+                        <span>
+                            {
+                                sports
+                            }
+                        </span>
                     </S.SportRow>
                 )}
 
@@ -109,17 +147,23 @@ export default function FavoriteFacilityCard({
                         {accessibility.map(
                             (type) => (
                                 <S.AccessBadge
-                                    key={type}
+                                    key={
+                                        type
+                                    }
                                 >
                                     <AccessIcon
-                                        type={type}
+                                        type={
+                                            type
+                                        }
                                     />
                                 </S.AccessBadge>
                             )
                         )}
                     </S.AccessList>
 
-                    <S.CardChevron>
+                    <S.CardChevron
+                        aria-hidden="true"
+                    >
                         ›
                     </S.CardChevron>
                 </S.BottomRow>

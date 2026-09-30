@@ -9,8 +9,14 @@ export const Nav = styled.nav`
     transform: translateX(-50%);
 
     width: 100%;
-    max-width: 375px;
-    height: 64px;
+    max-width: 480px;
+
+    min-height: 64px;
+
+    padding-bottom: env(
+        safe-area-inset-bottom,
+        0px
+    );
 
     display: flex;
     align-items: center;
@@ -43,6 +49,9 @@ export const NavItem = styled.button`
 `;
 
 export const NavIcon = styled.svg`
+    fill: none;
+
+    path, circle { fill: none; }
     width: 24px;
     height: 24px;
 `;

@@ -1,21 +1,66 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { fetchFacilityDetail } from '../../../api/facilityDetail';
-import { addFavoriteFacility, removeFavoriteFacility } from '../../../api/favorite';
-import { getCurrentCoords } from '../../../utils/geolocation';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+
+import {
+  fetchFacilityDetail,
+} from '../../../api/facilityDetail';
+
+import {
+  addFavoriteFacility,
+  removeFavoriteFacility,
+} from '../../../api/favorite';
+
+import {
+  getCurrentCoords,
+} from '../../../utils/geolocation';
 
 export function useFacilityDetail() {
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const navigate =
+    useNavigate();
 
-  const [facility, setFacility] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { id } =
+    useParams();
 
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [favorite, setFavorite] = useState(false);
-  const [favoriteLoading, setFavoriteLoading] = useState(false);
-  const trackRef = useRef(null);
+  const [
+    facility,
+    setFacility,
+  ] = useState(null);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    error,
+    setError,
+  ] = useState(null);
+
+  const [
+    activeSlide,
+    setActiveSlide,
+  ] = useState(0);
+
+  const [
+    favorite,
+    setFavorite,
+  ] = useState(false);
+
+  const [
+    favoriteLoading,
+    setFavoriteLoading,
+  ] = useState(false);
+
+  const trackRef =
+    useRef(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,15 +71,32 @@ export function useFacilityDetail() {
       setFavorite(false);
 
       try {
-        const coords = await getCurrentCoords();
-        const data = await fetchFacilityDetail(id, coords);
+        const coords =
+          await getCurrentCoords();
+
+        const data =
+          await fetchFacilityDetail(
+            id,
+            coords
+          );
 
         if (!cancelled) {
           setFacility(data);
-          setFavorite(Boolean(data?.favorite));
+
+          setFavorite(
+            Boolean(
+              data?.favorite
+            )
+          );
         }
       } catch (err) {
-        console.error('시설 상세 조회 실패:', err.response?.status, err.response?.data || err.message);
+        console.error(
+          '시설 상세 조회 실패:',
+          err.response?.status,
+          err.response?.data ||
+            err.message
+        );
+
         if (!cancelled) {
           setError(err);
         }
@@ -52,79 +114,140 @@ export function useFacilityDetail() {
     };
   }, [id]);
 
-  const slideCount = facility?.imageUrls?.length || 0;
+  const slideCount =
+    facility?.imageUrls?.length ||
+    0;
 
   const handleScroll = () => {
-    const track = trackRef.current;
+    const track =
+      trackRef.current;
+
     if (!track) return;
-    const index = Math.round(track.scrollLeft / track.clientWidth);
+
+    const index =
+      Math.round(
+        track.scrollLeft /
+          track.clientWidth
+      );
+
     setActiveSlide(index);
   };
 
-  const toggleFavorite = async () => {
-    if (favoriteLoading) return;
-
-    setFavoriteLoading(true);
-    const nextFavorite = !favorite;
-
-    try {
-      if (nextFavorite) {
-        await addFavoriteFacility(id);
-      } else {
-        await removeFavoriteFacility(id);
+  const toggleFavorite =
+    async () => {
+      if (favoriteLoading) {
+        return;
       }
-      setFavorite(nextFavorite);
-    } catch (err) {
-      const status = err.response?.status;
-      const code = err.response?.data?.code;
 
-      if (status === 409 || code === 'FAVORITE_ALREADY_EXISTS') {
-        // 서버에는 이미 찜되어 있음 → 화면도 찜 상태로 맞춤
-        setFavorite(true);
-      } else if (!nextFavorite && status === 404) {
-        // 해제하려는데 서버에 찜 기록이 없음 → 화면도 해제 상태로 맞춤
-        setFavorite(false);
-      } else {
-        console.error('즐겨찾기 처리 실패:', status, err.response?.data || err.message);
+      setFavoriteLoading(true);
+
+      const nextFavorite =
+        !favorite;
+
+      try {
+        if (nextFavorite) {
+          await addFavoriteFacility(
+            id
+          );
+        } else {
+          await removeFavoriteFacility(
+            id
+          );
+        }
+
+        setFavorite(
+          nextFavorite
+        );
+      } catch (err) {
+        const status =
+          err.response?.status;
+
+        const code =
+          err.response?.data?.code;
+
+        if (
+          status === 409 ||
+          code ===
+            'FAVORITE_ALREADY_EXISTS'
+        ) {
+          setFavorite(true);
+        } else if (
+          !nextFavorite &&
+          status === 404
+        ) {
+          setFavorite(false);
+        } else {
+          console.error(
+            '즐겨찾기 처리 실패:',
+            status,
+            err.response?.data ||
+              err.message
+          );
+        }
+      } finally {
+        setFavoriteLoading(
+          false
+        );
       }
-    } finally {
-      setFavoriteLoading(false);
-    }
-  };
+    };
 
-  const handleProgramClick = () => {
-    navigate(`/facility-detail/${id}/programs`);
-  };
+  const handleProgramClick =
+    () => {
+      navigate(
+        `/facility-detail/${id}/programs`
+      );
+    };
 
   const goBack = () => {
     navigate(-1);
   };
 
-  const goAccessibleRoute = () => {
-    if (!facility) {
-      navigate('/accessible-route');
-      return;
-    }
-    navigate('/accessible-route', {
-      state: {
-        arrival: facility.name,
-        arrivalCoord: { latitude: facility.latitude, longitude: facility.longitude },
-      },
-    });
-  };
+  const goAccessibleRoute =
+    () => {
+      if (!facility) {
+        navigate(
+          '/accessible-route'
+        );
+
+        return;
+      }
+
+      navigate(
+        '/accessible-route',
+        {
+          state: {
+            arrival:
+              facility.name,
+
+            arrivalCoord: {
+              latitude:
+                facility.latitude,
+
+              longitude:
+                facility.longitude,
+            },
+          },
+        }
+      );
+    };
 
   return {
     facility,
     loading,
     error,
+
     activeSlide,
+
     favorite,
     favoriteLoading,
+
     trackRef,
     slideCount,
+
     handleScroll,
     toggleFavorite,
     handleProgramClick,
+
     goBack,
     goAccessibleRoute,
   };
