@@ -12,10 +12,15 @@ export const Page = styled.div`
 
 export const Content = styled.main`
     width: 100%;
-
-    padding: 14px 18px 92px;
-
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 18px 18px max(76px, calc(56px + env(safe-area-inset-bottom, 0px)));
     box-sizing: border-box;
+
+    > * { flex-shrink: 0; }
 `;
 
 /* =========================
@@ -26,7 +31,7 @@ export const Hero = styled.section`
     position: relative;
 
     width: 100%;
-    height: 190px;
+    height: 206px;
 
     padding: 18px 18px 20px;
 
@@ -132,7 +137,7 @@ export const Mascot = styled.img`
 export const SectionHeader = styled.div`
     width: 100%;
 
-    margin-bottom: 11px;
+    margin-bottom: 16px;
 
     display: flex;
     align-items: center;
@@ -179,7 +184,7 @@ export const MoreButton = styled.button`
 ========================= */
 
 export const FavoriteSection = styled.section`
-    margin-top: 18px;
+    margin-top: 0;
 `;
 
 /* 찜 목록 한 줄 가로 스크롤 */
@@ -455,11 +460,11 @@ export const EmptyArrow = styled.span`
 ========================= */
 
 export const MenuSection = styled.section`
-    margin-top: 22px;
+    margin-top: 0;
 `;
 
 export const MenuHeader = styled.div`
-    margin-bottom: 11px;
+    margin-bottom: 16px;
 `;
 
 export const MenuGrid = styled.div`
@@ -475,7 +480,7 @@ export const MenuGrid = styled.div`
 export const RecommendCard = styled.button`
     position: relative;
 
-    min-height: 180px;
+    min-height: 252px;
 
     padding: 0;
 
@@ -483,10 +488,10 @@ export const RecommendCard = styled.button`
 
     box-sizing: border-box;
 
-    border: none;
+    border: 1px solid #dceee3;
     border-radius: 18px;
 
-    background: #f6f6f6;
+    background: linear-gradient(145deg, #effbf5, #def5e9);
 
     font-family: inherit;
     text-align: left;
@@ -496,6 +501,8 @@ export const RecommendCard = styled.button`
     &:active {
         transform: scale(0.985);
     }
+
+    &:focus-visible { outline: 2px solid #16865e; outline-offset: 3px; }
 `;
 
 export const SideMenu = styled.div`
@@ -508,7 +515,8 @@ export const SideMenu = styled.div`
 export const SmallMenuCard = styled.button`
     position: relative;
 
-    min-height: 85px;
+    min-height: 120px;
+    flex: 1;
 
     padding: 14px;
 
@@ -516,10 +524,10 @@ export const SmallMenuCard = styled.button`
 
     box-sizing: border-box;
 
-    border: none;
+    border: 1px solid #dceee3;
     border-radius: 18px;
 
-    background: #f6f6f6;
+    background: linear-gradient(135deg, #f4faf7, #e9f4ee);
 
     font-family: inherit;
     text-align: left;
@@ -529,6 +537,8 @@ export const SmallMenuCard = styled.button`
     &:active {
         transform: scale(0.985);
     }
+
+    &:focus-visible { outline: 2px solid #16865e; outline-offset: 3px; }
 `;
 
 export const CardText = styled.div`
@@ -545,7 +555,7 @@ export const CardText = styled.div`
 export const MenuLabel = styled.div`
     color: #171717;
 
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.35;
 `;
@@ -555,7 +565,7 @@ export const MenuDescription = styled.div`
 
     color: #82918b;
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     line-height: 1.4;
 `;
@@ -563,7 +573,7 @@ export const MenuDescription = styled.div`
 export const SmallDescription = styled.div`
     margin-top: 3px;
 
-    color: #a0a0a0;
+    color: #73867b;
 
     font-size: 11px;
 `;
@@ -574,8 +584,8 @@ export const RecommendImage = styled.img`
     right: -6px;
     bottom: 3px;
 
-    width: 128px;
-    height: 128px;
+    width: clamp(146px, 39vw, 180px);
+    height: clamp(146px, 39vw, 180px);
 
     object-fit: contain;
 `;
@@ -586,8 +596,8 @@ export const MenuIcon = styled.div`
     right: 4px;
     bottom: 3px;
 
-    width: 70px;
-    height: 70px;
+    width: clamp(78px, 21vw, 100px);
+    height: clamp(78px, 21vw, 100px);
 
     background-image: ${({ $image }) =>
         `url("${$image}")`};
@@ -608,8 +618,8 @@ export const MenuIcon = styled.div`
 export const InfoBanner = styled.div`
     width: 100%;
 
-    margin-top: 16px;
-    padding: 9px 11px;
+    margin-top: auto;
+    padding: 12px 11px;
 
     display: flex;
     align-items: center;

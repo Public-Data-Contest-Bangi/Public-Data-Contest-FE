@@ -23,6 +23,7 @@ function BottomNav() {
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
+                        fill="none"
                         d="M4 11.5 12 4l8 7.5"
                         stroke="#fff"
                         strokeWidth="2"
@@ -31,6 +32,7 @@ function BottomNav() {
                     />
 
                     <path
+                        fill="none"
                         d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9"
                         stroke="#fff"
                         strokeWidth="2"
@@ -56,6 +58,7 @@ function BottomNav() {
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <path
+                        fill="none"
                         d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z"
                         stroke="#fff"
                         strokeWidth="2"
@@ -63,6 +66,7 @@ function BottomNav() {
                     />
 
                     <circle
+                        fill="none"
                         cx="12"
                         cy="9.5"
                         r="2.3"
@@ -91,6 +95,7 @@ function BottomNav() {
                     xmlns="http://www.w3.org/2000/svg"
                 >
                     <circle
+                        fill="none"
                         cx="12"
                         cy="8"
                         r="3.5"
@@ -99,6 +104,7 @@ function BottomNav() {
                     />
 
                     <path
+                        fill="none"
                         d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"
                         stroke="#fff"
                         strokeWidth="2"

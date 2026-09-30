@@ -132,15 +132,17 @@ export const RowValue = styled.span`
 `;
 
 export const GpsButton = styled.button`
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
   border: none;
   border-radius: 50%;
 
-  background: #f3f3f3;
+  background: transparent;
+  color: #64766e;
+  padding: 8px;
 
   display: flex;
   align-items: center;
