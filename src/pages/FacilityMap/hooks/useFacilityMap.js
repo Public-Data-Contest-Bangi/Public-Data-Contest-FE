@@ -568,6 +568,18 @@ export function useFacilityMap() {
         let initTimer =
             null;
 
+        // 현재 위치는 한 번만 요청하고 결과를 재사용한다
+        let myCoordsPromise = null;
+
+        const getMyCoordsOnce = () => {
+            if (!myCoordsPromise) {
+                myCoordsPromise =
+                    getCurrentCoords();
+            }
+
+            return myCoordsPromise;
+        };
+
         async function tryInitMap() {
             if (cancelled) {
                 return;
@@ -613,7 +625,7 @@ export function useFacilityMap() {
 
                 const initialCoord =
                     regionCoord ||
-                    (await getCurrentCoords());
+                    (await getMyCoordsOnce());
 
                 if (
                     cancelled ||
@@ -679,7 +691,7 @@ export function useFacilityMap() {
                     );
                 } else {
                     const myCoords =
-                        await getCurrentCoords();
+                        await getMyCoordsOnce();
 
                     if (!cancelled) {
                         setDeparture(
@@ -742,7 +754,6 @@ export function useFacilityMap() {
             if (
                 mapContainer
             ) {
-
                 mapContainer.removeEventListener('touchstart', handleTouchStart, true);
                 mapContainer.removeEventListener('touchmove', handleTouchMove, true);
                 mapContainer.removeEventListener('touchend', handleTouchEnd, true);

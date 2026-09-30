@@ -16,6 +16,15 @@ export default function useLogout() {
         localStorage.removeItem(
             "didimfit-my-condition"
         );
+
+        // 프로필 캐릭터 캐시 (다음 로그인 계정에 이전 캐릭터가 보이지 않게)
+        localStorage.removeItem(
+            "profileAvatar"
+        );
+
+        localStorage.removeItem(
+            "profileAvatarImage"
+        );
     };
 
     const handleLogout = async () => {

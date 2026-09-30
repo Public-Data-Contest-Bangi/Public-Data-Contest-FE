@@ -332,7 +332,7 @@ function Home() {
           </S.InfoIcon>
 
           <span>
-            모든 체육시설의 무장애
+            모든 체육시설의 계단회피
             경로는 지도에서 확인할 수
             있어요.
           </span>
