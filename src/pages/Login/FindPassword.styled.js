@@ -18,6 +18,7 @@ export const Field = styled.div`
     gap: 8px;
 
     align-items: stretch;
+
     text-align: left;
 `;
 
@@ -56,12 +57,24 @@ export const Input = styled.input`
 
     font-size: 14px;
 
+    color: #222222;
+
+    background: #ffffff;
+
     &::placeholder {
         color: #a7a7a7;
     }
 
     &:focus {
         border-color: #42dba0;
+    }
+
+    &:disabled {
+        background: #f5f5f5;
+
+        color: #999999;
+
+        cursor: not-allowed;
     }
 `;
 
@@ -82,14 +95,23 @@ export const CheckButton = styled.button`
     font-weight: 600;
 
     cursor: pointer;
+
+    &:disabled {
+        opacity: 0.55;
+
+        cursor: not-allowed;
+    }
 `;
 
 export const ErrorMessage = styled.p`
     margin: 0;
 
-    color: #42dba0;
+    color: #ff4141;
 
     font-size: 12px;
+    font-weight: 400;
+
+    line-height: 1.4;
 `;
 
 export const SuccessMessage = styled.p`
@@ -98,6 +120,9 @@ export const SuccessMessage = styled.p`
     color: #42dba0;
 
     font-size: 12px;
+    font-weight: 400;
+
+    line-height: 1.4;
 `;
 
 export const HelpText = styled.p`
@@ -106,9 +131,13 @@ export const HelpText = styled.p`
     color: #777777;
 
     font-size: 10px;
+    font-weight: 400;
+
+    line-height: 1.4;
 `;
 
 export const ButtonArea = styled.div`
     width: 100%;
+
     margin-top: auto;
 `;
