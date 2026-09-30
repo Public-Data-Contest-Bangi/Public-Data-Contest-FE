@@ -30,8 +30,9 @@ export const Page = styled.div`
 export const Container = styled.div`
     position: relative;
 
-    width: 375px;
-    min-height: 815px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
 
     padding: 0 20px 60px;
 
@@ -244,13 +245,16 @@ export const AvatarOverlay = styled.div`
     position: fixed;
     inset: 0;
 
-    z-index: 1000;
+    z-index: 2000;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 20px;
+    padding:
+        max(20px, env(safe-area-inset-top))
+        16px
+        max(20px, env(safe-area-inset-bottom));
 
     box-sizing: border-box;
 
@@ -259,15 +263,25 @@ export const AvatarOverlay = styled.div`
 
 export const AvatarModal = styled.div`
     width: 100%;
-    max-width: 335px;
+    max-width: 400px;
+    max-height: calc(100dvh - 40px);
 
-    padding: 24px 20px 20px;
+    display: flex;
+    flex-direction: column;
+
+    padding: 28px 20px 20px;
 
     box-sizing: border-box;
 
-    border-radius: 16px;
-
     background: #ffffff;
+    border-radius: 24px;
+
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    @media (max-width: 360px) {
+        padding: 24px 16px 16px;
+    }
 `;
 
 export const AvatarModalTitle = styled.h2`
@@ -275,82 +289,100 @@ export const AvatarModalTitle = styled.h2`
 
     color: #111111;
 
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
+
+    line-height: 1.3;
 
     text-align: center;
 `;
 
 export const AvatarModalDescription = styled.p`
-    margin: 8px 0 24px;
+    margin: 10px 0 24px;
 
     color: #777777;
 
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
+
+    line-height: 1.4;
 
     text-align: center;
 `;
 
 export const AvatarGrid = styled.div`
+    width: 100%;
+
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
     gap: 12px;
+
+    box-sizing: border-box;
+
+    @media (max-width: 360px) {
+        gap: 8px;
+    }
 `;
 
 export const AvatarOption = styled.button`
-    aspect-ratio: 1;
-
-    padding: 8px;
+    width: 100%;
+    aspect-ratio: 1 / 1.12;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    padding: 8px;
+
     box-sizing: border-box;
 
     border: ${({ $selected }) =>
         $selected
-            ? `2px solid ${PRIMARY}`
-            : "1px solid #e2e2e2"};
+            ? "2px solid #40D293"
+            : "1px solid #E0E0E0"};
 
-    border-radius: 14px;
+    border-radius: 16px;
 
     background: ${({ $selected }) =>
         $selected
-            ? "#ecfff7"
-            : "#ffffff"};
+            ? "#ECFFF7"
+            : "#FFFFFF"};
 
     cursor: pointer;
+    overflow: hidden;
 
     img {
+        display: block;
         width: 100%;
         height: 100%;
-
         object-fit: contain;
+    }
+
+    @media (max-width: 360px) {
+        padding: 5px;
+        border-radius: 13px;
     }
 `;
 
 export const AvatarCloseButton = styled.button`
     width: 100%;
-    height: 44px;
+    height: 52px;
+
+    flex-shrink: 0;
 
     margin-top: 20px;
 
     border: none;
-    border-radius: 8px;
+    border-radius: 14px;
 
-    background: #f4f4f4;
+    background: #f5f5f5;
 
-    color: #333333;
+    color: #222222;
 
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 600;
 
     cursor: pointer;
-
-    &:active {
-        background: #eaeaea;
-    }
 `;

@@ -9,8 +9,14 @@ export const Nav = styled.nav`
     transform: translateX(-50%);
 
     width: 100%;
-    max-width: 375px;
-    height: 64px;
+    max-width: 480px;
+
+    min-height: 64px;
+
+    padding-bottom: env(
+        safe-area-inset-bottom,
+        0px
+    );
 
     display: flex;
     align-items: center;

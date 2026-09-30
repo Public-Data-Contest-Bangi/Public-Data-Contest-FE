@@ -17,7 +17,7 @@ export default defineConfig({
           "장애인을 위한 체육시설 및 운동 추천 서비스",
 
         theme_color:
-          "#40D293",
+          "#FFFFFF",
 
         background_color:
           "#FFFFFF",

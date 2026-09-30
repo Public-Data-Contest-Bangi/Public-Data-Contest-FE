@@ -1,17 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import {
+    useNavigate,
+} from "react-router-dom";
 
 import * as S from "./ProgramCard.styled";
+
+import {
+    getSportIcon,
+    getSportDisplayName,
+} from "../../FacilityDetail/utils/sportIcons";
 
 export default function ProgramCard({
     program,
 }) {
-    const navigate = useNavigate();
+    const navigate =
+        useNavigate();
 
     const handleDetail = () => {
         navigate(
             `/facility-detail/${program.id}`
         );
     };
+
+    const sports =
+        program.sports ?? [];
 
     return (
         <S.Card>
@@ -21,28 +32,67 @@ export default function ProgramCard({
                         {program.name}
                     </S.Name>
 
-                    <S.Distance>
-                        {program.distance}
-                    </S.Distance>
+                    {program.distance && (
+                        <S.Distance>
+                            {
+                                program.distance
+                            }
+                        </S.Distance>
+                    )}
                 </S.TopRow>
 
                 <S.Address>
                     {program.address}
                 </S.Address>
 
-                <S.TagList>
-                    {program.tags.map(
-                        (tag) => (
-                            <S.Tag key={tag}>
-                                {tag}
-                            </S.Tag>
-                        )
-                    )}
-                </S.TagList>
+                {sports.length > 0 && (
+                    <S.TagList>
+                        {sports.map(
+                            (sport) => {
+                                const icon =
+                                    getSportIcon(
+                                        sport.name
+                                    );
+
+                                const label =
+                                    getSportDisplayName(
+                                        sport.name
+                                    );
+
+                                return (
+                                    <S.Tag
+                                        key={
+                                            sport.sportId ??
+                                            sport.name
+                                        }
+                                    >
+                                        {icon && (
+                                            <S.SportIcon
+                                                src={
+                                                    icon
+                                                }
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                        )}
+
+                                        <span>
+                                            {
+                                                label
+                                            }
+                                        </span>
+                                    </S.Tag>
+                                );
+                            }
+                        )}
+                    </S.TagList>
+                )}
 
                 <S.DetailButton
                     type="button"
-                    onClick={handleDetail}
+                    onClick={
+                        handleDetail
+                    }
                 >
                     시설 상세
 

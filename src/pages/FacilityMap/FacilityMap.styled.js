@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const Container = styled.div`
     position: relative;
 
-    width: 375px;
+    width: 100%;
+    max-width: 480px;
     min-height: 100dvh;
 
     margin: 0 auto;
@@ -592,27 +593,29 @@ export const ResearchAreaButton = styled.button`
 /* ── 시설 미리보기 시트 ───────────────── */
 
 export const FacilitySheet = styled.div`
-  position: fixed;
+    position: fixed;
 
-  left: 50%;
-  bottom: 64px;
+    left: 50%;
+    bottom: 64px;
 
-  transform: translateX(-50%);
+    transform: translateX(-50%);
 
-  width: 100%;
-  max-width: 375px;
+    width: 100%;
+    max-width: 480px;
 
-  z-index: 999;
+    z-index: 999;
 
-  background: #ffffff;
+    background: #ffffff;
 
-  border-radius: 20px 20px 0 0;
+    border-radius: 20px 20px 0 0;
 
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 -4px 16px
+        rgba(0, 0, 0, 0.08);
 
-  padding: 10px 10px;
+    padding: 10px;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
 `;
 
 export const SheetCloseButton = styled.button`

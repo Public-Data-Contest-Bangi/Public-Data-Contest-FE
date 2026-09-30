@@ -12,9 +12,9 @@ export const Page = styled.div`
 
 export const Container = styled.div`
     position: relative;
-
-    width: 375px;
-    min-height: 100vh;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
 
     display: flex;
     flex-direction: column;

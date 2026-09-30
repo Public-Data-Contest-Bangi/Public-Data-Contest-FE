@@ -1,4 +1,6 @@
-import { PROFILE_AVATARS } from "../data/profileAvatars";
+import {
+    PROFILE_AVATARS,
+} from "../data/profileAvatars";
 
 import * as S from "../ProfileEditPage.styled";
 
@@ -12,11 +14,16 @@ function ProfileAvatarPicker({
             onClick={onClose}
         >
             <S.AvatarModal
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="avatar-modal-title"
                 onClick={(e) =>
                     e.stopPropagation()
                 }
             >
-                <S.AvatarModalTitle>
+                <S.AvatarModalTitle
+                    id="avatar-modal-title"
+                >
                     프로필 캐릭터 선택
                 </S.AvatarModalTitle>
 
@@ -28,9 +35,16 @@ function ProfileAvatarPicker({
                     {PROFILE_AVATARS.map(
                         (avatar) => (
                             <S.AvatarOption
-                                key={avatar.id}
+                                key={
+                                    avatar.id
+                                }
                                 type="button"
                                 $selected={
+                                    avatar.id ===
+                                    selectedAvatarId
+                                }
+                                aria-label={`프로필 캐릭터 ${avatar.id} 선택`}
+                                aria-pressed={
                                     avatar.id ===
                                     selectedAvatarId
                                 }
@@ -44,7 +58,7 @@ function ProfileAvatarPicker({
                                     src={
                                         avatar.image
                                     }
-                                    alt="프로필 캐릭터"
+                                    alt=""
                                 />
                             </S.AvatarOption>
                         )

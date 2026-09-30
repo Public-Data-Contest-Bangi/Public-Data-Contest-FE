@@ -40,7 +40,7 @@ export const CardBody = styled.div`
     display: flex;
     flex-direction: column;
 
-    gap: 7px;
+    gap: 8px;
 `;
 
 export const TopRow = styled.div`
@@ -135,8 +135,8 @@ export const SportRow = styled.div`
 `;
 
 export const SportIcon = styled.img`
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
 
     object-fit: contain;
 `;
@@ -153,12 +153,12 @@ export const AccessList = styled.div`
     display: flex;
     align-items: center;
 
-    gap: 5px;
+    gap: 8px;
 `;
 
 export const AccessBadge = styled.div`
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
 
     display: flex;
     align-items: center;
@@ -170,8 +170,8 @@ export const AccessBadge = styled.div`
 `;
 
 export const AccessIcon = styled.img`
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
 
     object-fit: contain;
 `;

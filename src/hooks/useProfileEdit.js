@@ -13,6 +13,11 @@ import {
 } from "../api/member";
 
 import {
+    checkLoginIdAvailability,
+    checkNicknameAvailability,
+} from "../api/auth";
+
+import {
     validatePassword,
 } from "../utils/passwordValidation";
 
@@ -30,6 +35,11 @@ export default function useProfileEdit() {
     ] = useState("");
 
     const [
+        originalUserId,
+        setOriginalUserId,
+    ] = useState("");
+
+    const [
         name,
         setName,
     ] = useState("");
@@ -40,13 +50,13 @@ export default function useProfileEdit() {
     ] = useState("");
 
     const [
-        email,
-        setEmail,
+        originalNickname,
+        setOriginalNickname,
     ] = useState("");
 
     const [
-        verificationCode,
-        setVerificationCode,
+        email,
+        setEmail,
     ] = useState("");
 
     const [
@@ -57,16 +67,6 @@ export default function useProfileEdit() {
     const [
         nicknameStatus,
         setNicknameStatus,
-    ] = useState(null);
-
-    const [
-        emailStatus,
-        setEmailStatus,
-    ] = useState(null);
-
-    const [
-        verificationStatus,
-        setVerificationStatus,
     ] = useState(null);
 
     /* =========================
@@ -187,6 +187,8 @@ export default function useProfileEdit() {
                     replace: true,
                 }
             );
+
+            return;
         }
 
         setModalDestination(
@@ -213,8 +215,18 @@ export default function useProfileEdit() {
                     } =
                         response.data;
 
+                    const currentLoginId =
+                        loginId ?? "";
+
+                    const currentNickname =
+                        nickname ?? "";
+
                     setUserId(
-                        loginId ?? ""
+                        currentLoginId
+                    );
+
+                    setOriginalUserId(
+                        currentLoginId
                     );
 
                     setName(
@@ -222,11 +234,27 @@ export default function useProfileEdit() {
                     );
 
                     setNickname(
-                        nickname ?? ""
+                        currentNickname
+                    );
+
+                    setOriginalNickname(
+                        currentNickname
                     );
 
                     setEmail(
                         email ?? ""
+                    );
+
+                    /*
+                     * 현재 사용 중인 값이므로
+                     * 처음부터 정상 상태로 표시
+                     */
+                    setUserIdStatus(
+                        "current"
+                    );
+
+                    setNicknameStatus(
+                        "current"
                     );
                 } catch (error) {
                     console.error(
@@ -248,13 +276,29 @@ export default function useProfileEdit() {
     const handleUserIdChange = (
         e
     ) => {
+        const value =
+            e.target.value;
+
         setUserId(
-            e.target.value
+            value
         );
 
-        setUserIdStatus(
-            null
-        );
+        /*
+         * 입력값을 바꾸면
+         * 기존 중복확인 결과 무효화
+         */
+        if (
+            value.trim() ===
+            originalUserId
+        ) {
+            setUserIdStatus(
+                "current"
+            );
+        } else {
+            setUserIdStatus(
+                null
+            );
+        }
     };
 
     const handleNameChange = (
@@ -268,45 +312,30 @@ export default function useProfileEdit() {
     const handleNicknameChange = (
         e
     ) => {
+        const value =
+            e.target.value;
+
         setNickname(
-            e.target.value
+            value
         );
 
-        setNicknameStatus(
-            null
-        );
-    };
-
-    const handleEmailChange = (
-        e
-    ) => {
-        setEmail(
-            e.target.value
-        );
-
-        setEmailStatus(
-            null
-        );
-
-        setVerificationStatus(
-            null
-        );
-
-        setVerificationCode(
-            ""
-        );
-    };
-
-    const handleVerificationCodeChange =
-        (e) => {
-            setVerificationCode(
-                e.target.value
+        /*
+         * 입력값을 바꾸면
+         * 기존 중복확인 결과 무효화
+         */
+        if (
+            value.trim() ===
+            originalNickname
+        ) {
+            setNicknameStatus(
+                "current"
             );
-
-            setVerificationStatus(
+        } else {
+            setNicknameStatus(
                 null
             );
-        };
+        }
+    };
 
     /* =========================
        현재 비밀번호
@@ -391,32 +420,104 @@ export default function useProfileEdit() {
         };
 
     /* =========================
-       아이디 / 닉네임
+       아이디 중복 확인
     ========================= */
 
-    const handleIdCheck = () => {
-        if (
-            !userId.trim()
-        ) {
-            setUserIdStatus(
-                "empty"
-            );
+    const handleIdCheck =
+        async () => {
+            const trimmedUserId =
+                userId.trim();
 
-            return;
-        }
+            if (!trimmedUserId) {
+                setUserIdStatus(
+                    "empty"
+                );
 
-        // TODO:
-        // 아이디 중복확인 API 연결
-        setUserIdStatus(
-            "available"
-        );
-    };
+                return;
+            }
+
+            /*
+             * 기존 아이디와 같으면
+             * 자기 자신의 아이디이므로
+             * API 호출 필요 없음
+             */
+            if (
+                trimmedUserId ===
+                originalUserId
+            ) {
+                setUserIdStatus(
+                    "current"
+                );
+
+                return;
+            }
+
+            try {
+                await checkLoginIdAvailability(
+                    trimmedUserId
+                );
+
+                /*
+                 * Swagger 기준
+                 * 200 SUCCESS = 사용 가능
+                 */
+                setUserIdStatus(
+                    "available"
+                );
+            } catch (error) {
+                const status =
+                    error.response
+                        ?.status;
+
+                const code =
+                    error.response
+                        ?.data
+                        ?.code;
+
+                console.error(
+                    "아이디 중복 확인 실패:",
+                    error.response
+                        ?.data ??
+                        error
+                );
+
+                /*
+                 * Swagger 기준
+                 * 409 DUPLICATE_LOGIN_ID
+                 * = 이미 사용 중
+                 */
+                if (
+                    status === 409 ||
+                    code ===
+                        "DUPLICATE_LOGIN_ID"
+                ) {
+                    setUserIdStatus(
+                        "duplicate"
+                    );
+
+                    return;
+                }
+
+                setUserIdStatus(
+                    null
+                );
+
+                openModal(
+                    "아이디 중복 확인에 실패했습니다."
+                );
+            }
+        };
+
+    /* =========================
+       닉네임 중복 확인
+    ========================= */
 
     const handleNicknameCheck =
-        () => {
-            if (
-                !nickname.trim()
-            ) {
+        async () => {
+            const trimmedNickname =
+                nickname.trim();
+
+            if (!trimmedNickname) {
                 setNicknameStatus(
                     "empty"
                 );
@@ -424,60 +525,73 @@ export default function useProfileEdit() {
                 return;
             }
 
-            // TODO:
-            // 닉네임 중복확인 API 연결
-            setNicknameStatus(
-                "available"
-            );
-        };
-
-    /* =========================
-       이메일 인증
-    ========================= */
-
-    const handleEmailVerify =
-        () => {
+            /*
+             * 현재 사용 중인 닉네임이면
+             * 중복 검사할 필요 없음
+             */
             if (
-                !email.trim()
+                trimmedNickname ===
+                originalNickname
             ) {
-                setEmailStatus(
-                    "error"
+                setNicknameStatus(
+                    "current"
                 );
 
                 return;
             }
 
-            setEmailStatus(
-                "sent"
-            );
-
-            setVerificationStatus(
-                null
-            );
-        };
-
-    const handleCodeVerify =
-        () => {
-            if (
-                !verificationCode.trim()
-            ) {
-                setVerificationStatus(
-                    "error"
+            try {
+                await checkNicknameAvailability(
+                    trimmedNickname
                 );
 
-                return;
-            }
-
-            if (
-                verificationCode ===
-                "123456"
-            ) {
-                setVerificationStatus(
-                    "success"
+                /*
+                 * Swagger 기준
+                 * 200 SUCCESS = 사용 가능
+                 */
+                setNicknameStatus(
+                    "available"
                 );
-            } else {
-                setVerificationStatus(
-                    "error"
+            } catch (error) {
+                const status =
+                    error.response
+                        ?.status;
+
+                const code =
+                    error.response
+                        ?.data
+                        ?.code;
+
+                console.error(
+                    "닉네임 중복 확인 실패:",
+                    error.response
+                        ?.data ??
+                        error
+                );
+
+                /*
+                 * Swagger 기준
+                 * 409 DUPLICATE_NICKNAME
+                 * = 이미 사용 중
+                 */
+                if (
+                    status === 409 ||
+                    code ===
+                        "DUPLICATE_NICKNAME"
+                ) {
+                    setNicknameStatus(
+                        "duplicate"
+                    );
+
+                    return;
+                }
+
+                setNicknameStatus(
+                    null
+                );
+
+                openModal(
+                    "닉네임 중복 확인에 실패했습니다."
                 );
             }
         };
@@ -488,9 +602,16 @@ export default function useProfileEdit() {
 
     const handleSubmit =
         async () => {
-            if (
-                !userId.trim()
-            ) {
+            const trimmedUserId =
+                userId.trim();
+
+            const trimmedName =
+                name.trim();
+
+            const trimmedNickname =
+                nickname.trim();
+
+            if (!trimmedUserId) {
                 openModal(
                     "아이디를 입력해 주세요."
                 );
@@ -498,9 +619,24 @@ export default function useProfileEdit() {
                 return;
             }
 
+            /*
+             * 아이디를 변경했다면
+             * 중복확인 필수
+             */
             if (
-                !name.trim()
+                trimmedUserId !==
+                    originalUserId &&
+                userIdStatus !==
+                    "available"
             ) {
+                openModal(
+                    "아이디 중복 확인을 완료해 주세요."
+                );
+
+                return;
+            }
+
+            if (!trimmedName) {
                 openModal(
                     "이름을 입력해 주세요."
                 );
@@ -508,11 +644,26 @@ export default function useProfileEdit() {
                 return;
             }
 
-            if (
-                !nickname.trim()
-            ) {
+            if (!trimmedNickname) {
                 openModal(
                     "닉네임을 입력해 주세요."
+                );
+
+                return;
+            }
+
+            /*
+             * 닉네임을 변경했다면
+             * 중복확인 필수
+             */
+            if (
+                trimmedNickname !==
+                    originalNickname &&
+                nicknameStatus !==
+                    "available"
+            ) {
+                openModal(
+                    "닉네임 중복 확인을 완료해 주세요."
                 );
 
                 return;
@@ -557,13 +708,13 @@ export default function useProfileEdit() {
 
             const profileData = {
                 name:
-                    name.trim(),
+                    trimmedName,
 
                 nickname:
-                    nickname.trim(),
+                    trimmedNickname,
 
                 loginId:
-                    userId.trim(),
+                    trimmedUserId,
             };
 
             /*
@@ -630,9 +781,45 @@ export default function useProfileEdit() {
                     "";
 
                 /*
+                 * 중복확인 이후 다른 사용자가
+                 * 먼저 같은 아이디를 등록한 경우 등
+                 * 서버에서 최종적으로 중복을 잡아낼 수 있음
+                 */
+                if (
+                    status === 409 &&
+                    code ===
+                        "DUPLICATE_LOGIN_ID"
+                ) {
+                    setUserIdStatus(
+                        "duplicate"
+                    );
+
+                    openModal(
+                        "이미 사용 중인 아이디입니다."
+                    );
+
+                    return;
+                }
+
+                if (
+                    status === 409 &&
+                    code ===
+                        "DUPLICATE_NICKNAME"
+                ) {
+                    setNicknameStatus(
+                        "duplicate"
+                    );
+
+                    openModal(
+                        "이미 사용 중인 닉네임입니다."
+                    );
+
+                    return;
+                }
+
+                /*
                  * 비밀번호 변경 요청 중
-                 * 현재 비밀번호 관련 서버 오류는
-                 * 전부 같은 문구로 처리
+                 * 현재 비밀번호 관련 서버 오류
                  */
                 const isCurrentPasswordError =
                     newPassword &&
@@ -692,7 +879,6 @@ export default function useProfileEdit() {
         name,
         nickname,
         email,
-        verificationCode,
 
         currentPassword,
         newPassword,
@@ -700,8 +886,6 @@ export default function useProfileEdit() {
 
         userIdStatus,
         nicknameStatus,
-        emailStatus,
-        verificationStatus,
 
         newPasswordStatus,
         confirmPasswordStatus,
@@ -713,8 +897,6 @@ export default function useProfileEdit() {
         handleUserIdChange,
         handleNameChange,
         handleNicknameChange,
-        handleEmailChange,
-        handleVerificationCodeChange,
 
         handleCurrentPasswordChange,
         handleNewPasswordChange,
@@ -722,8 +904,6 @@ export default function useProfileEdit() {
 
         handleIdCheck,
         handleNicknameCheck,
-        handleEmailVerify,
-        handleCodeVerify,
 
         handleSubmit,
     };

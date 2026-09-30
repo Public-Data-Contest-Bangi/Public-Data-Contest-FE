@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Page = styled.div`
     width: 100%;
-    min-height: max(816px, 100dvh);
+    min-height: 100dvh;
 
     display: flex;
     justify-content: center;
@@ -11,8 +11,10 @@ const Page = styled.div`
 `;
 
 const Container = styled.div`
-    width: 375px;
-    min-height: max(816px, 100dvh);
+    width: 100%;
+    min-width: 0;
+
+    min-height: 100dvh;
 
     display: flex;
     flex-direction: column;
@@ -20,6 +22,14 @@ const Container = styled.div`
     box-sizing: border-box;
 
     background: #ffffff;
+
+    /*
+     * PC에서 너무 넓게 퍼지는 것만 방지.
+     * 일반 스마트폰에서는 100% 꽉 참.
+     */
+    @media (min-width: 481px) {
+        max-width: 480px;
+    }
 `;
 
 function MobileLayout({
@@ -28,7 +38,11 @@ function MobileLayout({
 }) {
     return (
         <Page>
-            <Container className={className}>
+            <Container
+                className={
+                    className
+                }
+            >
                 {children}
             </Container>
         </Page>
