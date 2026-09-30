@@ -11,8 +11,9 @@ export const Page = styled.div`
 `;
 
 export const LoginContainer = styled.div`
-    height: 815px;
-    max-width: 375px;
+    width: 100%;
+    max-width: 480px;
+    min-height: 100dvh;
 
     padding: 40px 24px;
 

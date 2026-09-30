@@ -82,20 +82,24 @@ export const TagList = styled.div`
     margin-bottom: 12px;
 `;
 
-export const Tag = styled.span`
-    padding: 5px 9px;
+export const Tag = styled.div`
+    display: inline-flex;
+    align-items: center;
 
-    border: 1px solid #dedede;
-    border-radius: 12px;
+    gap: 4px;
 
+    padding: 4px 8px;
+
+    border: 1px solid #e4e4e4;
+    border-radius: 999px;
+
+    color: #666666;
     background: #ffffff;
 
-    color: #555555;
-
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 500;
 
-    line-height: 1;
+    white-space: nowrap;
 `;
 
 export const DetailButton = styled.button`
@@ -122,4 +126,21 @@ export const DetailButton = styled.button`
     font-weight: 600;
 
     cursor: pointer;
+`;
+
+export const SportsWrap = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    margin-top: 10px;
+`;
+
+export const SportIcon = styled.img`
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    object-fit: contain;
 `;

@@ -176,7 +176,7 @@ export default function ProfileEditPage() {
             placeholder:
                 "e-mail@gmail.com",
 
-            readOnly:
+            disabled:
                 true,
 
             message:

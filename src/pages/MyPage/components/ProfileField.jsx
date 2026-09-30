@@ -6,10 +6,15 @@ export default function ProfileField({
     onChange,
     placeholder,
     type = "text",
+
     buttonText,
     onButtonClick,
+
     message,
     messageType,
+
+    readOnly = false,
+    disabled = false,
 }) {
     const input = (
         <S.Input
@@ -17,12 +22,16 @@ export default function ProfileField({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+            readOnly={readOnly}
+            disabled={disabled}
         />
     );
 
     return (
         <S.FieldGroup>
-            <S.Label>{label}</S.Label>
+            <S.Label>
+                {label}
+            </S.Label>
 
             {buttonText ? (
                 <S.InlineRow>
@@ -40,21 +49,24 @@ export default function ProfileField({
             )}
 
             {message &&
-                messageType === "success" && (
+                messageType ===
+                    "success" && (
                     <S.SuccessText>
                         {message}
                     </S.SuccessText>
                 )}
 
             {message &&
-                messageType === "error" && (
+                messageType ===
+                    "error" && (
                     <S.ErrorText>
                         {message}
                     </S.ErrorText>
                 )}
 
             {message &&
-                messageType === "helper" && (
+                messageType ===
+                    "helper" && (
                     <S.HelperText>
                         {message}
                     </S.HelperText>

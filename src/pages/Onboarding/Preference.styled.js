@@ -12,9 +12,9 @@ export const Page = styled.div`
 `;
 
 export const Container = styled.div`
-    width: min(100%, 375px);
+    width: 100%;
+    max-width: 480px;
     min-height: 100dvh;
-
     background: #ffffff;
 
     box-sizing: border-box;

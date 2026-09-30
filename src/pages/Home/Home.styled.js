@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Page = styled.div`
     width: 100%;
-    max-width: 375px;
+    max-width: 480px;
     min-height: 100dvh;
 
     margin: 0 auto;

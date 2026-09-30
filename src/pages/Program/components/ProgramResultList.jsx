@@ -68,22 +68,22 @@ function getPlaceCoord(place) {
 
     const latitude = Number(
         place.latitude ??
-            place.lat ??
-            place.frontLat ??
-            place.noorLat ??
-            coordinate.latitude ??
-            coordinate.lat
+        place.lat ??
+        place.frontLat ??
+        place.noorLat ??
+        coordinate.latitude ??
+        coordinate.lat
     );
 
     const longitude = Number(
         place.longitude ??
-            place.lng ??
-            place.lon ??
-            place.frontLon ??
-            place.noorLon ??
-            coordinate.longitude ??
-            coordinate.lng ??
-            coordinate.lon
+        place.lng ??
+        place.lon ??
+        place.frontLon ??
+        place.noorLon ??
+        coordinate.longitude ??
+        coordinate.lng ??
+        coordinate.lon
     );
 
     if (
@@ -169,7 +169,7 @@ export default function ProgramResultList() {
         sports = [],
 
         sportIds:
-            stateSportIds = [],
+        stateSportIds = [],
 
         province,
         city,
@@ -183,7 +183,7 @@ export default function ProgramResultList() {
         longitude,
 
         searchMode =
-            "REGION",
+        "REGION",
     } = location.state ?? {};
 
     const sportIds =
@@ -193,7 +193,7 @@ export default function ProgramResultList() {
                     stateSportIds
                 ) &&
                 stateSportIds.length >
-                    0
+                0
             ) {
                 return stateSportIds;
             }
@@ -201,16 +201,16 @@ export default function ProgramResultList() {
             return sports
                 .map((sport) =>
                     typeof sport ===
-                    "object"
+                        "object"
                         ? sport.sportId ??
-                          sport.id
+                        sport.id
                         : sport
                 )
                 .filter(
                     (id) =>
                         id !== null &&
                         id !==
-                            undefined
+                        undefined
                 );
         }, [
             sports,
@@ -250,7 +250,7 @@ export default function ProgramResultList() {
 
         if (
             searchMode ===
-                "REGION" &&
+            "REGION" &&
             !province &&
             !regionCode
         ) {
@@ -266,7 +266,7 @@ export default function ProgramResultList() {
 
         if (
             searchMode ===
-                "CURRENT_LOCATION" &&
+            "CURRENT_LOCATION" &&
             (
                 latitude == null ||
                 longitude == null
@@ -313,12 +313,12 @@ export default function ProgramResultList() {
 
                     if (
                         searchMode ===
-                            "REGION" &&
+                        "REGION" &&
                         (
                             searchLatitude ==
-                                null ||
+                            null ||
                             searchLongitude ==
-                                null
+                            null
                         )
                     ) {
                         const targetRegionName =
@@ -454,7 +454,7 @@ export default function ProgramResultList() {
                                             region
                                         ) =>
                                             region.provinceName ===
-                                                province &&
+                                            province &&
                                             region.regionCode
                                     )
                                     .map(
@@ -576,7 +576,7 @@ export default function ProgramResultList() {
                         "프로그램 운영 시설 검색 실패:",
                         error.response
                             ?.data ??
-                            error
+                        error
                     );
 
                     setPrograms(
@@ -635,7 +635,7 @@ export default function ProgramResultList() {
                         불러오지 못했어요.
                     </S.StatusText>
                 ) : programs.length ===
-                  0 ? (
+                    0 ? (
                     <S.StatusText>
                         선택한 종목의
                         운영 프로그램이 있는
@@ -691,10 +691,15 @@ function mapFacilities(
                     facility.distanceMeters
                 ),
 
-            tags:
+            sports:
                 facility.sports?.map(
-                    (sport) =>
-                        sport.name
+                    (sport) => ({
+                        sportId:
+                            sport.sportId,
+
+                        name:
+                            sport.name,
+                    })
                 ) ?? [],
         })
     );

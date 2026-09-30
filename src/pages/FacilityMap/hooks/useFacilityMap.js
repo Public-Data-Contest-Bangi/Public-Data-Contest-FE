@@ -445,15 +445,64 @@ export function useFacilityMap() {
         scheduleMarkerRefresh();
     };
 
-    const selectFacility = (facility) => {
-        const map = mapRef.current;
-        if (!map) return;
-        const coord = { latitude: facility.latitude, longitude: facility.longitude };
-        setSelectedFacility(facility);
-        setArrival(facility.name);
-        setArrivalCoord(coord);
+    const selectFacility = (
+        facility
+    ) => {
+        const map =
+            mapRef.current;
+
+        const Tmapv2 =
+            window.Tmapv2;
+
+        if (
+            !map ||
+            !Tmapv2
+        ) {
+            return;
+        }
+
+        const coord = {
+            latitude:
+                facility.latitude,
+
+            longitude:
+                facility.longitude,
+        };
+
+        /*
+         * 선택한 시설 정보는
+         * 미리보기 시트 표시용
+         */
+        setSelectedFacility(
+            facility
+        );
+
+        /*
+         * 핀을 누른 시설을
+         * 도착지로 설정
+         */
+        setArrival(
+            facility.name
+        );
+
+        setArrivalCoord(
+            coord
+        );
+
+        /*
+         * 이전 경로만 제거
+         * 도착지는 제거하지 않음
+         */
         clearRoute();
-        showArrivalMarker(window.Tmapv2, map, coord);
+
+        /*
+         * 빨간 도착지 핀 표시
+         */
+        showArrivalMarker(
+            Tmapv2,
+            map,
+            coord
+        );
     };
 
     const moveToCurrentLocation =
@@ -880,27 +929,7 @@ export function useFacilityMap() {
         };
 
     const closeSheet = () => {
-        setSelectedFacility(
-            null
-        );
-
-        setArrival('');
-        setArrivalCoord(
-            null
-        );
-
-        if (
-            arrivalMarkerRef.current
-        ) {
-            arrivalMarkerRef.current.setMap(
-                null
-            );
-
-            arrivalMarkerRef.current =
-                null;
-        }
-
-        clearRoute();
+        setSelectedFacility(null);
     };
 
     const goSelectedFacilityDetail =
