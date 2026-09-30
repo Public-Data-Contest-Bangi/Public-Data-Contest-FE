@@ -137,7 +137,7 @@ function ExerciseResult() {
         <S.Page>
             <S.Container>
                 <S.Content>
-                    <Header title="추천 결과" />
+                    <Header inset={18} title="추천 결과" />
 
                     <S.ResultBanner>
                         <S.BannerText>

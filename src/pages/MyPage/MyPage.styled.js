@@ -34,6 +34,15 @@ export const Content = styled.main`
     padding: 0 20px calc(100px + env(safe-area-inset-bottom));
 
     box-sizing: border-box;
+
+    @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+        display: flex;
+        flex-direction: column;
+
+        > * {
+            flex-shrink: 0;
+        }
+    }
 `;
 
 export const Header = styled.header`
@@ -162,6 +171,15 @@ export const MenuList = styled.div`
 
     padding-top: 12px;
     gap: 4px;
+
+    @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+        flex: 1 0 auto;
+        justify-content: space-between;
+
+        > button {
+            flex-shrink: 0;
+        }
+    }
 `;
 
 export const MenuItem = styled.button`

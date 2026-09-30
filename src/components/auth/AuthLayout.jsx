@@ -9,7 +9,7 @@ function AuthLayout({
     return (
         <S.Page>
             <S.Container>
-                <Header title={title} />
+                <Header inset={20} title={title} />
 
                 {children}
             </S.Container>

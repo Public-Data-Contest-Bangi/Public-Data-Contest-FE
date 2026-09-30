@@ -51,7 +51,7 @@ export default function AdminReportDetail({
 
     return (
         <>
-            <Header
+            <Header inset={20}
                 title="신고 상세"
                 onBack={onBack}
             />

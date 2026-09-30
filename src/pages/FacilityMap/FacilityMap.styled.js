@@ -89,7 +89,7 @@ export const DashedLine = styled.div`
 export const SwapButton = styled.button`
   position: absolute;
 
-  top: calc(50% - 3px);
+  top: calc(50% - 7px);
   left: 0;
 
   transform: translate(-50%, -50%);

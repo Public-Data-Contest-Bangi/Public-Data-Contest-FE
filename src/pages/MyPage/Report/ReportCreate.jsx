@@ -22,7 +22,7 @@ function ReportCreate() {
     return (
         <MobileLayout>
             <S.Inner>
-                <Header title="사용자 불편신고" />
+                <Header inset={16} title="사용자 불편신고" />
 
                 <S.Content>
                     <ReportForm

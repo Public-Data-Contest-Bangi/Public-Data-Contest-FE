@@ -83,28 +83,28 @@ export default function ProfileEditPage() {
 
             message:
                 userIdStatus ===
-                "available"
+                    "available"
                     ? "사용 가능한 아이디입니다."
                     : userIdStatus ===
                         "current"
-                      ? "현재 사용 중인 아이디입니다."
-                      : userIdStatus ===
-                          "duplicate"
-                        ? "이미 사용 중인 아이디입니다."
+                        ? "현재 사용 중인 아이디입니다."
                         : userIdStatus ===
-                            "empty"
-                          ? "아이디를 입력해 주세요."
-                          : null,
+                            "duplicate"
+                            ? "이미 사용 중인 아이디입니다."
+                            : userIdStatus ===
+                                "empty"
+                                ? "아이디를 입력해 주세요."
+                                : null,
 
             messageType:
                 userIdStatus ===
                     "available" ||
-                userIdStatus ===
+                    userIdStatus ===
                     "current"
                     ? "success"
                     : userIdStatus
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
 
         {
@@ -142,28 +142,28 @@ export default function ProfileEditPage() {
 
             message:
                 nicknameStatus ===
-                "available"
+                    "available"
                     ? "사용 가능한 닉네임입니다."
                     : nicknameStatus ===
                         "current"
-                      ? "현재 사용 중인 닉네임입니다."
-                      : nicknameStatus ===
-                          "duplicate"
-                        ? "이미 사용 중인 닉네임입니다."
+                        ? "현재 사용 중인 닉네임입니다."
                         : nicknameStatus ===
-                            "empty"
-                          ? "닉네임을 입력해 주세요."
-                          : null,
+                            "duplicate"
+                            ? "이미 사용 중인 닉네임입니다."
+                            : nicknameStatus ===
+                                "empty"
+                                ? "닉네임을 입력해 주세요."
+                                : null,
 
             messageType:
                 nicknameStatus ===
                     "available" ||
-                nicknameStatus ===
+                    nicknameStatus ===
                     "current"
                     ? "success"
                     : nicknameStatus
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
 
         {
@@ -223,18 +223,18 @@ export default function ProfileEditPage() {
 
             message:
                 newPasswordStatus ===
-                "success"
+                    "success"
                     ? "사용 가능한 비밀번호입니다."
                     : "영문, 숫자, 특수문자를 포함해 8자 이상 입력해 주세요.",
 
             messageType:
                 newPasswordStatus ===
-                "success"
+                    "success"
                     ? "success"
                     : newPasswordStatus ===
                         "error"
-                      ? "error"
-                      : "helper",
+                        ? "error"
+                        : "helper",
         },
 
         {
@@ -255,28 +255,28 @@ export default function ProfileEditPage() {
 
             message:
                 confirmPasswordStatus ===
-                "success"
+                    "success"
                     ? "비밀번호가 일치합니다."
                     : confirmPasswordStatus ===
                         "error"
-                      ? "비밀번호가 일치하지 않습니다."
-                      : null,
+                        ? "비밀번호가 일치하지 않습니다."
+                        : null,
 
             messageType:
                 confirmPasswordStatus ===
-                "success"
+                    "success"
                     ? "success"
                     : confirmPasswordStatus ===
                         "error"
-                      ? "error"
-                      : null,
+                        ? "error"
+                        : null,
         },
     ];
 
     return (
         <S.Page>
             <S.Container>
-                <Header
+                <Header inset={20}
                     title="마이페이지"
                     onBack={() =>
                         navigate(-1)

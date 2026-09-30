@@ -45,7 +45,9 @@ export default function useRegions() {
                                 controller.signal,
                         });
 
-                    setRegions(data);
+                    if (!controller.signal.aborted) {
+                        setRegions(data);
+                    }
                 } catch (error) {
                     if (
                         controller.signal

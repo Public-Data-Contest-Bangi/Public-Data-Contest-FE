@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const HeaderWrap = styled.header`
-    width: 100%;
+export const HeaderWrap = styled.header`
+    width: calc(100% + ${({ $inset = 0 }) => $inset * 2}px);
+    margin-inline: ${({ $inset = 0 }) => -$inset}px;
+    flex-shrink: 0;
     height: 72px;
 
     position: relative;
@@ -14,7 +16,7 @@ const HeaderWrap = styled.header`
     box-sizing: border-box;
 `;
 
-const BackButton = styled.button`
+export const BackButton = styled.button`
     position: absolute;
     left: 20px;
     top: 50%;
@@ -46,6 +48,7 @@ const Title = styled.h1`
 function Header({
     title,
     onBack,
+    inset = 0,
 }) {
     const navigate = useNavigate();
 
@@ -59,7 +62,7 @@ function Header({
     };
 
     return (
-        <HeaderWrap>
+        <HeaderWrap $inset={inset}>
             <BackButton
                 type="button"
                 aria-label="뒤로가기"

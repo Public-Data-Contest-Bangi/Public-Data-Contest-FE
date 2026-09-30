@@ -491,7 +491,7 @@ export const RecommendCard = styled.button`
     border: 1px solid #dceee3;
     border-radius: 18px;
 
-    background: linear-gradient(145deg, #effbf5, #def5e9);
+    background: linear-gradient(135deg, #f4faf7, #e9f4ee);
 
     font-family: inherit;
     text-align: left;

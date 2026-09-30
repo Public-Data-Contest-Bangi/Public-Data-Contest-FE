@@ -1,10 +1,11 @@
-import SearchFilter from "../pages/SearchFilter/SearchFilter";
-import SearchResult from "../pages/SearchResult/SearchResult";
-import SearchEmpty from "../pages/SearchEmpty/SearchEmpty";
-import FacilityDetail from "../pages/FacilityDetail/FacilityDetail";
-import DepartureSearch from "../pages/DepartureSearch/DepartureSearch";
-import FacilitySearch from "../pages/FacilitySearch/FacilitySearch";
-import FacilityMap from "../pages/FacilityMap/FacilityMap";
+import { lazy, Suspense } from "react";
+const SearchFilter = lazy(() => import("../pages/SearchFilter/SearchFilter"));
+const SearchResult = lazy(() => import("../pages/SearchResult/SearchResult"));
+const SearchEmpty = lazy(() => import("../pages/SearchEmpty/SearchEmpty"));
+const FacilityDetail = lazy(() => import("../pages/FacilityDetail/FacilityDetail"));
+const DepartureSearch = lazy(() => import("../pages/DepartureSearch/DepartureSearch"));
+const FacilitySearch = lazy(() => import("../pages/FacilitySearch/FacilitySearch"));
+const FacilityMap = lazy(() => import("../pages/FacilityMap/FacilityMap"));
 
 
 import {
@@ -13,44 +14,45 @@ import {
     Route,
 } from "react-router-dom";
 
-import Home from "../pages/Home/Home";
+const Home = lazy(() => import("../pages/Home/Home"));
 
-import Login from "../pages/Login/Login";
-import FindId from "../pages/Login/FindId";
-import FindPassword from "../pages/Login/FindPassword";
-import Signup from "../pages/Login/Signup";
+const Login = lazy(() => import("../pages/Login/Login"));
+const FindId = lazy(() => import("../pages/Login/FindId"));
+const FindPassword = lazy(() => import("../pages/Login/FindPassword"));
+const Signup = lazy(() => import("../pages/Login/Signup"));
 
-import Preference from "../pages/Onboarding/Preference";
+const Preference = lazy(() => import("../pages/Onboarding/Preference"));
 
-import MyPage from "../pages/MyPage/MyPage";
-import ProfileEditPage from "../pages/MyPage/ProfileEditPage";
-import ReportHistory from "../pages/MyPage/Report/ReportHistory";
-import ReportDetail from "../pages/MyPage/Report/ReportDetail";
-import ReportCreate from "../pages/MyPage/Report/ReportCreate";
-import MyConditionPage from "../pages/MyPage/MyConditionPage";
-import FavoritesPage from "../pages/MyPage/FavoritesPage";
+const MyPage = lazy(() => import("../pages/MyPage/MyPage"));
+const ProfileEditPage = lazy(() => import("../pages/MyPage/ProfileEditPage"));
+const ReportHistory = lazy(() => import("../pages/MyPage/Report/ReportHistory"));
+const ReportDetail = lazy(() => import("../pages/MyPage/Report/ReportDetail"));
+const ReportCreate = lazy(() => import("../pages/MyPage/Report/ReportCreate"));
+const MyConditionPage = lazy(() => import("../pages/MyPage/MyConditionPage"));
+const FavoritesPage = lazy(() => import("../pages/MyPage/FavoritesPage"));
 
-import ProgramBrowsePage from "../pages/Program/ProgramBrowsePage";
-import ProgramRegionPage from "../pages/Program/ProgramRegionPage";
-import ProgramResultPage from "../pages/Program/ProgramResultPage";
-import OperatingProgramPage from "../pages/Program/OperatingProgramPage";
+const ProgramBrowsePage = lazy(() => import("../pages/Program/ProgramBrowsePage"));
+const ProgramRegionPage = lazy(() => import("../pages/Program/ProgramRegionPage"));
+const ProgramResultPage = lazy(() => import("../pages/Program/ProgramResultPage"));
+const OperatingProgramPage = lazy(() => import("../pages/Program/OperatingProgramPage"));
 
-import ExerciseRecommend from "../pages/Exercise/ExerciseRecommend";
-import FirstExercise from "../pages/Exercise/FirstExercise";
-import ExerciseResult from "../pages/Exercise/ExerciseResult";
-import FitnessResultIntro from "../pages/Exercise/FitnessResultIntro";
-import FitnessResultInput from "../pages/Exercise/FitnessResultInput";
-import FitnessResultRecommend from "../pages/Exercise/FitnessResultRecommend";
-import ExerciseDetailPage from "../pages/Exercise/ExerciseDetailPage";
+const ExerciseRecommend = lazy(() => import("../pages/Exercise/ExerciseRecommend"));
+const FirstExercise = lazy(() => import("../pages/Exercise/FirstExercise"));
+const ExerciseResult = lazy(() => import("../pages/Exercise/ExerciseResult"));
+const FitnessResultIntro = lazy(() => import("../pages/Exercise/FitnessResultIntro"));
+const FitnessResultInput = lazy(() => import("../pages/Exercise/FitnessResultInput"));
+const FitnessResultRecommend = lazy(() => import("../pages/Exercise/FitnessResultRecommend"));
+const ExerciseDetailPage = lazy(() => import("../pages/Exercise/ExerciseDetailPage"));
 
 import ScrollToTop from "../components/ScrollToTop";
-import AdminPage from "../pages/Admin/AdminPage";
+const AdminPage = lazy(() => import("../pages/Admin/AdminPage"));
 
 function Router() {
     return (
         <BrowserRouter>
             <ScrollToTop />
 
+            <Suspense fallback={<div role="status" style={{ padding: "24px 20px", maxWidth: 480, margin: "0 auto", boxSizing: "border-box" }}>??? ???? ????.</div>}>
             <Routes>
                 <Route
                     path="/"
@@ -222,6 +224,7 @@ function Router() {
                     element={<AdminPage />}
                 />
             </Routes>
+            </Suspense>
         </BrowserRouter>
     );
 }

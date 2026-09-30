@@ -141,12 +141,28 @@ export async function getFacilityPrograms(
 }
 
 // 지역 조회
-export async function fetchRegions() {
-  const response = await client.get(
-    '/api/regions'
-  );
+const REGION_CACHE_TTL = 5 * 60_000;
+let regionCache = null;
+let regionsFetchedAt = 0;
+let regionsRequest = null;
 
-  return (
-    response.data.data?.regions ?? []
-  );
+export function fetchRegions() {
+  if (regionCache && Date.now() - regionsFetchedAt < REGION_CACHE_TTL) {
+    return Promise.resolve(regionCache);
+  }
+  if (regionsRequest) return regionsRequest;
+
+  regionsRequest = client.get('/api/regions')
+    .then((response) => {
+      const regions = response.data.data?.regions;
+      if (!Array.isArray(regions)) return [];
+      regionCache = regions;
+      regionsFetchedAt = Date.now();
+      return regions;
+    })
+    .finally(() => {
+      regionsRequest = null;
+    });
+
+  return regionsRequest;
 }

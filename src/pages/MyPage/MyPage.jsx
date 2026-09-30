@@ -134,7 +134,7 @@ export default function MyPage() {
         <S.Page>
             <S.Container>
                 <S.Content>
-                    <Header title="마이페이지" />
+                    <Header inset={20} title="마이페이지" />
 
                     <S.ProfileSection>
                         <S.ProfileImage
