@@ -49,6 +49,9 @@ export const NavItem = styled.button`
 `;
 
 export const NavIcon = styled.svg`
+    fill: none;
+
+    path, circle { fill: none; }
     width: 24px;
     height: 24px;
 `;

@@ -3,7 +3,7 @@
 import Button from '../../../components/common/Button';
 
 import swapIcon from '../../../assets/icons/swap-icon.png';
-import locationIcon from '../../../assets/icons/location-icon.png';
+import CurrentLocationIcon from '../../../components/common/CurrentLocationIcon';
 
 import {
     RouteCard,
@@ -167,19 +167,7 @@ function RouteSearchCard({
                             locating
                         }
                     >
-                        <img
-                            src={
-                                locationIcon
-                            }
-                            alt=""
-                            style={{
-                                width: 24,
-                                height: 24,
-
-                                objectFit:
-                                    'contain',
-                            }}
-                        />
+                        <CurrentLocationIcon />
                     </GpsButton>
                 </Row>
 
