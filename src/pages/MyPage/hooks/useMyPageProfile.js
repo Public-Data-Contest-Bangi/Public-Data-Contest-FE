@@ -9,11 +9,11 @@ import {
     getMyProfile,
 } from "../../../api/member";
 
+// 후
 import {
     findProfileAvatar,
     getSavedProfileAvatar,
-} from "../ProfileEdit/hooks/useProfileAvatar";
-
+} from "./useProfileAvatar";
 import profileCharacter from "../../../assets/images/profile-character.png";
 
 const CACHE_KEY =
