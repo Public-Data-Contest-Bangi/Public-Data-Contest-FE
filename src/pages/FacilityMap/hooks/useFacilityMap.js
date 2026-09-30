@@ -26,6 +26,11 @@ import {
     latLngToWorldPixel,
 } from '../utils/mapUtils';
 
+// 폰 터치를 '탭'으로 인정하는 기준
+const TAP_MOVE_LIMIT = 10; // px 이내로만 움직였을 때
+const TAP_TIME_LIMIT = 500; // ms 안에 손을 뗐을 때
+const CLICK_AFTER_TOUCH_IGNORE = 700; // 터치 직후 따라오는 click 무시 시간(ms)
+
 export function useFacilityMap() {
     const navigate =
         useNavigate();
@@ -53,6 +58,13 @@ export function useFacilityMap() {
 
     const clustersDataRef =
         useRef([]);
+
+    // 폰 터치 판정용
+    const touchStartRef =
+        useRef(null);
+
+    const lastTouchTimeRef =
+        useRef(0);
 
     const [
         mapLoaded,
@@ -575,6 +587,112 @@ export function useFacilityMap() {
             }
         };
 
+    // ── 폰: 손가락을 댈 때 위치/시간 기록 ─────────────
+    const handleContainerTouchStart =
+        (event) => {
+            // 두 손가락(핀치 줌)은 탭으로 안 봄
+            if (
+                event.touches &&
+                event.touches.length > 1
+            ) {
+                touchStartRef.current =
+                    null;
+
+                return;
+            }
+
+            const touch =
+                event.touches?.[0];
+
+            if (!touch) {
+                return;
+            }
+
+            touchStartRef.current = {
+                x: touch.clientX,
+                y: touch.clientY,
+                time: Date.now(),
+            };
+        };
+
+    // ── 폰: 손가락을 뗄 때 '탭'이면 기존 클릭 판정 실행 ──
+    const handleContainerTouchEnd =
+        (event) => {
+            const start =
+                touchStartRef.current;
+
+            touchStartRef.current =
+                null;
+
+            // 아직 다른 손가락이 화면에 남아있으면 무시
+            if (
+                event.touches &&
+                event.touches.length > 0
+            ) {
+                return;
+            }
+
+            const touch =
+                event.changedTouches?.[0];
+
+            if (
+                !start ||
+                !touch
+            ) {
+                return;
+            }
+
+            const moved =
+                Math.hypot(
+                    touch.clientX -
+                        start.x,
+
+                    touch.clientY -
+                        start.y
+                );
+
+            const duration =
+                Date.now() -
+                start.time;
+
+            // 드래그했거나 오래 누른 건 탭이 아님
+            if (
+                moved >
+                    TAP_MOVE_LIMIT ||
+                duration >
+                    TAP_TIME_LIMIT
+            ) {
+                return;
+            }
+
+            lastTouchTimeRef.current =
+                Date.now();
+
+            handleContainerClick({
+                clientX:
+                    touch.clientX,
+
+                clientY:
+                    touch.clientY,
+            });
+        };
+
+    // ── PC: 마우스 클릭 (폰에서 터치 직후 따라오는 click은 무시) ──
+    const handleContainerMouseClick =
+        (event) => {
+            if (
+                Date.now() -
+                    lastTouchTimeRef.current <
+                CLICK_AFTER_TOUCH_IGNORE
+            ) {
+                return;
+            }
+
+            handleContainerClick(
+                event
+            );
+        };
+
     const moveToCurrentLocation =
         async () => {
             const map =
@@ -722,9 +840,32 @@ export function useFacilityMap() {
                 mapRef.current =
                     map;
 
-                mapContainerRef.current.addEventListener(
+                const container =
+                    mapContainerRef.current;
+
+                // 캡처 단계(true)로 등록 → TMAP이 이벤트를 가져가기 전에 먼저 받음
+                container.addEventListener(
                     'click',
-                    handleContainerClick
+                    handleContainerMouseClick,
+                    true
+                );
+
+                container.addEventListener(
+                    'touchstart',
+                    handleContainerTouchStart,
+                    {
+                        capture: true,
+                        passive: true,
+                    }
+                );
+
+                container.addEventListener(
+                    'touchend',
+                    handleContainerTouchEnd,
+                    {
+                        capture: true,
+                        passive: true,
+                    }
                 );
 
                 const myCoords =
@@ -782,12 +923,28 @@ export function useFacilityMap() {
                 );
             }
 
+            const container =
+                mapContainerRef.current;
+
             if (
-                mapContainerRef.current
+                container
             ) {
-                mapContainerRef.current.removeEventListener(
+                container.removeEventListener(
                     'click',
-                    handleContainerClick
+                    handleContainerMouseClick,
+                    true
+                );
+
+                container.removeEventListener(
+                    'touchstart',
+                    handleContainerTouchStart,
+                    true
+                );
+
+                container.removeEventListener(
+                    'touchend',
+                    handleContainerTouchEnd,
+                    true
                 );
             }
 

@@ -1,4 +1,4 @@
-export const ACCESS_ICON_SIZE = 50;
+export const ACCESS_ICON_SIZE = 30;
 
 // API가 내려주는 accessibilities[].name 텍스트에 이 키워드가 포함되어 있으면 해당 아이콘을 보여줌
 // (accessibilityCodes 전체 enum을 아직 확정 못 해서, 표시는 이름 텍스트 매칭으로 처리)

@@ -88,13 +88,18 @@ export const DashedLine = styled.div`
 export const SwapButton = styled.button`
   position: absolute;
 
-  top: 50%;
+  top: calc(50% - 3px);
   left: 0;
 
   transform: translate(-50%, -50%);
 
+  z-index: 1;
+
   width: 28px;
   height: 28px;
+
+  padding: 0;
+  margin: 0;
 
   border-radius: 50%;
   border: 1px solid #e4e4e4;
@@ -107,7 +112,22 @@ export const SwapButton = styled.button`
   align-items: center;
   justify-content: center;
 
+  line-height: 0;
+
+  -webkit-appearance: none;
+  appearance: none;
+
   cursor: pointer;
+
+  img,
+  svg {
+    display: block;
+
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+  }
 `;
 
 export const RowLabel = styled.span`
